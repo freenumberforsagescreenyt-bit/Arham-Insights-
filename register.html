@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naya Khata Banayein - Arham Insights</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #fffaf0; margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; }
+        .register-card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 95%; max-width: 420px; border-top: 6px solid #ff9933; text-align: center; max-height: 95vh; overflow-y: auto; }
+        h2 { color: #ff9933; margin-bottom: 5px; }
+        .sub-text { color: #666; font-size: 0.85em; margin-bottom: 20px; }
+        
+        .input-group { position: relative; margin-bottom: 15px; text-align: left; }
+        .input-group i { position: absolute; left: 15px; top: 38px; color: #ff9933; }
+        label { font-weight: bold; font-size: 0.8em; color: #333; margin-left: 5px; }
+        input { width: 100%; padding: 10px 10px 10px 40px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; margin-top: 5px; background: #fdfdfd; font-size: 0.9em; }
+        input:focus { outline: none; border-color: #ff9933; box-shadow: 0 0 5px rgba(255,153,51,0.2); }
+
+        /* TL Code Section Style */
+        .tl-section { background: #fff5eb; padding: 10px; border-radius: 8px; border: 1px dashed #ff9933; margin-bottom: 15px; }
+        .tl-note { font-size: 0.75em; color: #d35400; margin-top: 5px; display: block; font-weight: bold; line-height: 1.5; }
+        .get-tl-link { color: #2c3e50; text-decoration: underline; cursor: pointer; font-weight: bold; }
+        .email-display { display: block; margin-top: 5px; color: #ff9933; background: #fff; padding: 5px; border-radius: 5px; font-size: 0.9em; border: 1px solid #ffe0b2; }
+
+        .btn-register { background-color: #ff9933; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 1em; margin-top: 10px; }
+        .btn-register:hover { background-color: #e67e22; transform: translateY(-2px); }
+        
+        .footer-links { margin-top: 15px; font-size: 0.85em; color: #888; }
+        .footer-links a { color: #ff9933; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="register-card">
+        <img src="Arham Insights logo.png" alt="Logo" style="max-height: 50px; margin-bottom: 10px;" onerror="this.style.display='none'">
+        <h2>Join Arham Insights</h2>
+        <p class="sub-text">Sahi Disha, Sahi Pragati ke saath apna digital safar shuru karein.</p>
+
+        <form id="registrationForm">
+            <div class="tl-section">
+                <div class="input-group" style="margin-bottom: 0;">
+                    <label>Team Leader (TL) Code</label>
+                    <i class="fa fa-id-card"></i>
+                    <input type="text" id="tlCode" placeholder="Enter Authorized TL Code" required>
+                </div>
+                <span class="tl-note">
+                    Bina TL code ke register nahi kar sakte. <br>
+                    <a href="mailto:arhaminsightshelp@gmail.com?subject=Need%20TL%20Code%20for%20Registration&body=Namaste%20Arham%20Team%2C%0AMujhe%20registration%20ke%20liye%20TL%20code%20chahiye.%0AMera%20naam%3A" class="get-tl-link">Get TL Code (Click Here)</a>
+                    <span class="email-display"><i class="fa fa-envelope"></i> arhaminsightshelp@gmail.com</span>
+                </span>
+            </div>
+
+            <div class="input-group">
+                <label>Poora Naam</label>
+                <i class="fa fa-user"></i>
+                <input type="text" id="fullName" placeholder="Apna naam likhein" required>
+            </div>
+
+            <div class="input-group">
+                <label>Email Address</label>
+                <i class="fa fa-envelope"></i>
+                <input type="email" id="email" placeholder="example@gmail.com" required>
+            </div>
+
+            <div class="input-group">
+                <label>Password Set Karein</label>
+                <i class="fa fa-lock"></i>
+                <input type="password" id="password" placeholder="Min. 6 characters" required>
+            </div>
+
+            <div class="input-group">
+                <label>WhatsApp Number</label>
+                <i class="fa fa-phone"></i>
+                <input type="tel" id="whatsapp" placeholder="91XXXXXXXXXX" required>
+            </div>
+
+            <button type="submit" class="btn-register">Account Banayein</button>
+        </form>
+
+        <div class="footer-links">
+            Pehle se account hai? <a href=" login.html">Login Karein</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script>
+        const registrationForm = document.getElementById('registrationForm');
+
+        registrationForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const tlCode = document.getElementById('tlCode').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const fullName = document.getElementById('fullName').value;
+            const whatsapp = document.getElementById('whatsapp').value;
+
+            // Basic Validation
+            if(tlCode.length < 4) {
+                alert("Kripya sahi TL Code dalein!");
+                return;
+            }
+
+            // Supabase Logic (Akash ko yahan Supabase keys setup karni hogi)
+            alert("Checking TL Code: " + tlCode + "...\nVerification ke baad aapka account " + email + " register ho jayega.");
+        });
+    </script>
+</body>
+</html>

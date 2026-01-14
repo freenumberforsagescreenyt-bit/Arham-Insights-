@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Validation - Arham Insights</title>
+    
+    <script src="https://pl28475167.effectivegatecpm.com/2c/8b/78/2c8b781e00216f7670a5327ac46a3c1c.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root { --primary: #ff9933; --success: #27ae60; --dark: #2c3e50; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #fffaf0; text-align: center; padding: 20px; margin: 0; }
+        
+        .task-container { 
+            max-width: 700px; 
+            margin: 30px auto; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 15px; 
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1); 
+            border-top: 8px solid var(--primary); 
+        }
+
+        .timer-box { 
+            font-size: 3em; 
+            font-weight: bold; 
+            color: var(--primary); 
+            margin: 20px 0; 
+            background: #fff4e6;
+            display: inline-block;
+            padding: 10px 30px;
+            border-radius: 50px;
+            border: 2px solid var(--primary);
+        }
+
+        /* Fixed Ad Containers */
+        .ad-banner-top { width: 100%; min-height: 70px; margin-bottom: 20px; display: block; }
+        .ad-native-middle { width: 100%; min-height: 200px; margin: 25px 0; background: #fafafa; border: 1px dashed #ccc; border-radius: 10px; padding: 15px; }
+        .ad-banner-bottom { width: 100%; min-height: 100px; margin-top: 30px; }
+
+        #secret-code-section { 
+            display: none; 
+            background: #e7ffea; 
+            padding: 25px; 
+            border: 3px solid var(--success); 
+            border-radius: 15px; 
+            margin-top: 25px; 
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .code-text { font-size: 2em; color: var(--success); font-weight: bold; letter-spacing: 5px; cursor: pointer; display: block; margin: 15px 0; }
+        .instruction { color: #555; font-size: 1.1em; line-height: 1.5; background: #fdf2e4; padding: 15px; border-radius: 8px; }
+        .status { color: #d35400; font-weight: bold; margin-bottom: 10px; font-size: 0.9em; }
+        .copy-btn { background: var(--success); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1.1em; transition: 0.3s; }
+        .copy-btn:hover { background: #219150; transform: scale(1.05); }
+    </style>
+</head>
+<body>
+
+    <div class="task-container">
+        <div class="ad-banner-top">
+            <p style="font-size: 10px; color: #ccc; margin: 0 0 5px 0;">ADVERTISEMENT</p>
+            <div id="ad-container-320">
+                <script type="text/javascript">
+                    atOptions = { 'key' : '902229a7bf2ce49170c53d2714c1aa14', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
+                </script>
+                <script type="text/javascript" src="https://www.highperformanceformat.com/902229a7bf2ce49170c53d2714c1aa14/invoke.js"></script>
+            </div>
+        </div>
+
+        <h2><i class="fa fa-shield-check"></i> Task Verification</h2>
+        <div class="instruction">
+            Kripya niche diye gaye timer ka intezar karein. <br> 
+            <b>Jab timer 0:00 ho jayega, tabhi 'Secret Code' dikhega.</b>
+        </div>
+
+        <div id="status-msg" class="status"><i class="fa fa-spinner fa-spin"></i> Initializing System...</div>
+        
+        <div class="timer-box" id="timer">03:00</div>
+
+        <article id="article-content" style="text-align: left; color: #444; margin-top: 20px; padding: 15px;">
+            <h3 id="task-title" style="color: var(--dark); border-bottom: 2px solid var(--primary); padding-bottom: 5px;">Digital Integrity & Earnings</h3>
+            <div id="task-body">
+                <p>Arham Insights ke is task mein aapka swagat hai. Digital integrity ka matlab hai online kaamo mein imaandari rakhna. Jab aap keywords ko sahi se search karte hain, to hamara system aapki activity ko valid maanta hai.</p>
+                
+                <div class="ad-native-middle">
+                    <p style="font-size: 10px; color: #ccc; margin-bottom: 10px;">SPONSORED CONTENT</p>
+                    <div id="container-5f31c60d2eeedee3463321dda3f645ae"></div>
+                    <script async="async" data-cfasync="false" src="https://pl28475128.effectivegatecpm.com/5f31c60d2eeedee3463321dda3f645ae/invoke.js"></script>
+                </div>
+
+                <p>Ethics aur online growth dono sath chalte hain. Aapka har second hamare platform ki visibility badhane mein madad karta hai. Timer khatam hone tak kripya is page par bane rahein taaki aapka payout miss na ho.</p>
+            </div>
+        </article>
+
+        <div id="secret-code-section">
+            <h3 style="color: var(--success); margin-top: 0;"><i class="fa fa-check-circle"></i> Task Completed!</h3>
+            <p>Niche diye gaye code ko copy karke dashboard mein submit karein:</p>
+            <div class="code-text" id="final-code">Generating...</div>
+            <button class="copy-btn" onclick="copyCode()"><i class="fa fa-copy"></i> Copy Secret Code</button>
+        </div>
+
+        <div class="ad-banner-bottom" id="dynamic-ad-bottom">
+            </div>
+    </div>
+
+    <script type="text/javascript" src="https://pl28475077.effectivegatecpm.com/6b/1c/fc/6b1cfc1c9a2ee7897addef94f9383a64.js"></script>
+
+    <script>
+        const SUPABASE_URL = "https://mkzgmrxakattqgbjnwch.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL";
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let timeLeft = 180; 
+        const timerDisplay = document.getElementById('timer');
+        const codeSection = document.getElementById('secret-code-section');
+        const statusMsg = document.getElementById('status-msg');
+        const finalCodeDisplay = document.getElementById('final-code');
+
+        window.onload = function() {
+            // Task Content Sync
+            if(localStorage.getItem('task_blog_title')) {
+                document.getElementById('task-title').innerText = localStorage.getItem('task_blog_title');
+                document.getElementById('task-body').innerHTML += localStorage.getItem('task_blog_body');
+            }
+
+            // Referrer Check
+            const referrer = document.referrer;
+            if(referrer.includes("google.com")) {
+                statusMsg.innerHTML = "<span style='color:green'><i class='fa fa-check'></i> Verified: Google Search Entry</span>";
+            } else {
+                statusMsg.innerHTML = "<span style='color:#e67e22'><i class='fa fa-exclamation-triangle'></i> Warning: Open via Google Search</span>";
+            }
+            startTimer();
+        };
+
+        function startTimer() {
+            const countdown = setInterval(() => {
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                seconds = seconds < 10 ? '0' + seconds : seconds;
+                
+                timerDisplay.innerHTML = `${minutes}:${seconds}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    timerDisplay.style.display = 'none';
+                    showCode();
+                }
+                timeLeft--;
+            }, 1000);
+        }
+
+        async function showCode() {
+            const randomNum = Math.floor(100000 + Math.random() * 900000);
+            const generatedCode = "ARH-" + randomNum;
+            finalCodeDisplay.innerText = generatedCode;
+            localStorage.setItem('last_generated_task_code', generatedCode);
+            codeSection.style.display = 'block';
+            statusMsg.innerHTML = "<span style='color:green; font-size:1.2em;'>Code Ready! Copy it now.</span>";
+            codeSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function copyCode() {
+            const code = finalCodeDisplay.innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                alert("✅ Code Copied: " + code + "\nAb isse Dashboard par paste karke submit karein.");
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Control - Arham Insights</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root { --primary: #ff9933; --success: #27ae60; --dark-bg: #2c3e50; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--dark-bg); color: white; margin: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+        
+        .login-box, .dashboard { background: white; color: #333; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); width: 95%; max-width: 1100px; margin: 20px 0; }
+        .dashboard { display: none; }
+        
+        .pass-wrapper { position: relative; width: 100%; margin-bottom: 10px; }
+        .pass-wrapper i { position: absolute; right: 15px; top: 12px; cursor: pointer; color: #777; font-size: 1.2em; }
+        
+        input, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; margin-bottom: 10px; font-size: 0.9em; }
+        
+        button { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        button:hover { background: #e67e22; transform: translateY(-1px); }
+
+        .nav-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; position: sticky; top: 0; background: white; z-index: 10; padding: 10px 0; border-bottom: 2px solid #eee; }
+        .nav-tabs div { cursor: pointer; padding: 10px 15px; background: #eee; border-radius: 5px; flex: 1; text-align: center; font-size: 0.85em; font-weight: bold; transition: 0.3s; }
+        .nav-tabs .active-tab { background: var(--primary); color: white; }
+
+        .tab-content { display: none; text-align: left; animation: fadeIn 0.3s; }
+        .active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.82em; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #f8f9fa; color: #444; }
+
+        .code-box { padding: 4px 8px; border-radius: 4px; font-family: monospace; font-weight: bold; font-size: 1.1em; }
+        .code-match { background: #e8f5e9; color: #2e7d32; border: 1px solid #2e7d32; }
+        .code-mismatch { background: #ffebee; color: #c62828; border: 1px solid #c62828; }
+
+        .blog-list-container { max-height: 400px; overflow-y: auto; border: 1px solid #eee; margin-top: 15px; padding: 10px; border-radius: 8px; background: #fafafa; }
+        .blog-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #ddd; font-size: 0.85em; background: white; margin-bottom: 5px; border-radius: 5px; }
+        
+        .copy-icon { cursor: pointer; color: var(--primary); margin-left: 10px; transition: 0.2s; }
+        .copy-icon:hover { color: #e67e22; transform: scale(1.2); }
+
+        #global-loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; justify-content: center; align-items: center; color: white; flex-direction: column; }
+    </style>
+</head>
+<body>
+
+    <div id="global-loader">
+        <i class="fa fa-sync fa-spin fa-3x"></i>
+        <p>Processing...</p>
+    </div>
+
+    <div class="login-box" id="login-box">
+        <h2 style="color: var(--primary); text-align: center;"><i class="fa fa-shield-alt"></i> Admin Login</h2>
+        <div class="pass-wrapper">
+            <input type="password" id="access-code" placeholder="Enter Secret Key...">
+            <i class="fa fa-eye-slash" id="toggle-pass" onclick="togglePassword()"></i>
+        </div>
+        <button onclick="checkAccess()" style="width:100%;">Login</button>
+    </div>
+
+    <div class="dashboard" id="main-dashboard">
+        <div style="display:flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 15px;">
+            <h2 style="margin:0; color: var(--dark-bg);">Arham Control Center</h2>
+            <button onclick="logout()" style="background:#555; padding: 8px 15px;">Logout</button>
+        </div>
+        
+        <div class="nav-tabs">
+            <div id="t1" class="active-tab" onclick="showTab(event, 'verify')">Verify Tasks</div>
+            <div id="t2" onclick="showTab(event, 'blogs')">Manage Blogs</div>
+            <div id="t6" onclick="showTab(event, 'worker-finance')">Worker Finance</div>
+            <div id="t5" onclick="showTab(event, 'keywords')">Keywords & Links</div>
+            <div id="t3" onclick="showTab(event, 'ads')">Ads</div>
+        </div>
+
+        <div id="verify" class="tab-content active">
+            <h3>Worker Submissions</h3>
+            <table>
+                <thead>
+                    <tr><th>Worker Email</th><th>Generated</th><th>Submitted</th><th>Status</th><th>Action</th></tr>
+                </thead>
+                <tbody id="pending-tasks-list"></tbody>
+            </table>
+        </div>
+
+        <div id="blogs" class="tab-content">
+            <h3>Publish Article</h3>
+            <input type="text" id="blog-title" placeholder="Title...">
+            <textarea id="blog-content" rows="6" placeholder="Content..."></textarea>
+            <button onclick="saveBlogToSupabase()" style="width:100%;">Save Blog</button>
+            <div class="blog-list-container" id="saved-blogs-list"></div>
+        </div>
+
+        <div id="worker-finance" class="tab-content">
+            <h3>Earnings & Payouts</h3>
+            <table id="finance-table">
+                <thead>
+                    <tr><th>Email</th><th>Approved</th><th>Total Earning</th><th>Payment Info</th></tr>
+                </thead>
+                <tbody id="bank-data-list"></tbody>
+            </table>
+        </div>
+
+        <div id="keywords" class="tab-content">
+            <h3>50 Daily Search Keywords</h3>
+            <textarea id="keywords-input" rows="8" placeholder="Paste keywords here (one per line)..."></textarea>
+            <button onclick="saveKeywords()" style="width:100%; margin-bottom: 20px;">Sync Keywords</button>
+
+            <h3 style="color: var(--primary); border-top: 2px solid #eee; pt: 15px;">Live Task Links & Copy Space</h3>
+            <p style="font-size: 0.8em; color: #666;">Ye links aapke published blogs ke hain. Copy icon par click karke direct link share karein.</p>
+            <div class="blog-list-container" id="live-links-copy-list">
+                <p style="text-align:center; color:#999;">Loading links...</p>
+            </div>
+        </div>
+
+        <div id="ads" class="tab-content">
+            <h3>Ad Scripts</h3>
+            <textarea id="top-ad-code" rows="4" placeholder="Top Ad..."></textarea>
+            <textarea id="bottom-ad-code" rows="4" placeholder="Bottom Ad..."></textarea>
+            <button onclick="saveAds()" style="width:100%;">Update Ads</button>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = "https://mkzgmrxakattqgbjnwch.supabase.co"; 
+        const SUPABASE_KEY = "sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL"; 
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const SECRET_CODE = "Jainam Jayati Shasnam";
+
+        function togglePassword() {
+            const passInput = document.getElementById('access-code');
+            const eye = document.getElementById('toggle-pass');
+            if(passInput.type === "password") {
+                passInput.type = "text";
+                eye.classList.replace("fa-eye-slash", "fa-eye");
+            } else {
+                passInput.type = "password";
+                eye.classList.replace("fa-eye", "fa-eye-slash");
+            }
+        }
+
+        function checkAccess() {
+            if(document.getElementById('access-code').value === SECRET_CODE) {
+                document.getElementById('login-box').style.display = 'none';
+                document.getElementById('main-dashboard').style.display = 'block';
+                fetchBlogs();
+                loadPendingTasks();
+            } else { alert("Wrong Code!"); }
+        }
+
+        function showTab(event, tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-tabs div').forEach(t => t.classList.remove('active-tab'));
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active-tab');
+            if(tabId === 'worker-finance') loadWorkerFinance();
+            if(tabId === 'keywords') fetchBlogs(); // Refresh links
+        }
+
+        async function saveBlogToSupabase() {
+            const title = document.getElementById('blog-title').value;
+            const content = document.getElementById('blog-content').value;
+            if(!title || !content) return alert("Fill data!");
+            const { error } = await _supabase.from('admin_blogs').insert([{ title, content }]);
+            if(!error) { alert("Blog Saved!"); fetchBlogs(); }
+        }
+
+        async function fetchBlogs() {
+            const { data } = await _supabase.from('admin_blogs').select('*').order('created_at', {ascending: false});
+            const blogList = document.getElementById('saved-blogs-list');
+            const linkCopyList = document.getElementById('live-links-copy-list');
+            
+            blogList.innerHTML = "";
+            linkCopyList.innerHTML = "";
+
+            if(data) {
+                data.forEach(b => {
+                    const fullUrl = `https://arhaminsights.netlify.app/taskpage.html?id=${b.id}`;
+                    
+                    // Standard Blog List
+                    blogList.innerHTML += `
+                        <div class="blog-item">
+                            <span><b>${b.title}</b></span>
+                            <button onclick="window.open('${fullUrl}', '_blank')" class="btn-approve" style="background:#3498db;">View</button>
+                        </div>`;
+
+                    // Keywords Tab Link List with Copy Icons
+                    linkCopyList.innerHTML += `
+                        <div class="blog-item">
+                            <div style="flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                <span style="color:var(--dark-bg); font-weight:bold;">${b.title}</span><br>
+                                <span style="font-size:0.85em; color:#666;">${fullUrl}</span>
+                            </div>
+                            <i class="fa fa-copy copy-icon" onclick="copyText('${fullUrl}')" title="Copy Link"></i>
+                        </div>`;
+                });
+            }
+        }
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Copied to clipboard!");
+            });
+        }
+
+        async function loadPendingTasks() {
+            const { data } = await _supabase.from('tasks').select('*').eq('status', 'pending');
+            const list = document.getElementById('pending-tasks-list');
+            list.innerHTML = data ? data.map(t => {
+                const isMatch = t.generated_code === t.task_code;
+                return `<tr>
+                    <td>${t.worker_email}</td>
+                    <td>${t.generated_code}</td>
+                    <td><span class="code-box ${isMatch?'code-match':'code-mismatch'}">${t.task_code}</span></td>
+                    <td>${isMatch?'Match':'Mismatch'}</td>
+                    <td><button class="btn-approve" onclick="updateStatus('${t.id}','approved')">✔</button><button class="btn-reject" onclick="updateStatus('${t.id}','rejected')">✖</button></td>
+                </tr>`;
+            }).join('') : "";
+        }
+
+        async function updateStatus(id, s) {
+            await _supabase.from('tasks').update({status:s}).eq('id',id);
+            loadPendingTasks();
+        }
+
+        async function loadWorkerFinance() {
+            const { data: profiles } = await _supabase.from('profiles').select('*');
+            const { data: approved } = await _supabase.from('tasks').select('worker_email').eq('status', 'approved');
+            const list = document.getElementById('bank-data-list');
+            list.innerHTML = profiles ? profiles.map(p => {
+                const count = approved ? approved.filter(t => t.worker_email === p.email).length : 0;
+                return `<tr><td>${p.email}</td><td>${count}</td><td>₹${count*5}</td><td>${p.upi_id || 'N/A'}</td></tr>`;
+            }).join('') : "";
+        }
+
+        function logout() { location.reload(); }
+    </script>
+</body>
+</html>
+

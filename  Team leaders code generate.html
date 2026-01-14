@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <title>TL Code Generator - Arham Admin</title>
+    <style>
+        body { font-family: sans-serif; background: #2c3e50; color: white; padding: 50px; text-align: center; }
+        .gen-box { background: white; color: #333; padding: 30px; border-radius: 15px; display: inline-block; width: 400px; }
+        input { width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
+        button { background: #ff9933; color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; width: 95%; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="gen-box">
+        <h2 style="color: #ff9933;">Generate TL Code</h2>
+        <input type="text" id="tl-name" placeholder="Team Leader Name (e.g. Akash)">
+        <input type="text" id="tl-code" placeholder="Create Unique Code (e.g. ARH-TL-77)">
+        <button onclick="saveTL()">Save & Activate TL</button>
+    </div>
+
+    <script>
+        function saveTL() {
+            const name = document.getElementById('tl-name').value;
+            const code = document.getElementById('tl-code').value;
+            alert(`Success! TL ${name} is now active with code: ${code}\n(Admin will connect this to Supabase)`);
+        }
+    </script>
+</body>
+</html>
+
