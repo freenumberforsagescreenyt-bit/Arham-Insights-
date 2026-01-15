@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Validation - Arham Insights</title>
-    
     <meta name="referrer" content="no-referrer-when-downgrade" />
 
     <script type="text/javascript" src="//data527.click/76978ffabd4a5bbf4a70/488a487bd1/?placementName=default"></script>
@@ -15,36 +14,53 @@
     
     <style>
         :root { --primary: #ff9933; --success: #27ae60; --dark: #2c3e50; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: #fffaf0; text-align: center; padding: 15px; margin: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #fffaf0; text-align: center; padding: 10px; margin: 0; }
         
         .task-container { 
-            max-width: 700px; 
-            margin: 20px auto; 
+            max-width: 800px; 
+            margin: 15px auto; 
             background: white; 
-            padding: 25px; 
+            padding: 20px; 
             border-radius: 15px; 
             box-shadow: 0 5px 25px rgba(0,0,0,0.1); 
             border-top: 8px solid var(--primary); 
         }
 
-        /* Advertica Banner Container */
-        .ad-banner-top {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: center;
+        /* Fixed: Ad Banner Layout */
+        .ad-space { 
+            margin: 15px 0; 
+            min-height: 60px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            background: #f9f9f9;
+            border-radius: 8px;
             overflow: hidden;
         }
 
         .timer-box { 
-            font-size: 2.5em; 
+            font-size: 2.2em; 
             font-weight: bold; 
             color: var(--primary); 
-            margin: 15px 0; 
+            margin: 10px 0; 
             background: #fff4e6;
             display: inline-block;
-            padding: 10px 25px;
+            padding: 8px 25px;
             border-radius: 50px;
             border: 2px solid var(--primary);
+        }
+
+        /* Fixed: Blog Content formatting (Spaces and Line breaks) */
+        #task-body { 
+            text-align: left; 
+            color: #333; 
+            line-height: 1.8; 
+            white-space: pre-wrap; /* Yeh line breaks aur spaces ko preserve karega */
+            word-wrap: break-word;
+            font-size: 1.05em;
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
         }
 
         #secret-code-section { 
@@ -60,43 +76,44 @@
         @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
         .code-text { font-size: 1.8em; color: var(--success); font-weight: bold; letter-spacing: 4px; display: block; margin: 15px 0; }
-        .instruction { color: #555; font-size: 1em; line-height: 1.5; background: #fdf2e4; padding: 12px; border-radius: 8px; margin-bottom: 15px; }
-        .status { color: #d35400; font-weight: bold; margin-bottom: 10px; font-size: 0.85em; }
-        .copy-btn { background: var(--success); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1.1em; transition: 0.3s; text-decoration: none; display: inline-block; }
-        .copy-btn:hover { background: #219150; transform: scale(1.03); }
+        .instruction { color: #555; font-size: 0.95em; line-height: 1.5; background: #fdf2e4; padding: 12px; border-radius: 8px; margin-bottom: 10px; }
+        .copy-btn { background: var(--success); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; max-width: 300px; }
     </style>
 </head>
 <body>
 
     <div class="task-container">
         
-        <div class="ad-banner-top">
+        <div class="ad-space">
             <ins style="width: 320px;height:50px" data-width="320" data-height="50" class="be2e2ac20d3" data-domain="//data527.click" data-affquery="/24cca9bed965b7820ebd/e2e2ac20d3/?placementName=default"><script src="//data527.click/js/responsive.js" async></script></ins>
         </div>
 
         <h2><i class="fa fa-shield-check"></i> Task Verification</h2>
         
         <div class="instruction">
-            Kripya niche diye gaye timer ka intezar karein. <br> 
-            <b>Jab timer 0:00 ho jayega, tabhi 'Secret Code' dikhega.</b>
+            Kripya timer khatam hone tak wait karein. <br> 
+            <b>Secret Code timer ke baad hi milega.</b>
         </div>
 
-        <div id="status-msg" class="status"><i class="fa fa-spinner fa-spin"></i> Checking Session...</div>
+        <div id="status-msg" style="color:#d35400; font-weight:bold; font-size: 0.8em; margin-bottom: 5px;">Checking...</div>
         
         <div class="timer-box" id="timer">03:00</div>
 
-        <article id="article-content" style="text-align: left; color: #444; margin-top: 20px; padding: 10px;">
-            <h3 id="task-title" style="color: var(--dark); border-bottom: 2px solid var(--primary); padding-bottom: 5px;">Loading Task...</h3>
-            <div id="task-body">
-                <p>Arham Insights ke is task mein aapka swagat hai. Task load ho raha hai, kripya pratiksha karein...</p>
-            </div>
+        <article id="article-content" style="margin-top: 15px;">
+            <h3 id="task-title" style="color: var(--dark); border-bottom: 2px solid var(--primary); padding-bottom: 8px; text-align: left;">Loading Task...</h3>
+            
+            <div id="task-body">Loading article content...</div>
         </article>
 
+        <div class="ad-space">
+            <ins style="width: 320px;height:50px" data-width="320" data-height="50" class="be2e2ac20d3" data-domain="//data527.click" data-affquery="/24cca9bed965b7820ebd/e2e2ac20d3/?placementName=default"></ins>
+        </div>
+
         <div id="secret-code-section">
-            <h3 style="color: var(--success); margin-top: 0;"><i class="fa fa-check-circle"></i> Task Completed!</h3>
-            <p>Niche diye gaye code ko copy karke dashboard mein submit karein:</p>
-            <div class="code-text" id="final-code">Generating...</div>
-            <a href="javascript:void(0)" class="copy-btn" id="copyBtn" onclick="copyCode()"><i class="fa fa-copy"></i> Copy Secret Code</a>
+            <h3 style="color: var(--success); margin-top: 0;"><i class="fa fa-check-circle"></i> Completed!</h3>
+            <p style="color:#444;">Code copy karein aur dashboard mein submit karein:</p>
+            <div class="code-text" id="final-code">...</div>
+            <button class="copy-btn" id="copyBtn" onclick="copyCode()"><i class="fa fa-copy"></i> Copy Secret Code</button>
         </div>
 
     </div>
@@ -108,27 +125,17 @@
 
         let timeLeft = 180; 
         let currentUser = null;
-        const timerDisplay = document.getElementById('timer');
-        const codeSection = document.getElementById('secret-code-section');
-        const statusMsg = document.getElementById('status-msg');
-        const finalCodeDisplay = document.getElementById('final-code');
-
         const urlParams = new URLSearchParams(window.location.search);
         const taskId = urlParams.get('id');
 
         async function checkAuth() {
-            try {
-                const { data: { session } } = await _supabase.auth.getSession();
-                if (session) {
-                    currentUser = session.user;
-                    if(taskId) fetchTaskFromDB(taskId);
-                    startTimer();
-                } else {
-                    alert("Pehle Login karein!");
-                    window.location.href = "login.html";
-                }
-            } catch (err) {
-                console.error("Auth Error:", err);
+            const { data: { session } } = await _supabase.auth.getSession();
+            if (session) {
+                currentUser = session.user;
+                if(taskId) fetchTaskFromDB(taskId);
+                startTimer();
+            } else {
+                window.location.href = "login.html";
             }
         }
 
@@ -138,20 +145,20 @@
             const { data, error } = await _supabase.from('admin_blogs').select('*').eq('id', id).single();
             if(data) {
                 document.getElementById('task-title').innerText = data.title;
-                document.getElementById('task-body').innerHTML = `<p>${data.content}</p>`;
-                statusMsg.innerHTML = "<i class='fa fa-clock'></i> Verification in Progress...";
+                // .innerText use karne se line breaks preserve hote hain
+                document.getElementById('task-body').innerText = data.content;
+                document.getElementById('status-msg').innerHTML = "Verification Live...";
             }
         }
 
         function startTimer() {
             const countdown = setInterval(() => {
-                let minutes = Math.floor(timeLeft / 60);
-                let seconds = timeLeft % 60;
-                seconds = seconds < 10 ? '0' + seconds : seconds;
-                timerDisplay.innerHTML = `${minutes}:${seconds}`;
+                let m = Math.floor(timeLeft / 60);
+                let s = timeLeft % 60;
+                document.getElementById('timer').innerHTML = `${m}:${s < 10 ? '0'+s : s}`;
                 if (timeLeft <= 0) {
                     clearInterval(countdown);
-                    timerDisplay.style.display = 'none';
+                    document.getElementById('timer').style.display = 'none';
                     showCodeAndReport();
                 }
                 timeLeft--;
@@ -159,49 +166,26 @@
         }
 
         async function showCodeAndReport() {
-            const randomNum = Math.floor(100000 + Math.random() * 900000);
-            const generatedCode = "ARH-" + randomNum;
-            
-            finalCodeDisplay.innerText = generatedCode;
-            codeSection.style.display = 'block';
-            statusMsg.innerHTML = "<span style='color:green;'>Code Generated & Logged!</span>";
-            codeSection.scrollIntoView({ behavior: 'smooth' });
+            const generatedCode = "ARH-" + Math.floor(100000 + Math.random() * 900000);
+            document.getElementById('final-code').innerText = generatedCode;
+            document.getElementById('secret-code-section').style.display = 'block';
+            document.getElementById('secret-code-section').scrollIntoView({ behavior: 'smooth' });
 
-            // Auto-save to 'tasks' table
             try {
                 await _supabase.from('tasks').insert([{ 
                     worker_email: currentUser.email, 
                     task_code: generatedCode, 
                     status: 'generated' 
                 }]);
-            } catch (e) {
-                console.error("Auto-Log Error:", e);
-            }
+            } catch (e) { console.log(e); }
         }
 
         function copyCode() {
             const code = document.getElementById('final-code').innerText;
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(code).then(() => handleCopySuccess(code));
-            } else {
-                fallbackCopy(code);
-            }
-        }
-
-        function fallbackCopy(text) {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            handleCopySuccess(text);
-        }
-
-        function handleCopySuccess(code) {
-            alert("✅ Code Copied: " + code + "\n\nAb ise Dashboard par submit karein.");
-            // Direct Smartlink (Advertica Smartlink remains the same destination)
-            window.open('https://www.effectivegatecpm.com/r1hbbzimi?key=a4d9598ee44995d5096461b0d43de968', '_blank');
+            navigator.clipboard.writeText(code).then(() => {
+                alert("Code Copied!");
+                window.open('https://www.effectivegatecpm.com/r1hbbzimi?key=a4d9598ee44995d5096461b0d43de968', '_blank');
+            });
         }
     </script>
 </body>
