@@ -3,146 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arham Insights - Sahi Disha, Sahi Pragati</title>
-    
-    <meta name="description" content="Arham Insights ek trusted platform hai jahan aap bina kisi investment ke daily tasks pure karke income generate kar sakte hain.">
-    
-    <meta name="google-site-verification" content="_ovBok1XaIYK46LVbwbBQdj2Zoa7ZP7mwH91JrRwHbo" />
-    
-    <meta name="2312e10d6571e47930fd86b4e73c3dc6c3d7b2ae" content="2312e10d6571e47930fd86b4e73c3dc6c3d7b2ae" />
-    
-    <meta name="referrer" content="no-referrer-when-downgrade" />
-
+    <title>Admin Control - Arham Insights</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        :root { --primary: #ff9933; --dark: #2c3e50; --light: #fffaf0; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; background-color: var(--light); color: #333; line-height: 1.6; }
-        
-        header { 
-            background-color: var(--primary); 
-            color: white; 
-            padding: 40px 20px; 
-            text-align: center; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            min-height: 220px; 
-            display: flex !important; 
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            z-index: 100;
-        }
-        
-        .logo-box { 
-            margin-bottom: 15px; 
-            display: flex !important; 
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            min-height: 110px;
-        }
-
-        .logo-img { 
-            height: 100px; 
-            width: 100px;
-            border-radius: 15px; 
-            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-            border: 4px solid white;
-            background: white;
-            object-fit: cover;
-            display: block;
-            margin: 0 auto;
-        }
-
-        .text-logo { 
-            font-size: 2.2em; 
-            font-weight: bold; 
-            border: 3.5px solid white; 
-            display: inline-block; 
-            padding: 10px 25px; 
-            letter-spacing: 2px; 
-            color: white; 
-            text-transform: uppercase;
-            background: rgba(255,255,255,0.15);
-        }
-
-        .hero { padding: 50px 20px; text-align: center; background: white; margin: -30px auto 20px; max-width: 800px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border-top: 6px solid var(--primary); position: relative; z-index: 10; }
-        h1 { margin: 10px 0; font-size: 2.5em; color: var(--primary); }
-        .tagline { font-style: italic; color: #666; font-size: 1.1em; margin-bottom: 25px; }
-
-        .btn-group { margin-top: 30px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
-        .btn { padding: 14px 35px; text-decoration: none; font-weight: bold; border-radius: 50px; display: inline-block; transition: 0.3s; font-size: 1em; }
-        .btn-join { background-color: var(--primary); color: white; box-shadow: 0 4px 15px rgba(255,153,51,0.3); }
-        .btn-login { border: 2.5px solid var(--primary); color: var(--primary); background: transparent; }
-        .btn:hover { transform: translateY(-3px); }
-
-        .features { display: flex; justify-content: center; flex-wrap: wrap; padding: 30px 10px; gap: 20px; }
-        .feature-box { background: white; padding: 25px; width: 250px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; border-bottom: 4px solid var(--primary); }
-        .feature-box i { font-size: 2em; color: var(--primary); margin-bottom: 15px; }
-        
-        .support-box { background: #fff4e6; padding: 30px 20px; text-align: center; margin: 30px auto; max-width: 700px; border-radius: 15px; border: 2px dashed var(--primary); }
-        .support-email { color: #d35400; font-weight: bold; font-size: 1.2em; text-decoration: none; }
-        footer { text-align: center; padding: 30px 20px; font-size: 0.9em; color: #666; background: #fdf2e4; }
+        /* Aapka purana CSS yahan aayega (Maine space bachane ke liye repeat nahi kiya) */
+        :root { --primary: #ff9933; --success: #27ae60; --dark-bg: #2c3e50; --danger: #e74c3c; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--dark-bg); color: white; margin: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+        .login-box, .dashboard { background: white; color: #333; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); width: 95%; max-width: 1100px; margin: 20px 0; }
+        .dashboard { display: none; }
+        .pass-wrapper { position: relative; width: 100%; margin-bottom: 10px; }
+        .pass-wrapper i { position: absolute; right: 15px; top: 12px; cursor: pointer; color: #777; font-size: 1.2em; }
+        input, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; margin-bottom: 10px; font-size: 0.9em; }
+        button { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .nav-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; position: sticky; top: 0; background: white; z-index: 10; padding: 10px 0; border-bottom: 2px solid #eee; }
+        .nav-tabs div { cursor: pointer; padding: 10px 15px; background: #eee; border-radius: 5px; flex: 1; text-align: center; font-size: 0.85em; font-weight: bold; }
+        .nav-tabs .active-tab { background: var(--primary); color: white; }
+        .tab-content { display: none; animation: fadeIn 0.3s; }
+        .active { display: block; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.82em; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        .blog-list-container { max-height: 400px; overflow-y: auto; border: 1px solid #eee; margin-top: 15px; padding: 10px; border-radius: 8px; background: #fafafa; }
+        .blog-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #ddd; background: white; margin-bottom: 5px; border-radius: 5px; color: #333;}
+        .copy-icon { cursor: pointer; color: var(--primary); margin-left: 10px; }
     </style>
 </head>
 <body>
 
-<header>
-    <div class="logo-box">
-        <img src="logo.png" alt="Arham Insights" class="logo-img" onerror="this.style.display='none'; document.getElementById('alt-logo').style.display='inline-block';">
-        <div id="alt-logo" class="text-logo" style="display:none;">ARHAM INSIGHTS</div>
-    </div>
-    <p style="margin-top: 15px; font-weight: 600; font-size: 1.3em; letter-spacing: 0.5px;">Sahi Disha, Sahi Pragati</p>
-</header>
-
-<main>
-    <div id="frame" style="width: 100%; margin: 20px auto; position: relative; z-index: 99998; text-align: center;">
-        <p style="font-size: 10px; color: #ccc; margin-bottom: 5px;">ADVERTISEMENT</p>
-        <iframe data-aa='2424210' src='//acceptable.a-ads.com/2424210/?size=Adaptive'
-                style='border:0; padding:0; width:70%; height:auto; min-height: 90px; overflow:hidden; display: block; margin: auto'></iframe>
+    <div class="login-box" id="login-box">
+        <h2 style="color: var(--primary); text-align: center;"><i class="fa fa-shield-alt"></i> Admin Login</h2>
+        <div class="pass-wrapper">
+            <input type="password" id="access-code" placeholder="Enter Secret Key...">
+            <i class="fa fa-eye-slash" id="toggle-pass" onclick="togglePassword()"></i>
+        </div>
+        <button onclick="checkAccess()" style="width:100%;">Login</button>
     </div>
 
-    <section class="hero">
-        <h1>Arham Insights</h1>
-        <h2>Digital Work From Home</h2>
-        <p class="tagline">"Humari technology aur aapki mehnat - ek behtar bhavishya."</p>
+    <div class="dashboard" id="main-dashboard">
+        <div style="display:flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 15px;">
+            <h2 style="margin:0; color: var(--dark-bg);">Arham Control Center</h2>
+            <button onclick="logout()" style="background:#555; padding: 8px 15px;">Logout</button>
+        </div>
         
-        <div class="btn-group">
-            <a href="register.html" class="btn btn-join"><i class="fa fa-user-plus"></i> Join Now</a>
-            <a href="login.html" class="btn btn-login"><i class="fa fa-sign-in-alt"></i> Worker Login</a>
+        <div class="nav-tabs">
+            <div id="t1" class="active-tab" onclick="showTab(event, 'verify')">Verify Tasks</div>
+            <div id="t2" onclick="showTab(event, 'blogs')">Manage Blogs</div>
+            <div id="t6" onclick="showTab(event, 'worker-finance')">Worker Finance</div>
+            <div id="t5" onclick="showTab(event, 'keywords')">Keywords & Links</div>
         </div>
-    </section>
 
-    <section class="features">
-        <div class="feature-box">
-            <i class="fa fa-mobile-alt"></i>
-            <h3>Online Work</h3>
-            <p>Sirf smartphone se kaam karein.</p>
+        <div id="verify" class="tab-content active">
+            <h3>Worker Submissions</h3>
+            <table id="pending-table">
+                <thead>
+                    <tr><th>Worker</th><th>Code</th><th>Status</th><th>Action</th></tr>
+                </thead>
+                <tbody id="pending-tasks-list"></tbody>
+            </table>
         </div>
-        <div class="feature-box">
-            <i class="fa fa-wallet"></i>
-            <h3>Easy Payout</h3>
-            <p>Sahi aur turant hisaab.</p>
+
+        <div id="blogs" class="tab-content">
+            <h3>Create Single Blog</h3>
+            <input type="text" id="blog-title" placeholder="Title...">
+            <textarea id="blog-content" rows="4" placeholder="Content..."></textarea>
+            <button onclick="saveBlogToSupabase()" style="width:100%;">Save Single Blog</button>
         </div>
-        <div class="feature-box">
-            <i class="fa fa-check-circle"></i>
-            <h3>Safe & Secure</h3>
-            <p>100% transparent system.</p>
+
+        <div id="worker-finance" class="tab-content">
+            <div class="finance-card" style="color:#333; background:#fff4e6; padding:15px; border-radius:10px;">
+                <h3>Payout Rate</h3>
+                <input type="number" id="pay-rate" value="3.00" step="0.5" style="width:80px;">
+                <button onclick="loadWorkerFinance()">Apply Rate</button>
+            </div>
+            <table style="color:#333;">
+                <thead><tr><th>Email</th><th>Tasks</th><th>Earning</th></tr></thead>
+                <tbody id="bank-data-list"></tbody>
+            </table>
         </div>
-    </section>
 
-    <section class="support-box">
-        <h3><i class="fa fa-headset"></i> Support</h3>
-        <p>Contact us:</p>
-        <a href="mailto:arhaminsightshelp@gmail.com" class="support-email">arhaminsightshelp@gmail.com</a>
-    </section>
-</main>
+        <div id="keywords" class="tab-content">
+            <h3>Bulk 50 Keywords Update</h3>
+            <p style="color: #666; font-size: 0.8em;">Ek line mein ek keyword dalein. Ye sab automatic alag blogs ban jayenge.</p>
+            <textarea id="keywords-input" rows="10" placeholder="Keyword 1&#10;Keyword 2&#10;Keyword 3..."></textarea>
+            <button onclick="bulkSaveKeywords()" style="width:100%; background: var(--success);">Publish All Keywords Now</button>
 
-<footer>
-    <p>&copy; 2026 <strong>Arham Insights</strong> | Managed by Naman Jain</p>
-</footer>
+            <h3 style="color: var(--primary); margin-top:20px;">Live Task Links (For Workers)</h3>
+            <div class="blog-list-container" id="live-links-copy-list"></div>
+        </div>
+    </div>
 
+    <script>
+        const SUPABASE_URL = "https://mkzgmrxakattqgbjnwch.supabase.co"; 
+        const SUPABASE_KEY = "sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL"; 
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const SECRET_CODE = "Jainam Jayati Shasnam";
+
+        function checkAccess() {
+            if(document.getElementById('access-code').value === SECRET_CODE) {
+                document.getElementById('login-box').style.display = 'none';
+                document.getElementById('main-dashboard').style.display = 'block';
+                fetchBlogs();
+            } else { alert("Wrong!"); }
+        }
+
+        // --- Naya Bulk Save Logic ---
+        async function bulkSaveKeywords() {
+            const input = document.getElementById('keywords-input').value;
+            const keywordList = input.split('\n').filter(k => k.trim() !== "");
+            
+            if(keywordList.length === 0) return alert("Kuch keywords to likho!");
+
+            const rowsToInsert = keywordList.map(kw => ({
+                title: kw.trim(),
+                content: `Doston, aaj hum baat karenge ${kw.trim()} ke baare mein. Is digital yug mein ye ek mahatvapurn vishay hai...`
+            }));
+
+            const { error } = await _supabase.from('admin_blogs').insert(rowsToInsert);
+            
+            if(!error) {
+                alert(keywordList.length + " Keywords Publish Ho Gaye!");
+                document.getElementById('keywords-input').value = "";
+                fetchBlogs();
+            } else {
+                alert("Error: " + error.message);
+            }
+        }
+
+        async function fetchBlogs() {
+            const { data } = await _supabase.from('admin_blogs').select('*').order('created_at', {ascending: false});
+            const linkCopyList = document.getElementById('live-links-copy-list');
+            linkCopyList.innerHTML = "";
+            if(data) {
+                data.forEach(b => {
+                    const fullUrl = `https://arhaminsights.netlify.app/taskpage.html?id=${b.id}`;
+                    linkCopyList.innerHTML += `
+                        <div class="blog-item">
+                            <div style="flex:1"><b>${b.title}</b><br><small>${fullUrl}</small></div>
+                            <i class="fa fa-copy copy-icon" onclick="copyText('${fullUrl}')"></i>
+                        </div>`;
+                });
+            }
+        }
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => alert("Copied!"));
+        }
+
+        function showTab(event, tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-tabs div').forEach(t => t.classList.remove('active-tab'));
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active-tab');
+            if(tabId === 'worker-finance') loadWorkerFinance();
+        }
+        
+        function logout() { location.reload(); }
+        function togglePassword() {
+            const p = document.getElementById('access-code');
+            p.type = p.type === "password" ? "text" : "password";
+        }
+    </script>
 </body>
 </html>
-
