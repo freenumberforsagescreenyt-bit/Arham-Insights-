@@ -17,7 +17,6 @@
         input { width: 100%; padding: 10px 10px 10px 40px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; margin-top: 5px; background: #fdfdfd; font-size: 0.9em; }
         input:focus { outline: none; border-color: #ff9933; box-shadow: 0 0 5px rgba(255,153,51,0.2); }
 
-        /* TL Code Section Style */
         .tl-section { background: #fff5eb; padding: 10px; border-radius: 8px; border: 1px dashed #ff9933; margin-bottom: 15px; }
         .tl-note { font-size: 0.75em; color: #d35400; margin-top: 5px; display: block; font-weight: bold; line-height: 1.5; }
         .get-tl-link { color: #2c3e50; text-decoration: underline; cursor: pointer; font-weight: bold; }
@@ -25,6 +24,7 @@
 
         .btn-register { background-color: #ff9933; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 1em; margin-top: 10px; }
         .btn-register:hover { background-color: #e67e22; transform: translateY(-2px); }
+        .btn-register:disabled { background-color: #ccc; cursor: not-allowed; }
         
         .footer-links { margin-top: 15px; font-size: 0.85em; color: #888; }
         .footer-links a { color: #ff9933; text-decoration: none; font-weight: bold; }
@@ -75,36 +75,77 @@
                 <input type="tel" id="whatsapp" placeholder="91XXXXXXXXXX" required>
             </div>
 
-            <button type="submit" class="btn-register">Account Banayein</button>
+            <button type="submit" id="regBtn" class="btn-register">Account Banayein</button>
         </form>
 
         <div class="footer-links">
-            Pehle se account hai? <a href=" login.html">Login Karein</a>
+            Pehle se account hai? <a href="login.html">Login Karein</a>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <script>
+        // Supabase Setup
+        const SUPABASE_URL = "https://mkzgmrxakattqgbjnwch.supabase.co"; 
+        const SUPABASE_KEY = "sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL"; 
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
         const registrationForm = document.getElementById('registrationForm');
+        const regBtn = document.getElementById('regBtn');
 
         registrationForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const tlCode = document.getElementById('tlCode').value;
-            const email = document.getElementById('email').value;
+            const tlCode = document.getElementById('tlCode').value.trim();
+            const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
-            const fullName = document.getElementById('fullName').value;
-            const whatsapp = document.getElementById('whatsapp').value;
+            const fullName = document.getElementById('fullName').value.trim();
+            const whatsapp = document.getElementById('whatsapp').value.trim();
 
-            // Basic Validation
-            if(tlCode.length < 4) {
-                alert("Kripya sahi TL Code dalein!");
-                return;
+            regBtn.disabled = true;
+            regBtn.innerText = "Verifying TL Code...";
+
+            try {
+                // 1. TL Code check karein Database mein
+                const { data: tlData, error: tlError } = await _supabase
+                    .from('tl_auth')
+                    .select('tl_code, tl_name')
+                    .eq('tl_code', tlCode)
+                    .single();
+
+                if (tlError || !tlData) {
+                    alert("❌ Galat TL Code! Kripya sahi code dalein jo aapko aapke Team Leader ne diya hai.");
+                    regBtn.disabled = false;
+                    regBtn.innerText = "Account Banayein";
+                    return;
+                }
+
+                // 2. Agar Code sahi hai, toh Account Create karein (Auth)
+                regBtn.innerText = "Creating Account...";
+                const { data: authData, error: authError } = await _supabase.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: {
+                        data: {
+                            full_name: fullName,
+                            whatsapp: whatsapp,
+                            tl_code: tlCode,
+                            tl_name: tlData.tl_name
+                        }
+                    }
+                });
+
+                if (authError) throw authError;
+
+                alert("✅ Registration Successful! Kripya apni Email check karein (Spam folder bhi) aur account verify karein.");
+                window.location.href = "login.html";
+
+            } catch (error) {
+                alert("Error: " + error.message);
+                regBtn.disabled = false;
+                regBtn.innerText = "Account Banayein";
             }
-
-            // Supabase Logic (Akash ko yahan Supabase keys setup karni hogi)
-            alert("Checking TL Code: " + tlCode + "...\nVerification ke baad aapka account " + email + " register ho jayega.");
         });
     </script>
 </body>

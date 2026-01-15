@@ -37,7 +37,6 @@
             border: 2px solid var(--primary);
         }
 
-        /* Ad Containers Styling */
         .ad-banner-top { width: 100%; min-height: 70px; margin-bottom: 20px; display: block; }
         .ad-native-middle { width: 100%; min-height: 150px; margin: 25px 0; background: #fafafa; border: 1px dashed #ccc; border-radius: 10px; padding: 15px; }
         .ad-banner-bottom { width: 100%; min-height: 100px; margin-top: 30px; }
@@ -68,33 +67,26 @@
             <iframe data-aa='2424210' src='//acceptable.a-ads.com/2424210/?size=Adaptive' style='border:0; padding:0; width:70%; height:auto; overflow:hidden;display: block;margin: auto'></iframe>
         </div>
 
-        <div class="ad-banner-top" style="margin-top: 15px;">
-            <script> atOptions = { 'key' : 'ac3a34c448d39282025c11644797e3a1', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} }; </script> 
-            <script src="https://www.highperformanceformat.com/ac3a34c448d39282025c11644797e3a1/invoke.js"></script>
-        </div>
-
         <h2><i class="fa fa-shield-check"></i> Task Verification</h2>
         <div class="instruction">
             Kripya niche diye gaye timer ka intezar karein. <br> 
             <b>Jab timer 0:00 ho jayega, tabhi 'Secret Code' dikhega.</b>
         </div>
 
-        <div id="status-msg" class="status"><i class="fa fa-spinner fa-spin"></i> Initializing System...</div>
+        <div id="status-msg" class="status"><i class="fa fa-spinner fa-spin"></i> Loading Task Details...</div>
         
         <div class="timer-box" id="timer">03:00</div>
 
         <article id="article-content" style="text-align: left; color: #444; margin-top: 20px; padding: 15px;">
-            <h3 id="task-title" style="color: var(--dark); border-bottom: 2px solid var(--primary); padding-bottom: 5px;">Digital Integrity & Earnings</h3>
+            <h3 id="task-title" style="color: var(--dark); border-bottom: 2px solid var(--primary); padding-bottom: 5px;">Loading...</h3>
             <div id="task-body">
-                <p>Arham Insights ke is task mein aapka swagat hai. Digital integrity ka matlab hai online kaamo mein imaandari rakhna. Jab aap keywords ko sahi se search karte hain, to hamara system aapki activity ko valid maanta hai.</p>
+                <p>Arham Insights ke is task mein aapka swagat hai. Task load ho raha hai, kripya pratiksha karein...</p>
                 
                 <div class="ad-native-middle">
                     <p style="font-size: 10px; color: #ccc; margin-bottom: 10px;">SPONSORED CONTENT</p>
                     <script async="async" data-cfasync="false" src="https://pl28481408.effectivegatecpm.com/b104bb133c0e3abf10d65c6dca934730/invoke.js"></script> 
                     <div id="container-b104bb133c0e3abf10d65c6dca934730"></div>
                 </div>
-
-                <p>Ethics aur online growth dono sath chalte hain. Aapka har second hamare platform ki visibility badhane mein madad karta hai. Timer khatam hone tak kripya is page par bane rahein taaki aapka payout miss na ho.</p>
             </div>
         </article>
 
@@ -102,7 +94,7 @@
             <h3 style="color: var(--success); margin-top: 0;"><i class="fa fa-check-circle"></i> Task Completed!</h3>
             <p>Niche diye gaye code ko copy karke dashboard mein submit karein:</p>
             <div class="code-text" id="final-code">Generating...</div>
-            <a href="https://www.effectivegatecpm.com/r1hbbzimi?key=a4d9598ee44995d5096461b0d43de968" target="_blank" class="copy-btn" onclick="copyCode()"><i class="fa fa-copy"></i> Copy Secret Code</a>
+            <a href="javascript:void(0)" class="copy-btn" onclick="copyCode()"><i class="fa fa-copy"></i> Copy Secret Code</a>
         </div>
 
         <div class="ad-banner-bottom">
@@ -113,29 +105,10 @@
     </div>
 
     <script src="https://pl28481397.effectivegatecpm.com/6a/13/24/6a132427188b052e88e7c0e78e69c6e2.js"></script>
-
     <script src="https://pl28481415.effectivegatecpm.com/3d/7b/7a/3d7b7a38e12c6c19d3f05744b524b637.js"></script>
 
     <script>
-    (function(yfbd){
-    var d = document, s = d.createElement('script'), l = d.scripts[d.scripts.length - 1];
-    s.settings = yfbd || {};
-    s.src = "\/\/stable-skill.com\/b\/X.VNsJdzGnlx0lYVW\/cZ\/_eHmA9zuEZNUAlQk\/PPT\/YT3\/NaDHgZ0xNHzRIbtGNRj\/cs0\/OlDUQE3uMCw_";
-    s.async = true; s.referrerPolicy = 'no-referrer-when-downgrade';
-    l.parentNode.insertBefore(s, l);
-    })({})
-    </script>
-
-    <script>
-        document.body.addEventListener('click', function() {
-            if(!window.popunderDone) {
-                window.open('https://limpfeel.com/bt3gV/0.Pb3spEvWbBmXVAJ/ZhDT0j2hNMzZQE4ON_Dwctw/L/TMYl3sNyDhgJ0iNazXEH', '_blank');
-                window.popunderDone = true;
-            }
-        });
-    </script>
-
-    <script>
+        // Supabase Init
         const SUPABASE_URL = "https://mkzgmrxakattqgbjnwch.supabase.co";
         const SUPABASE_KEY = "sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL";
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -146,13 +119,34 @@
         const statusMsg = document.getElementById('status-msg');
         const finalCodeDisplay = document.getElementById('final-code');
 
+        // URL se ID lena
+        const urlParams = new URLSearchParams(window.location.search);
+        const taskId = urlParams.get('id');
+
         window.onload = function() {
-            if(localStorage.getItem('task_blog_title')) {
-                document.getElementById('task-title').innerText = localStorage.getItem('task_blog_title');
-                document.getElementById('task-body').innerHTML += localStorage.getItem('task_blog_body');
+            if(taskId) {
+                fetchTaskFromDB(taskId);
+            } else {
+                statusMsg.innerText = "❌ No Task ID Found!";
             }
             startTimer();
         };
+
+        async function fetchTaskFromDB(id) {
+            const { data, error } = await _supabase
+                .from('admin_blogs')
+                .select('*')
+                .eq('id', id)
+                .single();
+
+            if(data) {
+                document.getElementById('task-title').innerText = data.title;
+                document.getElementById('task-body').innerHTML = `<p>${data.content}</p>` + document.getElementById('task-body').innerHTML;
+                statusMsg.innerHTML = "<i class='fa fa-clock'></i> Verification in Progress...";
+            } else {
+                document.getElementById('task-title').innerText = "Arham Insights Special Task";
+            }
+        }
 
         function startTimer() {
             const countdown = setInterval(() => {
@@ -160,6 +154,7 @@
                 let seconds = timeLeft % 60;
                 seconds = seconds < 10 ? '0' + seconds : seconds;
                 timerDisplay.innerHTML = `${minutes}:${seconds}`;
+                
                 if (timeLeft <= 0) {
                     clearInterval(countdown);
                     timerDisplay.style.display = 'none';
@@ -169,7 +164,8 @@
             }, 1000);
         }
 
-        async function showCode() {
+        function showCode() {
+            // Random Code Generation
             const randomNum = Math.floor(100000 + Math.random() * 900000);
             const generatedCode = "ARH-" + randomNum;
             finalCodeDisplay.innerText = generatedCode;
@@ -181,7 +177,9 @@
         function copyCode() {
             const code = finalCodeDisplay.innerText;
             navigator.clipboard.writeText(code).then(() => {
-                alert("✅ Code Copied: " + code + "\nAb isse Dashboard par submit karein.");
+                alert("✅ Code Copied: " + code + "\nAb Dashboard mein wapas jaakar 'Submit Code' box mein paste karein.");
+                // Open Ad Link on Copy
+                window.open('https://www.effectivegatecpm.com/r1hbbzimi?key=a4d9598ee44995d5096461b0d43de968', '_blank');
             });
         }
     </script>

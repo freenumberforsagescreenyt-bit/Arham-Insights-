@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Arham Insights</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #fffaf0; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
         .login-card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 90%; max-width: 400px; border-top: 6px solid #ff9933; text-align: center; }
@@ -15,44 +16,78 @@
         input:focus { outline: none; border-color: #ff9933; }
         .btn-login { background: #ff9933; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 1.1em; }
         .btn-login:hover { background: #e67e22; transform: translateY(-2px); }
+        .btn-login:disabled { background: #ccc; cursor: not-allowed; }
         .footer-text { font-size: 0.85em; margin-top: 20px; color: #888; }
         .footer-text a { color: #ff9933; text-decoration: none; font-weight: bold; }
+        #msg { margin-top: 10px; font-size: 0.9em; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="login-card">
-        <img src=" logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+        <img src="Arham Insights logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
         
         <h2>Arham Insights</h2>
         <p>Apna account login karein</p>
         
-        <form id="loginForm" onsubmit="event.preventDefault(); handleLogin();">
+        <form id="loginForm">
             <input type="email" id="email" placeholder="Email Address" required>
             <input type="password" id="pass" placeholder="Password" required>
-            <button type="submit" class="btn-login">Login</button>
+            <button type="submit" id="loginBtn" class="btn-login">Login</button>
         </form>
 
+        <div id="msg"></div>
+
         <p class="footer-text">
-            Account nahi hai? <a href=" register.html">Naya Account Banayein</a>
+            Account nahi hai? <a href="register.html">Naya Account Banayein</a>
         </p>
     </div>
 
     <script>
-        function handleLogin() {
-            const email = document.getElementById('email').value;
-            const pass = document.getElementById('pass').value;
+        // Supabase Configuration
+        const SUPABASE_URL = "https://mkzgmrxakattqgbjnwch.supabase.co"; 
+        const SUPABASE_KEY = "sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL"; 
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-            // Basic Validation
-            if (email && pass) {
-                // Success Alert
-                alert("Namaste! Login safal raha. Dashboard par le jaya ja raha hai...");
+        const loginForm = document.getElementById('loginForm');
+        const loginBtn = document.getElementById('loginBtn');
+        const msgDiv = document.getElementById('msg');
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('pass').value;
+
+            // UI Feedback
+            loginBtn.disabled = true;
+            loginBtn.innerText = "Checking...";
+            msgDiv.innerText = "";
+
+            try {
+                // Supabase Auth Login
+                const { data, error } = await _supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+                if (error) throw error;
+
+                // Success
+                msgDiv.style.color = "green";
+                msgDiv.innerText = "Namaste! Login safal raha...";
                 
-                // Redirecting to dashboard.html
-                window.location.href = "dashboard.html";
-            } else {
-                alert("Kripya saari details bharein.");
+                setTimeout(() => {
+                    window.location.href = "dashboard.html";
+                }, 1000);
+
+            } catch (err) {
+                msgDiv.style.color = "red";
+                msgDiv.innerText = "❌ Login fail: " + err.message;
+                loginBtn.disabled = false;
+                loginBtn.innerText = "Login";
             }
-        }
+        });
     </script>
 </body>
 </html>
+

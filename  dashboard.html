@@ -10,7 +10,6 @@
         :root { --primary: #ff9933; --dark: #2c3e50; --light: #f4f7f6; --success: #27ae60; }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--light); color: #333; }
         
-        /* Initial Hide to prevent flicker */
         #main-content { display: none; }
 
         .navbar { background: var(--dark); color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
@@ -99,24 +98,21 @@
                 <h3 style="margin:0 0 10px 0; color:var(--success);"><i class="fa fa-key"></i> Submit Work Code</h3>
                 <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
                     <input type="text" id="verify-code-input" class="verify-input" placeholder="Paste Code (ARH-XXXXX)">
-                    <button onclick="verifyTaskInDB()" style="background:var(--success); color:white; border:none; padding:12px 25px; border-radius:8px; cursor:pointer; font-weight:bold;">Submit</button>
+                    <button id="submitBtn" onclick="verifyTaskInDB()" style="background:var(--success); color:white; border:none; padding:12px 25px; border-radius:8px; cursor:pointer; font-weight:bold;">Submit</button>
                 </div>
             </div>
             
             <div class="task-banner">
                 <h2 style="margin: 0; color: var(--primary); text-align: center;"><i class="fa fa-list-ol"></i> Available Tasks</h2>
                 <div class="instruction-step">
-                    Copy Keyword & Search Google | Copy Link & Open Directly
-                </div>
-
-                <h4 style="margin: 10px 0;"><i class="fa fa-search"></i> Search Keywords</h4>
-                <div class="keyword-scroll-area">
-                    <div class="keyword-grid" id="keyword-list"></div>
+                    Copy Link & Open Task | Complete 3 Min Timer | Submit Code
                 </div>
 
                 <h4 style="margin: 20px 0 10px 0;"><i class="fa fa-link"></i> Direct Task Links</h4>
                 <div class="keyword-scroll-area">
-                    <div class="keyword-grid" id="live-links-list"></div>
+                    <div class="keyword-grid" id="live-links-list">
+                        <p style="color:white; opacity:0.6;">Loading tasks...</p>
+                    </div>
                 </div>
             </div>
 
@@ -124,12 +120,12 @@
                 <div class="card">
                     <i class="fa fa-wallet" style="color: #f1c40f;"></i>
                     <p id="total-earning">₹0</p>
-                    <small>Balance</small>
+                    <small>Balance (Approved Only)</small>
                 </div>
                 <div class="card">
                     <i class="fa fa-tasks" style="color: var(--success);"></i>
                     <p id="tasks-count">0 / 50</p>
-                    <small>Progress</small>
+                    <small>Approved Progress</small>
                 </div>
             </div>
 
@@ -164,90 +160,76 @@
 
         let currentUser = null;
 
-        // Session checking logic improved
         async function checkSession() {
-            const { data: { session }, error } = await _supabase.auth.getSession();
-            
+            const { data: { session } } = await _supabase.auth.getSession();
             if (session && session.user) {
                 currentUser = session.user;
                 document.getElementById('user-display-email').innerText = currentUser.email;
-                
-                // Show dashboard and hide loader
                 document.getElementById('global-loader').style.display = 'none';
                 document.getElementById('main-content').style.display = 'block';
                 
                 loadProfile();
                 fetchHistory();
-                loadKeywords();
                 fetchTaskLinks();
             } else {
-                // If no session, redirect to login
                 window.location.href = "login.html";
             }
         }
 
         window.onload = checkSession;
 
-        async function loadKeywords() {
-            const listContainer = document.getElementById('keyword-list');
-            listContainer.innerHTML = "";
-            let keywords = ["Arham Insights", "Earn Money Online", "Work From Home"]; // Fallback
-            
-            const { data } = await _supabase.from('admin_settings').select('value').eq('key', 'keywords').single();
-            if(data) keywords = data.value.split('\n');
-
-            for(let i=0; i < 50; i++) {
-                let word = keywords[i % keywords.length].trim();
-                if(!word) continue;
-                const div = document.createElement('div');
-                div.className = 'keyword-item';
-                div.innerHTML = `
-                    <span>${i+1}. ${word}</span>
-                    <div class="copy-group">
-                        <i class="fa fa-copy" onclick="copyAction('${word}')"></i>
-                        <i class="fa fa-external-link-alt" onclick="window.open('https://www.google.com/search?q=${word}', '_blank')"></i>
-                    </div>`;
-                listContainer.appendChild(div);
-            }
-        }
-
         async function fetchTaskLinks() {
             const { data } = await _supabase.from('admin_blogs').select('id, title').order('created_at', {ascending: false});
             const listContainer = document.getElementById('live-links-list');
             listContainer.innerHTML = "";
-            if(data) {
+            const currentUrl = window.location.origin;
+
+            if(data && data.length > 0) {
                 data.forEach((blog, index) => {
-                    const url = `https://arhaminsights.netlify.app/taskpage.html?id=${blog.id}`;
+                    // Fix: Redirecting to taskspage.html as per new system
+                    const url = `${currentUrl}/taskspage.html?id=${blog.id}`;
                     const div = document.createElement('div');
                     div.className = 'keyword-item';
                     div.innerHTML = `
                         <span>${index+1}. ${blog.title}</span>
                         <div class="copy-group">
-                            <i class="fa fa-copy" onclick="copyAction('${url}')"></i>
-                            <i class="fa fa-play-circle" onclick="window.open('${url}', '_blank')"></i>
+                            <i class="fa fa-copy" onclick="copyAction('${url}')" title="Copy Link"></i>
+                            <i class="fa fa-play-circle" onclick="window.open('${url}', '_blank')" title="Open Task"></i>
                         </div>`;
                     listContainer.appendChild(div);
                 });
+            } else {
+                listContainer.innerHTML = "<p style='color:white; padding:10px;'>No tasks available right now.</p>";
             }
         }
 
         function copyAction(text) {
-            navigator.clipboard.writeText(text);
-            alert("Copied!");
+            navigator.clipboard.writeText(text).then(() => alert("Link Copied!"));
         }
 
         async function verifyTaskInDB() {
             const codeInput = document.getElementById('verify-code-input').value.trim();
-            if(!codeInput) return;
+            const btn = document.getElementById('submitBtn');
+            if(!codeInput) return alert("Code paste karein!");
             
+            btn.disabled = true;
+            btn.innerText = "Processing...";
+
             const { error } = await _supabase.from('tasks').insert([{ 
                 worker_email: currentUser.email, 
                 task_code: codeInput, 
                 status: 'pending' 
             }]);
 
-            if (error) alert("Code Error or Duplicate!");
-            else { alert("Submitted!"); fetchHistory(); }
+            if (error) {
+                alert("Error: Duplicate code or Server busy.");
+            } else { 
+                alert("Work Code Submitted Successfully! Verification ka intezaar karein."); 
+                document.getElementById('verify-code-input').value = "";
+                fetchHistory(); 
+            }
+            btn.disabled = false;
+            btn.innerText = "Submit";
         }
 
         async function fetchHistory() {
@@ -259,12 +241,13 @@
             if(data) {
                 data.forEach(task => {
                     const isApp = task.status === 'approved';
-                    if(isApp) { approvedCount++; cash += 5; }
+                    // Rate is 3 Rs per task
+                    if(isApp) { approvedCount++; cash += 3; }
                     historyBody.innerHTML += `<tr>
                         <td>${new Date(task.created_at).toLocaleDateString()}</td>
                         <td><code>${task.task_code}</code></td>
-                        <td style="color:${isApp ? 'green' : 'orange'}">${task.status.toUpperCase()}</td>
-                        <td>₹${isApp ? '5' : '0'}</td>
+                        <td style="color:${isApp ? 'green' : (task.status === 'rejected' ? 'red' : 'orange')}">${task.status.toUpperCase()}</td>
+                        <td>₹${isApp ? '3' : '0'}</td>
                     </tr>`;
                 });
                 document.getElementById('total-earning').innerText = "₹" + cash;
@@ -279,8 +262,8 @@
                 bank_name: document.getElementById('bank_name').value, 
                 upi_id: document.getElementById('upi_id').value, 
                 account_no: document.getElementById('acc_number').value 
-            }]);
-            alert(error ? "Error" : "Saved!");
+            }], { onConflict: 'email' });
+            alert(error ? "Error saving details" : "Payment details updated!");
         }
 
         async function loadProfile() {
