@@ -94,7 +94,7 @@
             <h3 style="color: var(--success); margin-top: 0;"><i class="fa fa-check-circle"></i> Task Completed!</h3>
             <p>Niche diye gaye code ko copy karke dashboard mein submit karein:</p>
             <div class="code-text" id="final-code">Generating...</div>
-            <a href="javascript:void(0)" class="copy-btn" onclick="copyCode()"><i class="fa fa-copy"></i> Copy Secret Code</a>
+            <a href="javascript:void(0)" class="copy-btn" id="copyBtn" onclick="copyCode()"><i class="fa fa-copy"></i> Copy Secret Code</a>
         </div>
 
         <div class="ad-banner-bottom">
@@ -108,7 +108,6 @@
     <script src="https://pl28481415.effectivegatecpm.com/3d/7b/7a/3d7b7a38e12c6c19d3f05744b524b637.js"></script>
 
     <script>
-        // Supabase Init
         const SUPABASE_URL = "https://mkzgmrxakattqgbjnwch.supabase.co";
         const SUPABASE_KEY = "sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL";
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -119,7 +118,6 @@
         const statusMsg = document.getElementById('status-msg');
         const finalCodeDisplay = document.getElementById('final-code');
 
-        // URL se ID lena
         const urlParams = new URLSearchParams(window.location.search);
         const taskId = urlParams.get('id');
 
@@ -133,18 +131,11 @@
         };
 
         async function fetchTaskFromDB(id) {
-            const { data, error } = await _supabase
-                .from('admin_blogs')
-                .select('*')
-                .eq('id', id)
-                .single();
-
+            const { data, error } = await _supabase.from('admin_blogs').select('*').eq('id', id).single();
             if(data) {
                 document.getElementById('task-title').innerText = data.title;
                 document.getElementById('task-body').innerHTML = `<p>${data.content}</p>` + document.getElementById('task-body').innerHTML;
                 statusMsg.innerHTML = "<i class='fa fa-clock'></i> Verification in Progress...";
-            } else {
-                document.getElementById('task-title').innerText = "Arham Insights Special Task";
             }
         }
 
@@ -154,7 +145,6 @@
                 let seconds = timeLeft % 60;
                 seconds = seconds < 10 ? '0' + seconds : seconds;
                 timerDisplay.innerHTML = `${minutes}:${seconds}`;
-                
                 if (timeLeft <= 0) {
                     clearInterval(countdown);
                     timerDisplay.style.display = 'none';
@@ -165,7 +155,6 @@
         }
 
         function showCode() {
-            // Random Code Generation
             const randomNum = Math.floor(100000 + Math.random() * 900000);
             const generatedCode = "ARH-" + randomNum;
             finalCodeDisplay.innerText = generatedCode;
@@ -174,13 +163,43 @@
             codeSection.scrollIntoView({ behavior: 'smooth' });
         }
 
+        // --- FIXED COPY LOGIC ---
         function copyCode() {
-            const code = finalCodeDisplay.innerText;
-            navigator.clipboard.writeText(code).then(() => {
-                alert("✅ Code Copied: " + code + "\nAb Dashboard mein wapas jaakar 'Submit Code' box mein paste karein.");
-                // Open Ad Link on Copy
-                window.open('https://www.effectivegatecpm.com/r1hbbzimi?key=a4d9598ee44995d5096461b0d43de968', '_blank');
-            });
+            const code = document.getElementById('final-code').innerText;
+            
+            // Step 1: Attempt Modern Clipboard API
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(code).then(() => {
+                    handleCopySuccess(code);
+                }).catch(() => {
+                    fallbackCopyTextSelection(code);
+                });
+            } else {
+                // Step 2: Fallback for older browsers/non-secure contexts
+                fallbackCopyTextSelection(code);
+            }
+        }
+
+        function fallbackCopyTextSelection(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed"; // Avoid scrolling to bottom
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                handleCopySuccess(text);
+            } catch (err) {
+                alert("Mobile Error: Please long press the code to copy manually.");
+            }
+            document.body.removeChild(textArea);
+        }
+
+        function handleCopySuccess(code) {
+            alert("✅ Code Copied: " + code + "\n\nAb wapas Dashboard par jaakar ise submit karein.");
+            // Open Ad Link after successful copy
+            window.open('https://www.effectivegatecpm.com/r1hbbzimi?key=a4d9598ee44995d5096461b0d43de968', '_blank');
         }
     </script>
 </body>

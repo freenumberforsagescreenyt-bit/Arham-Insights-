@@ -199,7 +199,6 @@
             if(blogs && blogs.length > 0) {
                 blogs.forEach((blog, index) => {
                     const taskUrl = `${currentUrl}/taskspage.html?id=${blog.id}`;
-                    // Keyword logic: Agar keyword empty hai toh title hi keyword hai
                     const keyword = blog.keyword || blog.title; 
                     
                     const div = document.createElement('div');
@@ -231,29 +230,53 @@
             navigator.clipboard.writeText(text).then(() => alert(type + " Copied!"));
         }
 
+        // --- FIXED: Submit Logic to Handle Duplicates and Server Busy ---
         async function verifyTaskInDB() {
             const codeInput = document.getElementById('verify-code-input').value.trim();
             const btn = document.getElementById('submitBtn');
-            if(!codeInput) return alert("Code paste karein!");
+            
+            if(!codeInput) return alert("Kripya code paste karein!");
+            if(!codeInput.startsWith("ARH-")) return alert("Invalid Code! Code ARH- se shuru hona chahiye.");
             
             btn.disabled = true;
-            btn.innerText = "Processing...";
+            btn.innerText = "Checking...";
 
-            const { error } = await _supabase.from('tasks').insert([{ 
-                worker_email: currentUser.email, 
-                task_code: codeInput, 
-                status: 'pending' 
-            }]);
+            try {
+                // Pehle check karte hain ki ye code pehle kisi ne submit toh nahi kiya
+                const { data: alreadyUsed } = await _supabase
+                    .from('tasks')
+                    .select('task_code')
+                    .eq('task_code', codeInput)
+                    .maybeSingle();
 
-            if (error) {
-                alert("Error: Duplicate code or Server busy.");
-            } else { 
-                alert("Work Code Submitted Successfully!"); 
-                document.getElementById('verify-code-input').value = "";
-                fetchHistory(); 
+                if (alreadyUsed) {
+                    alert("❌ Error: Ye code pehle hi submit ho chuka hai! Naya task poora karke naya code laayein.");
+                    btn.disabled = false;
+                    btn.innerText = "Submit";
+                    return;
+                }
+
+                // Agar unique hai toh insert karein
+                const { error } = await _supabase.from('tasks').insert([{ 
+                    worker_email: currentUser.email, 
+                    task_code: codeInput, 
+                    status: 'pending' 
+                }]);
+
+                if (error) {
+                    throw error;
+                } else { 
+                    alert("✅ Success! Aapka code submit ho gaya hai. Ab admin ise approve karenge."); 
+                    document.getElementById('verify-code-input').value = "";
+                    fetchHistory(); 
+                }
+            } catch (err) {
+                console.error(err);
+                alert("❌ Server Error: Shayad aapka internet slow hai ya code duplicate hai. Dobara koshish karein.");
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Submit";
             }
-            btn.disabled = false;
-            btn.innerText = "Submit";
         }
 
         async function fetchHistory() {
@@ -305,4 +328,3 @@
     </script>
 </body>
 </html>
-
