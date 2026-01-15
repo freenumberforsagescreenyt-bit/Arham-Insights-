@@ -31,9 +31,9 @@
 
         .keyword-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 12px;
-            max-height: 400px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            max-height: 500px;
             overflow-y: auto;
             padding: 10px;
         }
@@ -41,17 +41,30 @@
         .keyword-item {
             background: white;
             color: #333;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 0.85em;
-            border-left: 4px solid var(--primary);
-            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 5px solid var(--primary);
+            display: flex; 
+            flex-direction: column;
+            gap: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .copy-group { display: flex; gap: 10px; }
-        .copy-group i { cursor: pointer; color: var(--primary); transition: 0.2s; }
-        .copy-group i:hover { transform: scale(1.2); color: #e67e22; }
+        .task-info b { color: var(--dark); font-size: 1em; display: block; margin-bottom: 4px; }
+        .task-info span { color: #666; font-size: 0.85em; background: #eee; padding: 2px 6px; border-radius: 4px; }
+
+        .copy-group { display: flex; gap: 10px; margin-top: 5px; border-top: 1px solid #eee; padding-top: 8px; }
+        .copy-btn-action { 
+            cursor: pointer; 
+            color: var(--primary); 
+            font-size: 0.9em; 
+            display: flex; 
+            align-items: center; 
+            gap: 5px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .copy-btn-action:hover { color: #e67e22; }
 
         .instruction-step {
             background: #fff3e0; color: #e65100; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-weight: bold; font-size: 0.85em; text-align: center;
@@ -103,15 +116,14 @@
             </div>
             
             <div class="task-banner">
-                <h2 style="margin: 0; color: var(--primary); text-align: center;"><i class="fa fa-list-ol"></i> Available Tasks</h2>
+                <h2 style="margin: 0; color: var(--primary); text-align: center;"><i class="fa fa-tasks"></i> All Available Tasks</h2>
                 <div class="instruction-step">
-                    Copy Link & Open Task | Complete 3 Min Timer | Submit Code
+                    Keyword Copy karein aur Google par search karein ya Direct Link open karein.
                 </div>
 
-                <h4 style="margin: 20px 0 10px 0;"><i class="fa fa-link"></i> Direct Task Links</h4>
                 <div class="keyword-scroll-area">
                     <div class="keyword-grid" id="live-links-list">
-                        <p style="color:white; opacity:0.6;">Loading tasks...</p>
+                        <p style="color:white; opacity:0.6;">Loading tasks and keywords...</p>
                     </div>
                 </div>
             </div>
@@ -179,22 +191,34 @@
         window.onload = checkSession;
 
         async function fetchTaskLinks() {
-            const { data } = await _supabase.from('admin_blogs').select('id, title').order('created_at', {ascending: false});
+            const { data: blogs } = await _supabase.from('admin_blogs').select('*').order('created_at', {ascending: false});
             const listContainer = document.getElementById('live-links-list');
             listContainer.innerHTML = "";
             const currentUrl = window.location.origin;
 
-            if(data && data.length > 0) {
-                data.forEach((blog, index) => {
-                    // Fix: Redirecting to taskspage.html as per new system
-                    const url = `${currentUrl}/taskspage.html?id=${blog.id}`;
+            if(blogs && blogs.length > 0) {
+                blogs.forEach((blog, index) => {
+                    const taskUrl = `${currentUrl}/taskspage.html?id=${blog.id}`;
+                    // Keyword logic: Agar keyword empty hai toh title hi keyword hai
+                    const keyword = blog.keyword || blog.title; 
+                    
                     const div = document.createElement('div');
                     div.className = 'keyword-item';
                     div.innerHTML = `
-                        <span>${index+1}. ${blog.title}</span>
+                        <div class="task-info">
+                            <b>${index+1}. ${blog.title}</b>
+                            <span><i class="fa fa-search"></i> Keyword: ${keyword}</span>
+                        </div>
                         <div class="copy-group">
-                            <i class="fa fa-copy" onclick="copyAction('${url}')" title="Copy Link"></i>
-                            <i class="fa fa-play-circle" onclick="window.open('${url}', '_blank')" title="Open Task"></i>
+                            <a href="javascript:void(0)" class="copy-btn-action" onclick="copyAction('${keyword}', 'Keyword')">
+                                <i class="fa fa-copy"></i> Copy Keyword
+                            </a>
+                            <a href="javascript:void(0)" class="copy-btn-action" onclick="copyAction('${taskUrl}', 'Link')">
+                                <i class="fa fa-link"></i> Copy Link
+                            </a>
+                            <a href="${taskUrl}" target="_blank" class="copy-btn-action" style="color:var(--success)">
+                                <i class="fa fa-play-circle"></i> Open Task
+                            </a>
                         </div>`;
                     listContainer.appendChild(div);
                 });
@@ -203,8 +227,8 @@
             }
         }
 
-        function copyAction(text) {
-            navigator.clipboard.writeText(text).then(() => alert("Link Copied!"));
+        function copyAction(text, type) {
+            navigator.clipboard.writeText(text).then(() => alert(type + " Copied!"));
         }
 
         async function verifyTaskInDB() {
@@ -224,7 +248,7 @@
             if (error) {
                 alert("Error: Duplicate code or Server busy.");
             } else { 
-                alert("Work Code Submitted Successfully! Verification ka intezaar karein."); 
+                alert("Work Code Submitted Successfully!"); 
                 document.getElementById('verify-code-input').value = "";
                 fetchHistory(); 
             }
@@ -241,7 +265,6 @@
             if(data) {
                 data.forEach(task => {
                     const isApp = task.status === 'approved';
-                    // Rate is 3 Rs per task
                     if(isApp) { approvedCount++; cash += 3; }
                     historyBody.innerHTML += `<tr>
                         <td>${new Date(task.created_at).toLocaleDateString()}</td>
@@ -263,7 +286,7 @@
                 upi_id: document.getElementById('upi_id').value, 
                 account_no: document.getElementById('acc_number').value 
             }], { onConflict: 'email' });
-            alert(error ? "Error saving details" : "Payment details updated!");
+            alert(error ? "Error" : "Saved!");
         }
 
         async function loadProfile() {
@@ -282,3 +305,4 @@
     </script>
 </body>
 </html>
+

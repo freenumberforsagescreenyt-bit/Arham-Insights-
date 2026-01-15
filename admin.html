@@ -24,6 +24,7 @@
         .blog-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #ddd; background: white; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .copy-icon { cursor: pointer; color: var(--primary); margin-left: 15px; font-size: 1.2em; }
         .delete-icon { cursor: pointer; color: var(--danger); margin-left: 15px; }
+        .status-badge { font-size: 0.7em; padding: 2px 6px; border-radius: 4px; background: #e8f5e9; color: #2e7d32; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -44,25 +45,27 @@
         </div>
         
         <div class="nav-tabs">
-            <div id="t1" class="active-tab" onclick="showTab(event, 'verify')">Verify Tasks</div>
-            <div id="t2" onclick="showTab(event, 'blogs')">Manage Blogs</div>
-            <div id="t5" onclick="showTab(event, 'keywords')">Keywords & Links</div>
+            <div id="t2" class="active-tab" onclick="showTab(event, 'blogs')">Manage Blogs</div>
+            <div id="t5" onclick="showTab(event, 'keywords')">Bulk Keywords & Links</div>
         </div>
 
-        <div id="blogs" class="tab-content">
-            <h3>Create Single Blog</h3>
-            <input type="text" id="blog-title" placeholder="Blog Title...">
-            <textarea id="blog-content" rows="6" placeholder="Full Blog Content..."></textarea>
-            <button onclick="saveBlogToSupabase()" style="width:100%;">Publish Blog</button>
+        <div id="blogs" class="tab-content active">
+            <h3>Publish Single Task</h3>
+            <input type="text" id="blog-title" placeholder="Blog Title (Worker ko dikhega)">
+            <input type="text" id="blog-keyword" placeholder="Search Keyword (Worker isse search karega)">
+            <textarea id="blog-content" rows="6" placeholder="Full Blog Content / Article..."></textarea>
+            <button onclick="saveBlogToSupabase()" style="width:100%;">Publish Task</button>
         </div>
 
         <div id="keywords" class="tab-content">
             <h3>Bulk Keywords Update (Max 50)</h3>
-            <textarea id="keywords-input" rows="10" placeholder="Keyword 1&#10;Keyword 2..."></textarea>
-            <button onclick="bulkSaveKeywords()" style="width:100%; background: var(--success);">Generate Task Links</button>
+            <p style="color:#666; font-size: 0.8em; margin-bottom: 10px;">Har line mein ek naya keyword likhein.</p>
+            <textarea id="keywords-input" rows="10" placeholder="Keyword 1&#10;Keyword 2&#10;Keyword 3..."></textarea>
+            <button onclick="bulkSaveKeywords()" id="bulkBtn" style="width:100%; background: var(--success);">Generate & Sync All Links</button>
 
-            <h3 style="color: var(--primary); margin-top:25px; border-top: 1px solid #eee; padding-top: 15px;">Live Task Links (taskspage)</h3>
-            <div class="blog-list-container" id="live-links-copy-list"></div>
+            <h3 style="color: var(--primary); margin-top:25px; border-top: 1px solid #eee; padding-top: 15px;">Live Task Management</h3>
+            <div class="blog-list-container" id="live-links-copy-list">
+                </div>
         </div>
     </div>
 
@@ -75,13 +78,8 @@
         function togglePassword() {
             const passInput = document.getElementById('access-code');
             const eyeIcon = document.getElementById('eye-icon');
-            if (passInput.type === "password") {
-                passInput.type = "text";
-                eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
-            } else {
-                passInput.type = "password";
-                eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
-            }
+            passInput.type = passInput.type === "password" ? "text" : "password";
+            eyeIcon.classList.toggle('fa-eye-slash');
         }
 
         function checkAccess() {
@@ -92,6 +90,28 @@
             } else { alert("Incorrect Admin Key!"); }
         }
 
+        async function saveBlogToSupabase() {
+            const title = document.getElementById('blog-title').value;
+            const keyword = document.getElementById('blog-keyword').value;
+            const content = document.getElementById('blog-content').value;
+
+            if(!title || !keyword) return alert("Title aur Keyword zaruri hai!");
+
+            const { error } = await _supabase.from('admin_blogs').insert([{
+                title: title,
+                keyword: keyword,
+                content: content
+            }]);
+
+            if(!error) {
+                alert("Task Published!");
+                document.getElementById('blog-title').value = "";
+                document.getElementById('blog-keyword').value = "";
+                document.getElementById('blog-content').value = "";
+                fetchBlogs();
+            } else { alert("Error: " + error.message); }
+        }
+
         async function fetchBlogs() {
             const { data, error } = await _supabase.from('admin_blogs').select('*').order('created_at', {ascending: false});
             const list = document.getElementById('live-links-copy-list');
@@ -100,17 +120,17 @@
 
             if(data) {
                 data.forEach(b => {
-                    // Yahan taskpage ko badal kar taskspage kiya gaya hai
                     const fullUrl = `${baseUrl}/taskspage.html?id=${b.id}`;
                     list.innerHTML += `
                         <div class="blog-item">
                             <div style="flex:1">
-                                <b>${b.title}</b><br>
-                                <small style="color:#2980b9;">${fullUrl}</small>
+                                <b>${b.title}</b> <span class="status-badge">Live</span><br>
+                                <small style="color:var(--primary);">Keyword: ${b.keyword || 'Not Set'}</small><br>
+                                <small style="color:#777; font-size: 0.75em;">${fullUrl}</small>
                             </div>
                             <div>
-                                <i class="fa fa-copy copy-icon" onclick="copyText('${fullUrl}')"></i>
-                                <i class="fa fa-trash delete-icon" onclick="deleteBlog('${b.id}')"></i>
+                                <i class="fa fa-copy copy-icon" onclick="copyText('${fullUrl}')" title="Copy Link"></i>
+                                <i class="fa fa-trash delete-icon" onclick="deleteBlog('${b.id}')" title="Delete"></i>
                             </div>
                         </div>`;
                 });
@@ -118,24 +138,41 @@
         }
 
         async function bulkSaveKeywords() {
+            const btn = document.getElementById('bulkBtn');
             const input = document.getElementById('keywords-input').value;
             const keywords = input.split('\n').filter(k => k.trim() !== "");
+            
+            if(keywords.length === 0) return alert("Kam se kam ek keyword likhein!");
+            
+            btn.disabled = true;
+            btn.innerText = "Syncing with Database...";
+
             const rows = keywords.map(kw => ({
                 title: kw.trim(),
-                content: `Detail analysis on ${kw.trim()} for Arham Insights workers.`
+                keyword: kw.trim(), // Keyword aur Title bulk mein same rakhenge
+                content: `Complete guide and analysis on ${kw.trim()} for Arham Insights users.`
             }));
-            await _supabase.from('admin_blogs').insert(rows);
-            fetchBlogs();
+
+            const { error } = await _supabase.from('admin_blogs').insert(rows);
+            
+            if(!error) {
+                alert(keywords.length + " Tasks generated successfully!");
+                document.getElementById('keywords-input').value = "";
+                fetchBlogs();
+            } else { alert("Error: " + error.message); }
+            
+            btn.disabled = false;
+            btn.innerText = "Generate Task Links";
         }
 
         async function deleteBlog(id) {
-            if(confirm("Nischit hai?")) {
+            if(confirm("Kya aap is task ko delete karna chahte hain?")) {
                 await _supabase.from('admin_blogs').delete().eq('id', id);
                 fetchBlogs();
             }
         }
 
-        function copyText(t) { navigator.clipboard.writeText(t).then(() => alert("Link Copied!")); }
+        function copyText(t) { navigator.clipboard.writeText(t).then(() => alert("Task Link Copied!")); }
         
         function showTab(e, id) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
@@ -143,6 +180,8 @@
             document.getElementById(id).classList.add('active');
             e.currentTarget.classList.add('active-tab');
         }
+
+        function logout() { location.reload(); }
     </script>
 </body>
 </html>
