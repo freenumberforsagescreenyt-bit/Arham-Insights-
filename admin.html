@@ -15,20 +15,15 @@
         .pass-wrapper i { position: absolute; right: 15px; top: 12px; cursor: pointer; color: #777; font-size: 1.2em; z-index: 10; }
         input, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; margin-bottom: 10px; font-size: 0.9em; }
         button { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        button:hover { opacity: 0.9; }
         .nav-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; position: sticky; top: 0; background: white; z-index: 10; padding: 10px 0; border-bottom: 2px solid #eee; }
         .nav-tabs div { cursor: pointer; padding: 10px 15px; background: #eee; border-radius: 5px; flex: 1; text-align: center; font-size: 0.85em; font-weight: bold; }
         .nav-tabs .active-tab { background: var(--primary); color: white; }
-        .tab-content { display: none; animation: fadeIn 0.3s; }
+        .tab-content { display: none; }
         .active { display: block; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.82em; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
         .blog-list-container { max-height: 500px; overflow-y: auto; border: 1px solid #eee; margin-top: 15px; padding: 10px; border-radius: 8px; background: #fafafa; }
         .blog-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #ddd; background: white; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .copy-icon { cursor: pointer; color: var(--primary); margin-left: 15px; font-size: 1.2em; transition: 0.2s; }
-        .delete-icon { cursor: pointer; color: var(--danger); margin-left: 15px; font-size: 1.1em; }
-        .copy-icon:hover { transform: scale(1.2); }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .copy-icon { cursor: pointer; color: var(--primary); margin-left: 15px; font-size: 1.2em; }
+        .delete-icon { cursor: pointer; color: var(--danger); margin-left: 15px; }
     </style>
 </head>
 <body>
@@ -51,18 +46,7 @@
         <div class="nav-tabs">
             <div id="t1" class="active-tab" onclick="showTab(event, 'verify')">Verify Tasks</div>
             <div id="t2" onclick="showTab(event, 'blogs')">Manage Blogs</div>
-            <div id="t6" onclick="showTab(event, 'worker-finance')">Worker Finance</div>
             <div id="t5" onclick="showTab(event, 'keywords')">Keywords & Links</div>
-        </div>
-
-        <div id="verify" class="tab-content active">
-            <h3>Worker Submissions</h3>
-            <div style="overflow-x:auto;">
-                <table>
-                    <thead><tr><th>Worker</th><th>Code</th><th>Status</th><th>Action</th></tr></thead>
-                    <tbody id="pending-tasks-list"></tbody>
-                </table>
-            </div>
         </div>
 
         <div id="blogs" class="tab-content">
@@ -72,154 +56,93 @@
             <button onclick="saveBlogToSupabase()" style="width:100%;">Publish Blog</button>
         </div>
 
-        <div id="worker-finance" class="tab-content">
-            <div style="color:#333; background:#fff4e6; padding:15px; border-radius:10px; margin-bottom: 15px;">
-                <h3>Payout Settings</h3>
-                <label>Rate per task: </label>
-                <input type="number" id="pay-rate" value="3.00" step="0.5" style="width:80px;">
-                <button onclick="alert('Rate Updated Locally!')">Save Rate</button>
-            </div>
-            <table style="color:#333;">
-                <thead><tr><th>Worker Email</th><th>Tasks</th><th>Total Earning</th></tr></thead>
-                <tbody id="bank-data-list"></tbody>
-            </table>
-        </div>
-
         <div id="keywords" class="tab-content">
             <h3>Bulk Keywords Update (Max 50)</h3>
-            <p style="color: #666; font-size: 0.8em;">Har line mein ek keyword dalein.</p>
             <textarea id="keywords-input" rows="10" placeholder="Keyword 1&#10;Keyword 2..."></textarea>
-            <button onclick="bulkSaveKeywords()" style="width:100%; background: var(--success);">Generate All Links</button>
+            <button onclick="bulkSaveKeywords()" style="width:100%; background: var(--success);">Generate Task Links</button>
 
-            <h3 style="color: var(--primary); margin-top:25px; border-top: 1px solid #eee; padding-top: 15px;">Live Task Links</h3>
-            <div class="blog-list-container" id="live-links-copy-list">
-                </div>
+            <h3 style="color: var(--primary); margin-top:25px; border-top: 1px solid #eee; padding-top: 15px;">Live Task Links (taskspage)</h3>
+            <div class="blog-list-container" id="live-links-copy-list"></div>
         </div>
     </div>
 
     <script>
-        // Supabase Configuration
         const SUPABASE_URL = "https://mkzgmrxakattqgbjnwch.supabase.co"; 
         const SUPABASE_KEY = "sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL"; 
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         const SECRET_CODE = "Jainam Jayati Shasnam";
 
-        // Login Logic
-        function checkAccess() {
-            const inputCode = document.getElementById('access-code').value;
-            if(inputCode === SECRET_CODE) {
-                document.getElementById('login-box').style.display = 'none';
-                document.getElementById('main-dashboard').style.display = 'block';
-                fetchBlogs();
-            } else { 
-                alert("Incorrect Admin Key!"); 
-            }
-        }
-
-        // Eye Button (Password Toggle) Logic
         function togglePassword() {
             const passInput = document.getElementById('access-code');
             const eyeIcon = document.getElementById('eye-icon');
             if (passInput.type === "password") {
                 passInput.type = "text";
-                eyeIcon.classList.remove('fa-eye');
-                eyeIcon.classList.add('fa-eye-slash');
+                eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
             } else {
                 passInput.type = "password";
-                eyeIcon.classList.remove('fa-eye-slash');
-                eyeIcon.classList.add('fa-eye');
+                eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
             }
         }
 
-        // Single Blog Logic
-        async function saveBlogToSupabase() {
-            const title = document.getElementById('blog-title').value;
-            const content = document.getElementById('blog-content').value;
-            if(!title || !content) return alert("Kripya title aur content bharein!");
-            
-            const { error } = await _supabase.from('admin_blogs').insert([{ title, content }]);
-            if(!error) { 
-                alert("Blog Saved Successfully!"); 
-                document.getElementById('blog-title').value = "";
-                document.getElementById('blog-content').value = "";
-                fetchBlogs(); 
-            } else {
-                alert("Error: " + error.message);
-            }
-        }
-
-        // Bulk Save Logic
-        async function bulkSaveKeywords() {
-            const input = document.getElementById('keywords-input').value;
-            const keywordList = input.split('\n').filter(k => k.trim() !== "");
-            if(keywordList.length === 0) return alert("Enter at least one keyword!");
-
-            const rowsToInsert = keywordList.map(kw => ({
-                title: kw.trim(),
-                content: `Is post mein hum detail mein baat karenge: ${kw.trim()}. Digital earning ke liye ye ek mahatvapurn vishay hai...`
-            }));
-
-            const { error } = await _supabase.from('admin_blogs').insert(rowsToInsert);
-            if(!error) {
-                alert(keywordList.length + " Links Generated!");
-                document.getElementById('keywords-input').value = "";
+        function checkAccess() {
+            if(document.getElementById('access-code').value === SECRET_CODE) {
+                document.getElementById('login-box').style.display = 'none';
+                document.getElementById('main-dashboard').style.display = 'block';
                 fetchBlogs();
-            } else {
-                alert("Bulk Error: " + error.message);
-            }
+            } else { alert("Incorrect Admin Key!"); }
         }
 
-        // Fetch and Display Blogs with Delete Option
         async function fetchBlogs() {
             const { data, error } = await _supabase.from('admin_blogs').select('*').order('created_at', {ascending: false});
-            const linkCopyList = document.getElementById('live-links-copy-list');
-            linkCopyList.innerHTML = "";
-            
-            const currentSiteUrl = window.location.origin;
+            const list = document.getElementById('live-links-copy-list');
+            list.innerHTML = "";
+            const baseUrl = window.location.origin;
 
             if(data) {
                 data.forEach(b => {
-                    const fullUrl = `${currentSiteUrl}/taskpage.html?id=${b.id}`;
-                    linkCopyList.innerHTML += `
+                    // Yahan taskpage ko badal kar taskspage kiya gaya hai
+                    const fullUrl = `${baseUrl}/taskspage.html?id=${b.id}`;
+                    list.innerHTML += `
                         <div class="blog-item">
                             <div style="flex:1">
-                                <b style="color:#2c3e50;">${b.title}</b><br>
-                                <small style="color:#2980b9; word-break: break-all;">${fullUrl}</small>
+                                <b>${b.title}</b><br>
+                                <small style="color:#2980b9;">${fullUrl}</small>
                             </div>
-                            <div style="display:flex; align-items:center;">
-                                <i class="fa fa-copy copy-icon" onclick="copyText('${fullUrl}')" title="Copy Link"></i>
-                                <i class="fa fa-trash delete-icon" onclick="deleteBlog('${b.id}')" title="Delete Task"></i>
+                            <div>
+                                <i class="fa fa-copy copy-icon" onclick="copyText('${fullUrl}')"></i>
+                                <i class="fa fa-trash delete-icon" onclick="deleteBlog('${b.id}')"></i>
                             </div>
                         </div>`;
                 });
             }
         }
 
-        // Delete Logic
+        async function bulkSaveKeywords() {
+            const input = document.getElementById('keywords-input').value;
+            const keywords = input.split('\n').filter(k => k.trim() !== "");
+            const rows = keywords.map(kw => ({
+                title: kw.trim(),
+                content: `Detail analysis on ${kw.trim()} for Arham Insights workers.`
+            }));
+            await _supabase.from('admin_blogs').insert(rows);
+            fetchBlogs();
+        }
+
         async function deleteBlog(id) {
-            if(confirm("Kya aap is task ko delete karna chahte hain?")) {
-                const { error } = await _supabase.from('admin_blogs').delete().eq('id', id);
-                if(!error) {
-                    fetchBlogs();
-                } else {
-                    alert("Delete Error: " + error.message);
-                }
+            if(confirm("Nischit hai?")) {
+                await _supabase.from('admin_blogs').delete().eq('id', id);
+                fetchBlogs();
             }
         }
 
-        // Utility Functions
-        function copyText(text) {
-            navigator.clipboard.writeText(text).then(() => alert("Link Copied!"));
-        }
-
-        function showTab(event, tabId) {
+        function copyText(t) { navigator.clipboard.writeText(t).then(() => alert("Link Copied!")); }
+        
+        function showTab(e, id) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.nav-tabs div').forEach(t => t.classList.remove('active-tab'));
-            document.getElementById(tabId).classList.add('active');
-            event.currentTarget.classList.add('active-tab');
+            document.getElementById(id).classList.add('active');
+            e.currentTarget.classList.add('active-tab');
         }
-        
-        function logout() { location.reload(); }
     </script>
 </body>
 </html>

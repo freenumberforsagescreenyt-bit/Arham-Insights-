@@ -2,29 +2,82 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TL Code Generator - Arham Admin</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { font-family: sans-serif; background: #2c3e50; color: white; padding: 50px; text-align: center; }
-        .gen-box { background: white; color: #333; padding: 30px; border-radius: 15px; display: inline-block; width: 400px; }
-        input { width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
-        button { background: #ff9933; color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; width: 95%; font-weight: bold; }
+        body { font-family: 'Segoe UI', sans-serif; background: #2c3e50; color: white; min-height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; }
+        .gen-box { background: white; color: #333; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 90%; max-width: 400px; text-align: center; }
+        h2 { color: #ff9933; margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+        button { background: #ff9933; color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; font-size: 16px; transition: 0.3s; margin-top: 10px; }
+        button:hover { background: #e68a00; transform: translateY(-2px); }
+        .status-msg { margin-top: 15px; font-size: 14px; font-weight: bold; }
     </style>
 </head>
 <body>
+
     <div class="gen-box">
-        <h2 style="color: #ff9933;">Generate TL Code</h2>
+        <h2><i class="fas fa-user-plus"></i> Generate TL Code</h2>
         <input type="text" id="tl-name" placeholder="Team Leader Name (e.g. Akash)">
         <input type="text" id="tl-code" placeholder="Create Unique Code (e.g. ARH-TL-77)">
-        <button onclick="saveTL()">Save & Activate TL</button>
+        <button id="save-btn" onclick="saveTL()">Save & Activate TL</button>
+        <div id="msg" class="status-msg"></div>
     </div>
 
     <script>
-        function saveTL() {
-            const name = document.getElementById('tl-name').value;
-            const code = document.getElementById('tl-code').value;
-            alert(`Success! TL ${name} is now active with code: ${code}\n(Admin will connect this to Supabase)`);
+        // Supabase Configuration
+        const SUPABASE_URL = "https://mkzgmrxakattqgbjnwch.supabase.co"; 
+        const SUPABASE_KEY = "sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL"; 
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        async function saveTL() {
+            const name = document.getElementById('tl-name').value.trim();
+            const code = document.getElementById('tl-code').value.trim();
+            const msgDiv = document.getElementById('msg');
+            const btn = document.getElementById('save-btn');
+
+            if (!name || !code) {
+                alert("Please fill both fields!");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "Saving...";
+            msgDiv.innerText = "Connecting to database...";
+
+            try {
+                // Supabase mein data insert karna
+                const { data, error } = await _supabase
+                    .from('tl_auth')
+                    .insert([{ tl_name: name, tl_code: code }]);
+
+                if (error) {
+                    if (error.code === '23505') {
+                        throw new Error("This TL Code already exists! Use a different one.");
+                    }
+                    throw error;
+                }
+
+                msgDiv.style.color = "green";
+                msgDiv.innerText = `✅ Success! ${name} is activated.`;
+                alert(`Success! TL ${name} is now active.\nCode: ${code}`);
+                
+                // Fields clear karein
+                document.getElementById('tl-name').value = "";
+                document.getElementById('tl-code').value = "";
+
+            } catch (err) {
+                msgDiv.style.color = "red";
+                msgDiv.innerText = "❌ Error: " + err.message;
+                console.error(err);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Save & Activate TL";
+            }
         }
     </script>
 </body>
 </html>
+
 
