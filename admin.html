@@ -11,10 +11,11 @@
         body { font-family: 'Segoe UI', sans-serif; background-color: var(--dark-bg); color: white; margin: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
         .login-box, .dashboard { background: white; color: #333; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); width: 95%; max-width: 1100px; margin: 20px 0; }
         .dashboard { display: none; }
-        .pass-wrapper { position: relative; width: 100%; margin-bottom: 10px; }
-        .pass-wrapper i { position: absolute; right: 15px; top: 12px; cursor: pointer; color: #777; font-size: 1.2em; }
+        .pass-wrapper { position: relative; width: 100%; margin-bottom: 15px; }
+        .pass-wrapper i { position: absolute; right: 15px; top: 12px; cursor: pointer; color: #777; font-size: 1.2em; z-index: 10; }
         input, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; margin-bottom: 10px; font-size: 0.9em; }
         button { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        button:hover { opacity: 0.9; }
         .nav-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; position: sticky; top: 0; background: white; z-index: 10; padding: 10px 0; border-bottom: 2px solid #eee; }
         .nav-tabs div { cursor: pointer; padding: 10px 15px; background: #eee; border-radius: 5px; flex: 1; text-align: center; font-size: 0.85em; font-weight: bold; }
         .nav-tabs .active-tab { background: var(--primary); color: white; }
@@ -22,10 +23,12 @@
         .active { display: block; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.82em; }
         th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-        .blog-list-container { max-height: 400px; overflow-y: auto; border: 1px solid #eee; margin-top: 15px; padding: 10px; border-radius: 8px; background: #fafafa; }
-        .blog-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #ddd; background: white; margin-bottom: 5px; border-radius: 5px; color: #333;}
-        .copy-icon { cursor: pointer; color: var(--primary); margin-left: 10px; transition: 0.2s; }
-        .copy-icon:hover { transform: scale(1.3); }
+        .blog-list-container { max-height: 500px; overflow-y: auto; border: 1px solid #eee; margin-top: 15px; padding: 10px; border-radius: 8px; background: #fafafa; }
+        .blog-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #ddd; background: white; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .copy-icon { cursor: pointer; color: var(--primary); margin-left: 15px; font-size: 1.2em; transition: 0.2s; }
+        .delete-icon { cursor: pointer; color: var(--danger); margin-left: 15px; font-size: 1.1em; }
+        .copy-icon:hover { transform: scale(1.2); }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -34,7 +37,7 @@
         <h2 style="color: var(--primary); text-align: center;"><i class="fa fa-shield-alt"></i> Admin Login</h2>
         <div class="pass-wrapper">
             <input type="password" id="access-code" placeholder="Enter Secret Key...">
-            <i class="fa fa-eye-slash" id="toggle-pass" onclick="togglePassword()"></i>
+            <i class="fa fa-eye" id="eye-icon" onclick="togglePassword()"></i>
         </div>
         <button onclick="checkAccess()" style="width:100%;">Login</button>
     </div>
@@ -54,88 +57,124 @@
 
         <div id="verify" class="tab-content active">
             <h3>Worker Submissions</h3>
-            <table>
-                <thead><tr><th>Worker</th><th>Code</th><th>Status</th><th>Action</th></tr></thead>
-                <tbody id="pending-tasks-list"></tbody>
-            </table>
+            <div style="overflow-x:auto;">
+                <table>
+                    <thead><tr><th>Worker</th><th>Code</th><th>Status</th><th>Action</th></tr></thead>
+                    <tbody id="pending-tasks-list"></tbody>
+                </table>
+            </div>
         </div>
 
         <div id="blogs" class="tab-content">
             <h3>Create Single Blog</h3>
-            <input type="text" id="blog-title" placeholder="Title...">
-            <textarea id="blog-content" rows="4" placeholder="Content..."></textarea>
-            <button onclick="saveBlogToSupabase()" style="width:100%;">Save Single Blog</button>
+            <input type="text" id="blog-title" placeholder="Blog Title...">
+            <textarea id="blog-content" rows="6" placeholder="Full Blog Content..."></textarea>
+            <button onclick="saveBlogToSupabase()" style="width:100%;">Publish Blog</button>
         </div>
 
         <div id="worker-finance" class="tab-content">
-            <div class="finance-card" style="color:#333; background:#fff4e6; padding:15px; border-radius:10px; margin-bottom: 10px;">
-                <h3>Payout Rate</h3>
+            <div style="color:#333; background:#fff4e6; padding:15px; border-radius:10px; margin-bottom: 15px;">
+                <h3>Payout Settings</h3>
+                <label>Rate per task: </label>
                 <input type="number" id="pay-rate" value="3.00" step="0.5" style="width:80px;">
-                <button onclick="loadWorkerFinance()">Apply Rate</button>
+                <button onclick="alert('Rate Updated Locally!')">Save Rate</button>
             </div>
             <table style="color:#333;">
-                <thead><tr><th>Email</th><th>Tasks</th><th>Earning</th></tr></thead>
+                <thead><tr><th>Worker Email</th><th>Tasks</th><th>Total Earning</th></tr></thead>
                 <tbody id="bank-data-list"></tbody>
             </table>
         </div>
 
         <div id="keywords" class="tab-content">
-            <h3>Bulk 50 Keywords Update</h3>
-            <p style="color: #666; font-size: 0.8em;">Ek line mein ek keyword dalein.</p>
+            <h3>Bulk Keywords Update (Max 50)</h3>
+            <p style="color: #666; font-size: 0.8em;">Har line mein ek keyword dalein.</p>
             <textarea id="keywords-input" rows="10" placeholder="Keyword 1&#10;Keyword 2..."></textarea>
-            <button onclick="bulkSaveKeywords()" style="width:100%; background: var(--success);">Publish All Keywords Now</button>
+            <button onclick="bulkSaveKeywords()" style="width:100%; background: var(--success);">Generate All Links</button>
 
-            <h3 style="color: var(--primary); margin-top:20px;">Live Task Links (For Workers)</h3>
-            <div class="blog-list-container" id="live-links-copy-list"></div>
+            <h3 style="color: var(--primary); margin-top:25px; border-top: 1px solid #eee; padding-top: 15px;">Live Task Links</h3>
+            <div class="blog-list-container" id="live-links-copy-list">
+                </div>
         </div>
     </div>
 
     <script>
+        // Supabase Configuration
         const SUPABASE_URL = "https://mkzgmrxakattqgbjnwch.supabase.co"; 
         const SUPABASE_KEY = "sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL"; 
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         const SECRET_CODE = "Jainam Jayati Shasnam";
 
+        // Login Logic
         function checkAccess() {
-            if(document.getElementById('access-code').value === SECRET_CODE) {
+            const inputCode = document.getElementById('access-code').value;
+            if(inputCode === SECRET_CODE) {
                 document.getElementById('login-box').style.display = 'none';
                 document.getElementById('main-dashboard').style.display = 'block';
                 fetchBlogs();
-            } else { alert("Wrong Key!"); }
+            } else { 
+                alert("Incorrect Admin Key!"); 
+            }
         }
 
+        // Eye Button (Password Toggle) Logic
+        function togglePassword() {
+            const passInput = document.getElementById('access-code');
+            const eyeIcon = document.getElementById('eye-icon');
+            if (passInput.type === "password") {
+                passInput.type = "text";
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                passInput.type = "password";
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        }
+
+        // Single Blog Logic
         async function saveBlogToSupabase() {
             const title = document.getElementById('blog-title').value;
             const content = document.getElementById('blog-content').value;
-            if(!title || !content) return alert("Fill data!");
+            if(!title || !content) return alert("Kripya title aur content bharein!");
+            
             const { error } = await _supabase.from('admin_blogs').insert([{ title, content }]);
-            if(!error) { alert("Saved!"); fetchBlogs(); }
+            if(!error) { 
+                alert("Blog Saved Successfully!"); 
+                document.getElementById('blog-title').value = "";
+                document.getElementById('blog-content').value = "";
+                fetchBlogs(); 
+            } else {
+                alert("Error: " + error.message);
+            }
         }
 
+        // Bulk Save Logic
         async function bulkSaveKeywords() {
             const input = document.getElementById('keywords-input').value;
             const keywordList = input.split('\n').filter(k => k.trim() !== "");
-            if(keywordList.length === 0) return alert("Enter keywords!");
+            if(keywordList.length === 0) return alert("Enter at least one keyword!");
 
             const rowsToInsert = keywordList.map(kw => ({
                 title: kw.trim(),
-                content: `Doston, aaj hum baat karenge ${kw.trim()} ke baare mein...`
+                content: `Is post mein hum detail mein baat karenge: ${kw.trim()}. Digital earning ke liye ye ek mahatvapurn vishay hai...`
             }));
 
             const { error } = await _supabase.from('admin_blogs').insert(rowsToInsert);
             if(!error) {
-                alert("Bulk Keywords Published!");
+                alert(keywordList.length + " Links Generated!");
                 document.getElementById('keywords-input').value = "";
                 fetchBlogs();
+            } else {
+                alert("Bulk Error: " + error.message);
             }
         }
 
+        // Fetch and Display Blogs with Delete Option
         async function fetchBlogs() {
-            const { data } = await _supabase.from('admin_blogs').select('*').order('created_at', {ascending: false});
+            const { data, error } = await _supabase.from('admin_blogs').select('*').order('created_at', {ascending: false});
             const linkCopyList = document.getElementById('live-links-copy-list');
             linkCopyList.innerHTML = "";
             
-            // DYNAMIC URL LOGIC: Ye aapki site ka current address apne aap pakad lega
             const currentSiteUrl = window.location.origin;
 
             if(data) {
@@ -143,13 +182,32 @@
                     const fullUrl = `${currentSiteUrl}/taskpage.html?id=${b.id}`;
                     linkCopyList.innerHTML += `
                         <div class="blog-item">
-                            <div style="flex:1"><b>${b.title}</b><br><small style="color:blue">${fullUrl}</small></div>
-                            <i class="fa fa-copy copy-icon" onclick="copyText('${fullUrl}')"></i>
+                            <div style="flex:1">
+                                <b style="color:#2c3e50;">${b.title}</b><br>
+                                <small style="color:#2980b9; word-break: break-all;">${fullUrl}</small>
+                            </div>
+                            <div style="display:flex; align-items:center;">
+                                <i class="fa fa-copy copy-icon" onclick="copyText('${fullUrl}')" title="Copy Link"></i>
+                                <i class="fa fa-trash delete-icon" onclick="deleteBlog('${b.id}')" title="Delete Task"></i>
+                            </div>
                         </div>`;
                 });
             }
         }
 
+        // Delete Logic
+        async function deleteBlog(id) {
+            if(confirm("Kya aap is task ko delete karna chahte hain?")) {
+                const { error } = await _supabase.from('admin_blogs').delete().eq('id', id);
+                if(!error) {
+                    fetchBlogs();
+                } else {
+                    alert("Delete Error: " + error.message);
+                }
+            }
+        }
+
+        // Utility Functions
         function copyText(text) {
             navigator.clipboard.writeText(text).then(() => alert("Link Copied!"));
         }
@@ -159,14 +217,9 @@
             document.querySelectorAll('.nav-tabs div').forEach(t => t.classList.remove('active-tab'));
             document.getElementById(tabId).classList.add('active');
             event.currentTarget.classList.add('active-tab');
-            if(tabId === 'worker-finance') loadWorkerFinance();
         }
         
         function logout() { location.reload(); }
-        function togglePassword() {
-            const p = document.getElementById('access-code');
-            p.type = p.type === "password" ? "text" : "password";
-        }
     </script>
 </body>
 </html>
