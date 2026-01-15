@@ -48,7 +48,9 @@
             flex-direction: column;
             gap: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: 0.3s;
         }
+        .keyword-item:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
         .task-info b { color: var(--dark); font-size: 1em; display: block; margin-bottom: 4px; }
         .task-info span { color: #666; font-size: 0.85em; background: #eee; padding: 2px 6px; border-radius: 4px; }
@@ -123,7 +125,7 @@
 
                 <div class="keyword-scroll-area">
                     <div class="keyword-grid" id="live-links-list">
-                        <p style="color:white; opacity:0.6;">Loading tasks and keywords...</p>
+                        <p style="color:white; opacity:0.6;">Loading tasks...</p>
                     </div>
                 </div>
             </div>
@@ -166,33 +168,50 @@
     </div>
 
     <script>
+        // Supabase configuration
         const SUPABASE_URL = "https://mkzgmrxakattqgbjnwch.supabase.co"; 
         const SUPABASE_KEY = "sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL"; 
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let currentUser = null;
 
+        // AUTH CHECK
         async function checkSession() {
-            const { data: { session } } = await _supabase.auth.getSession();
-            if (session && session.user) {
-                currentUser = session.user;
-                document.getElementById('user-display-email').innerText = currentUser.email;
-                document.getElementById('global-loader').style.display = 'none';
-                document.getElementById('main-content').style.display = 'block';
-                
-                loadProfile();
-                fetchHistory();
-                fetchTaskLinks();
-            } else {
-                window.location.href = "login.html";
+            try {
+                const { data: { session }, error } = await _supabase.auth.getSession();
+                if (session && session.user) {
+                    currentUser = session.user;
+                    document.getElementById('user-display-email').innerText = currentUser.email;
+                    
+                    // Show content
+                    document.getElementById('global-loader').style.display = 'none';
+                    document.getElementById('main-content').style.display = 'block';
+                    
+                    // Initial Data Loads
+                    loadProfile();
+                    fetchHistory();
+                    fetchTaskLinks();
+                } else {
+                    window.location.href = "login.html";
+                }
+            } catch (err) {
+                console.error("Auth error:", err);
+                alert("Session check failed. Please refresh.");
             }
         }
 
         window.onload = checkSession;
 
+        // FETCH BLOGS/TASKS
         async function fetchTaskLinks() {
-            const { data: blogs } = await _supabase.from('admin_blogs').select('*').order('created_at', {ascending: false});
             const listContainer = document.getElementById('live-links-list');
+            const { data: blogs, error } = await _supabase.from('admin_blogs').select('*').order('created_at', {ascending: false});
+            
+            if(error) {
+                listContainer.innerHTML = `<p style="color:red">Error loading tasks: ${error.message}</p>`;
+                return;
+            }
+
             listContainer.innerHTML = "";
             const currentUrl = window.location.origin;
 
@@ -216,13 +235,13 @@
                                 <i class="fa fa-link"></i> Copy Link
                             </a>
                             <a href="${taskUrl}" target="_blank" class="copy-btn-action" style="color:var(--success)">
-                                <i class="fa fa-play-circle"></i> Open Task
+                                <i class="fa fa-play-circle"></i> Open
                             </a>
                         </div>`;
                     listContainer.appendChild(div);
                 });
             } else {
-                listContainer.innerHTML = "<p style='color:white; padding:10px;'>No tasks available right now.</p>";
+                listContainer.innerHTML = "<p style='color:white;'>No active tasks.</p>";
             }
         }
 
@@ -230,57 +249,55 @@
             navigator.clipboard.writeText(text).then(() => alert(type + " Copied!"));
         }
 
-        // --- FIXED: Submit Logic to Handle Duplicates and Server Busy ---
+        // SUBMIT TASK CODE
         async function verifyTaskInDB() {
             const codeInput = document.getElementById('verify-code-input').value.trim();
             const btn = document.getElementById('submitBtn');
             
-            if(!codeInput) return alert("Kripya code paste karein!");
-            if(!codeInput.startsWith("ARH-")) return alert("Invalid Code! Code ARH- se shuru hona chahiye.");
+            if(!codeInput) return alert("Please enter code!");
+            if(!codeInput.startsWith("ARH-")) return alert("Code must start with ARH-");
             
             btn.disabled = true;
-            btn.innerText = "Checking...";
+            btn.innerText = "Processing...";
 
             try {
-                // Pehle check karte hain ki ye code pehle kisi ne submit toh nahi kiya
-                const { data: alreadyUsed } = await _supabase
+                // Check Duplicate
+                const { data: existing } = await _supabase
                     .from('tasks')
                     .select('task_code')
                     .eq('task_code', codeInput)
                     .maybeSingle();
 
-                if (alreadyUsed) {
-                    alert("❌ Error: Ye code pehle hi submit ho chuka hai! Naya task poora karke naya code laayein.");
-                    btn.disabled = false;
-                    btn.innerText = "Submit";
-                    return;
-                }
-
-                // Agar unique hai toh insert karein
-                const { error } = await _supabase.from('tasks').insert([{ 
-                    worker_email: currentUser.email, 
-                    task_code: codeInput, 
-                    status: 'pending' 
-                }]);
-
-                if (error) {
-                    throw error;
-                } else { 
-                    alert("✅ Success! Aapka code submit ho gaya hai. Ab admin ise approve karenge."); 
+                if (existing) {
+                    alert("❌ This code has already been used!");
+                } else {
+                    // Insert
+                    const { error } = await _supabase.from('tasks').insert([{ 
+                        worker_email: currentUser.email, 
+                        task_code: codeInput, 
+                        status: 'pending' 
+                    }]);
+                    if (error) throw error;
+                    alert("✅ Task Submitted Successfully!");
                     document.getElementById('verify-code-input').value = "";
-                    fetchHistory(); 
+                    fetchHistory();
                 }
             } catch (err) {
-                console.error(err);
-                alert("❌ Server Error: Shayad aapka internet slow hai ya code duplicate hai. Dobara koshish karein.");
+                alert("❌ Submission Error: " + err.message);
             } finally {
                 btn.disabled = false;
                 btn.innerText = "Submit";
             }
         }
 
+        // HISTORY & STATS
         async function fetchHistory() {
-            const { data } = await _supabase.from('tasks').select('*').eq('worker_email', currentUser.email).order('created_at', { ascending: false });
+            const { data, error } = await _supabase
+                .from('tasks')
+                .select('*')
+                .eq('worker_email', currentUser.email)
+                .order('created_at', { ascending: false });
+            
             const historyBody = document.getElementById('task-history-body');
             historyBody.innerHTML = "";
             let approvedCount = 0; let cash = 0;
@@ -301,6 +318,7 @@
             }
         }
 
+        // PAYMENT INFO
         async function savePaymentDetails(e) {
             e.preventDefault();
             const { error } = await _supabase.from('profiles').upsert([{ 
@@ -309,16 +327,18 @@
                 upi_id: document.getElementById('upi_id').value, 
                 account_no: document.getElementById('acc_number').value 
             }], { onConflict: 'email' });
-            alert(error ? "Error" : "Saved!");
+            alert(error ? "Error: " + error.message : "Details Saved!");
         }
 
         async function loadProfile() {
-            const { data } = await _supabase.from('profiles').select('*').eq('email', currentUser.email).single();
-            if(data) {
-                document.getElementById('bank_name').value = data.bank_name || '';
-                document.getElementById('upi_id').value = data.upi_id || '';
-                document.getElementById('acc_number').value = data.account_no || '';
-            }
+            try {
+                const { data } = await _supabase.from('profiles').select('*').eq('email', currentUser.email).maybeSingle();
+                if(data) {
+                    document.getElementById('bank_name').value = data.bank_name || '';
+                    document.getElementById('upi_id').value = data.upi_id || '';
+                    document.getElementById('acc_number').value = data.account_no || '';
+                }
+            } catch (e) { console.log("Profile not found yet"); }
         }
 
         async function logout() { 
@@ -328,3 +348,4 @@
     </script>
 </body>
 </html>
+
