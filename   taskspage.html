@@ -101,11 +101,6 @@
             <div id="task-body">Content is being verified...</div>
         </article>
 
-        <div class="ad-space">
-            <ins style="width: 320px;height:50px" data-width="320" data-height="50" class="pde6aa5416d" data-domain="//data527.click" data-affquery="/22eed5bea0245b608235/de6aa5416d/?placementName=default"></ins>
-            <script src="//data527.click/js/responsive.js" async></script>
-        </div>
-
         <div id="secret-code-section">
             <h3 style="color: var(--success); margin: 0;"><i class="fa fa-check-circle"></i> Verification Successful!</h3>
             <p style="font-size: 0.8em; color: #666;">Copy this code and submit it on the dashboard.</p>
@@ -165,33 +160,32 @@
             document.getElementById('final-code').innerText = generatedCode;
             document.getElementById('secret-code-section').style.display = 'block';
             
-            // Database mein turant insert karein taaki Admin.html par show ho jaaye
-            const { error } = await _supabase.from('tasks').insert([{ 
-                worker_email: currentUser.email, 
-                task_code: generatedCode, 
-                status: 'generated', 
+            // Database mein turant insert karein taaki Admin panel mein 'Generated' dikhe
+            await _supabase.from('tasks').insert([{ 
+                generated_code: generatedCode, 
+                status: 'generated_by_user', 
                 blog_id: taskId 
             }]);
-
-            if(error) console.error("Database Error:", error);
         }
 
-        function handleCodeCopy() {
+        async function handleCodeCopy() {
             const btn = document.getElementById('copyBtn');
             const msg = document.getElementById('copy-msg');
 
             // Copy to clipboard
-            navigator.clipboard.writeText(generatedCode).then(() => {
+            navigator.clipboard.writeText(generatedCode).then(async () => {
                 msg.style.display = 'block';
                 btn.innerText = "COPIED!";
                 btn.disabled = true;
                 btn.style.opacity = "0.7";
                 
-                // 1.2 second baad action karein
+                // Final Sync confirm karein (optional but good for safety)
+                await _supabase.from('tasks').update({ status: 'generated_by_user' }).eq('generated_code', generatedCode);
+                
                 setTimeout(() => {
-                    // Naye tab mein ad
+                    // Naye tab mein ad open karein
                     window.open('https://www.effectivegatecpm.com/r1hbbzimi?key=a4d9598ee44995d5096461b0d43de968', '_blank');
-                    // Current tab mein dashboard
+                    // Dashboard par redirect karein
                     window.location.href = "dashboard.html";
                 }, 1200);
             }).catch(err => {

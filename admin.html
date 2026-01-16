@@ -24,30 +24,27 @@
         .tab-content { display: none; }
         .active { display: block; }
         
-        .list-container { max-height: 600px; overflow-y: auto; border: 1px solid #eee; margin-top: 15px; padding: 10px; border-radius: 8px; background: #fafafa; }
+        .list-container { max-height: 500px; overflow-y: auto; border: 1px solid #eee; margin-top: 10px; padding: 10px; border-radius: 8px; background: #fafafa; }
         table { width: 100%; border-collapse: collapse; font-size: 0.85em; background: white; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; color: #333; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #eee; color: #333; }
         th { background: #f8f9fa; position: sticky; top: 0; z-index: 5; }
 
         .search-bar { margin-bottom: 15px; padding: 10px; border: 2px solid var(--primary); border-radius: 8px; outline: none; width: 100%; box-sizing: border-box;}
 
-        .blog-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #ddd; background: white; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .copy-icon { cursor: pointer; color: var(--primary); margin-left: 15px; font-size: 1.2em; }
-        .delete-icon { cursor: pointer; color: var(--danger); margin-left: 15px; }
-        
         .status-badge { font-size: 0.7em; padding: 3px 8px; border-radius: 12px; font-weight: bold; text-transform: uppercase; }
         .status-pending { background: #fff3e0; color: #ef6c00; }
         .status-approved { background: #e8f5e9; color: #2e7d32; }
+        .status-generated { background: #e3f2fd; color: #1976d2; }
 
         .action-btn { padding: 5px 10px; font-size: 0.8em; margin-right: 5px; border-radius: 4px; border:none; color:white; cursor:pointer; }
-        .danger-zone { margin-top: 20px; padding: 15px; border: 2px solid var(--danger); border-radius: 10px; background: #fff5f5; text-align: left; }
+        h4 { margin: 15px 0 5px 0; color: var(--dark-bg); border-left: 4px solid var(--primary); padding-left: 10px; }
     </style>
 </head>
 <body>
 
     <div class="login-box" id="login-box">
         <h2 style="color: var(--primary); text-align: center;"><i class="fa fa-shield-alt"></i> Admin Login</h2>
-        <input type="password" id="access-code" placeholder="Enter Secret Key...">
+        <input type="password" id="access-code" placeholder="Enter Jainam Secret Key...">
         <button onclick="checkAccess()" style="width:100%;">Login</button>
     </div>
 
@@ -55,28 +52,37 @@
         <div style="display:flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 15px;">
             <h2 style="margin:0; color: var(--dark-bg);">Arham Control Center</h2>
             <div>
-                <span id="task-total-count" style="background:var(--primary); color:white; padding:5px 10px; border-radius:15px; font-size:0.8em; margin-right:10px;">Tasks: 0</span>
+                <button onclick="fetchEverything()" style="background:var(--info); padding: 8px 15px;"><i class="fa fa-sync"></i> Refresh</button>
                 <button onclick="logout()" style="background:#555; padding: 8px 15px;">Logout</button>
             </div>
         </div>
         
         <div class="nav-tabs">
-            <div class="active-tab" onclick="showTab(event, 'verify-work')">Submissions</div>
+            <div class="active-tab" onclick="showTab(event, 'verify-work')">Submissions & Live Logs</div>
             <div onclick="showTab(event, 'blogs')">Single Task</div>
-            <div onclick="showTab(event, 'keywords')">Bulk Upload (SEO)</div>
+            <div onclick="showTab(event, 'keywords')">Bulk Upload</div>
         </div>
 
         <div id="verify-work" class="tab-content active">
-            <div style="display:flex; justify-content: space-between; align-items: center; gap:10px; margin-bottom:10px;">
-                <input type="text" id="sub-search" class="search-bar" placeholder="Search by Email or Code..." onkeyup="filterSubmissions()">
-                <button onclick="fetchSubmissions()" style="background:var(--info); height:45px;"><i class="fa fa-sync"></i></button>
-            </div>
+            <input type="text" id="sub-search" class="search-bar" placeholder="Search Email or Code..." onkeyup="filterSubmissions()">
+            
+            <h4>1. User Submissions (To Approve)</h4>
             <div class="list-container">
                 <table>
                     <thead>
-                        <tr><th>Worker</th><th>Code</th><th>Status</th><th>Action</th></tr>
+                        <tr><th>User Email</th><th>Submitted Code</th><th>Status</th><th>Action</th></tr>
                     </thead>
                     <tbody id="submission-list"></tbody>
+                </table>
+            </div>
+
+            <h4 style="margin-top:30px;">2. Recent Generated Codes (Taskspage Logs)</h4>
+            <div class="list-container" style="max-height: 250px;">
+                <table>
+                    <thead>
+                        <tr><th>Time</th><th>Code Generated</th><th>Status</th></tr>
+                    </thead>
+                    <tbody id="generated-logs-list"></tbody>
                 </table>
             </div>
         </div>
@@ -84,207 +90,116 @@
         <div id="blogs" class="tab-content">
             <h3>Publish SEO Optimized Task</h3>
             <input type="text" id="blog-title" placeholder="Main Title (e.g. Best Stocks to Buy)">
-            <input type="text" id="blog-keyword" placeholder="Base Keyword (Auto Arham Insights sync)">
+            <input type="text" id="blog-keyword" placeholder="Base Keyword">
             <textarea id="blog-content" rows="6" placeholder="Article Content..."></textarea>
-            <button id="singlePublishBtn" onclick="saveBlogToSupabase()" style="width:100%;">Publish & Sync Now</button>
+            <button id="singlePublishBtn" onclick="saveBlogToSupabase()" style="width:100%;">Publish & Sync</button>
         </div>
 
         <div id="keywords" class="tab-content">
-            <h3>Bulk Upload (SEO Optimized)</h3>
-            <p style="font-size: 0.85em; color: #d35400; font-weight: bold;">Unique links generate karne ke liye keywords daalein.</p>
-            <textarea id="keywords-input" rows="10" placeholder="Keyword 1&#10;Keyword 2..."></textarea>
-            <button onclick="bulkSaveKeywords()" id="bulkBtn" style="width:100%; background: var(--success); font-size: 1.1em;">Generate 100+ Unique Links</button>
+            <h3>Bulk Upload Keywords</h3>
+            <textarea id="keywords-input" rows="8" placeholder="Keyword 1&#10;Keyword 2..."></textarea>
+            <button onclick="bulkSaveKeywords()" id="bulkBtn" style="width:100%; background: var(--success);">Generate Unique Links</button>
 
-            <h3 style="margin-top:25px;">Live Tasks Links (taskspage)</h3>
-            <input type="text" id="blog-search" class="search-bar" placeholder="Search Live Tasks..." onkeyup="filterBlogs()">
+            <h3 style="margin-top:25px;">Live Tasks Links</h3>
             <div class="list-container" id="live-links-copy-list"></div>
-
-            <div class="danger-zone">
-                <h4 style="color:var(--danger); margin-top:0;"><i class="fa fa-exclamation-triangle"></i> Danger Zone</h4>
-                <p style="font-size: 0.8em; color: #333;">Sabhi purane blogs aur links ko ek saath delete karne ke liye niche button dabayein.</p>
-                <button onclick="deleteAllBlogs()" style="background:var(--danger); font-size: 0.8em; padding: 8px 15px;">Delete All Live Tasks</button>
-            </div>
         </div>
     </div>
 
     <script>
-        const SUPABASE_URL = "https://mkzgmrxakattqgbjnwch.supabase.co"; 
-        const SUPABASE_KEY = "sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL"; 
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const _supabase = supabase.createClient("https://mkzgmrxakattqgbjnwch.supabase.co", "sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL");
         const SECRET_CODE = "Jainam Jayati Shasnam";
 
-        let allBlogs = [];
-        let allSubmissions = [];
+        let allData = [];
 
         function checkAccess() {
             if(document.getElementById('access-code').value === SECRET_CODE) {
                 document.getElementById('login-box').style.display = 'none';
                 document.getElementById('main-dashboard').style.display = 'block';
-                fetchBlogs();
-                fetchSubmissions();
+                fetchEverything();
             } else { alert("Incorrect Admin Key!"); }
         }
 
-        async function fetchSubmissions() {
+        async function fetchEverything() {
             const { data, error } = await _supabase.from('tasks').select('*').order('created_at', {ascending: false});
-            if(data) { allSubmissions = data; renderSubmissions(allSubmissions); }
+            if(data) { 
+                allData = data; 
+                renderSubmissions();
+                renderLogs();
+            }
+            fetchBlogs();
         }
 
-        function renderSubmissions(data) {
+        function renderSubmissions() {
             const list = document.getElementById('submission-list');
             list.innerHTML = "";
-            data.forEach(s => {
-                const statusClass = `status-${s.status}`;
+            // Sirf wahi dikhao jo users ne dashboard se SUBMIT kiya hai
+            const subs = allData.filter(item => item.submitted_code);
+            
+            subs.forEach(s => {
                 list.innerHTML += `<tr>
                     <td>${s.worker_email}</td>
-                    <td><code>${s.task_code}</code></td>
-                    <td><span class="status-badge ${statusClass}">${s.status}</span></td>
+                    <td><b style="color:var(--info)">${s.submitted_code}</b></td>
+                    <td><span class="status-badge status-${s.status}">${s.status}</span></td>
                     <td>
-                        ${s.status !== 'approved' ? `<button class="action-btn" style="background:var(--success)" onclick="updateStatus('${s.id}', 'approved')">Approve</button>` : ''}
-                        <button class="action-btn" style="background:var(--danger)" onclick="deleteSubmission('${s.id}')">Delete</button>
+                        ${s.status === 'pending' ? `<button class="action-btn" style="background:var(--success)" onclick="updateStatus('${s.id}', 'approved')">Approve</button>` : ''}
+                        <button class="action-btn" style="background:var(--danger)" onclick="deleteItem('${s.id}')">Del</button>
                     </td>
                 </tr>`;
             });
         }
 
-        function filterSubmissions() {
-            const q = document.getElementById('sub-search').value.toLowerCase();
-            const filtered = allSubmissions.filter(s => s.worker_email.toLowerCase().includes(q) || s.task_code.toLowerCase().includes(q));
-            renderSubmissions(filtered);
+        function renderLogs() {
+            const list = document.getElementById('generated-logs-list');
+            list.innerHTML = "";
+            // Sirf wahi dikhao jo taskspage se GENERATE hua hai
+            const logs = allData.filter(item => item.generated_code);
+            
+            logs.forEach(l => {
+                list.innerHTML += `<tr>
+                    <td>${new Date(l.created_at).toLocaleTimeString()}</td>
+                    <td><code>${l.generated_code}</code></td>
+                    <td><span class="status-badge status-generated">Generated</span></td>
+                </tr>`;
+            });
         }
 
         async function updateStatus(id, status) {
             await _supabase.from('tasks').update({ status: status }).eq('id', id);
-            fetchSubmissions();
+            fetchEverything();
         }
 
-        async function deleteSubmission(id) {
-            if(confirm("Permanently delete?")) { await _supabase.from('tasks').delete().eq('id', id); fetchSubmissions(); }
+        async function deleteItem(id) {
+            if(confirm("Delete this record?")) { await _supabase.from('tasks').delete().eq('id', id); fetchEverything(); }
         }
 
+        // --- BLOGS LOGIC ---
         async function fetchBlogs() {
             const { data } = await _supabase.from('admin_blogs').select('*').order('created_at', {ascending: false});
-            if(data) {
-                allBlogs = data;
-                document.getElementById('task-total-count').innerText = "Tasks: " + data.length;
-                renderBlogs(allBlogs);
-            }
+            if(data) renderBlogsList(data);
         }
 
-        function renderBlogs(data) {
+        function renderBlogsList(blogs) {
             const list = document.getElementById('live-links-copy-list');
             list.innerHTML = "";
-            
-            // Get current path for taskspage.html
-            const loc = window.location.href;
-            const path = loc.substring(0, loc.lastIndexOf('/'));
-            const taskPageUrl = `${path}/taskspage.html`;
-
-            data.forEach(b => {
-                // GENERATING UNIQUE LINK WITH ID
-                const fullUrl = `${taskPageUrl}?id=${b.id}`;
-                list.innerHTML += `<div class="blog-item">
-                    <div style="flex:1">
-                        <b>${b.title}</b> <br>
-                        <small style="color:var(--primary); font-weight:bold;">Keyword: ${b.keyword}</small>
-                    </div>
-                    <div>
-                        <i class="fa fa-copy copy-icon" title="Copy Unique Link" onclick="copyText('${fullUrl}')"></i>
-                        <i class="fa fa-trash delete-icon" title="Delete Task" onclick="deleteBlog('${b.id}')"></i>
-                    </div>
+            const path = window.location.origin;
+            blogs.forEach(b => {
+                const url = `${path}/taskspage.html?id=${b.id}`;
+                list.innerHTML += `<div style="background:#fff; padding:10px; margin-bottom:5px; border-radius:5px; display:flex; justify-content:space-between; align-items:center; border:1px solid #ddd;">
+                    <span>${b.title}</span>
+                    <button onclick="navigator.clipboard.writeText('${url}'); alert('Link Copied!')" style="padding:5px 10px; font-size:0.7em;">Copy Link</button>
                 </div>`;
             });
         }
 
-        function filterBlogs() {
-            const q = document.getElementById('blog-search').value.toLowerCase();
-            const filtered = allBlogs.filter(b => b.title.toLowerCase().includes(q) || b.keyword.toLowerCase().includes(q));
-            renderBlogs(filtered);
-        }
-
         async function saveBlogToSupabase() {
-            const btn = document.getElementById('singlePublishBtn');
-            const rawTitle = document.getElementById('blog-title').value.trim();
-            const rawKeyword = document.getElementById('blog-keyword').value.trim();
-            const content = document.getElementById('blog-content').value.trim();
-
-            if(!rawTitle || !rawKeyword) return alert("Title & Keyword are required!");
-
-            const seoTitle = `${rawTitle} | Arham Insights`;
-            const seoKeyword = `${rawKeyword} Arham Insights`;
-
-            btn.disabled = true; btn.innerText = "Syncing...";
-
-            const { error } = await _supabase.from('admin_blogs').insert([{ 
-                title: seoTitle, 
-                keyword: seoKeyword, 
-                content: content || `Latest updates on ${rawTitle}. Full guide for 2026.` 
-            }]);
-
-            if(!error) {
-                alert("Published & Unique Link Generated!");
-                document.getElementById('blog-title').value = "";
-                document.getElementById('blog-keyword').value = "";
-                document.getElementById('blog-content').value = "";
-                fetchBlogs();
-            } else { alert("Error: " + error.message); }
-            
-            btn.disabled = false; btn.innerText = "Publish & Sync Now";
+            const title = document.getElementById('blog-title').value;
+            const kw = document.getElementById('blog-keyword').value;
+            const content = document.getElementById('blog-content').value;
+            await _supabase.from('admin_blogs').insert([{ title: title, keyword: kw, content: content }]);
+            alert("Published!");
+            fetchEverything();
         }
 
-        async function bulkSaveKeywords() {
-            const btn = document.getElementById('bulkBtn');
-            const input = document.getElementById('keywords-input').value;
-            const keywords = input.split('\n').map(k => k.trim()).filter(k => k !== "");
-            
-            if(keywords.length === 0) return alert("Enter some keywords!");
-            
-            btn.disabled = true;
-            btn.innerText = "Generating Unique Links...";
-
-            const rows = keywords.map(kw => ({ 
-                title: `${kw} (2026 Update) | Arham Insights`, 
-                keyword: `${kw} Arham Insights`, 
-                content: `Everything you need to know about ${kw}. Read this complete guide by Arham Insights.` 
-            }));
-
-            const { error } = await _supabase.from('admin_blogs').insert(rows);
-            if(!error) {
-                alert("Successfully Synced " + keywords.length + " Unique Tasks!");
-                document.getElementById('keywords-input').value = "";
-                fetchBlogs();
-            } else { alert("Error: " + error.message); }
-            
-            btn.disabled = false;
-            btn.innerText = "Generate 100+ Unique Links";
-        }
-
-        async function deleteBlog(id) {
-            if(confirm("Delete this blog task?")) { 
-                await _supabase.from('admin_blogs').delete().eq('id', id); 
-                fetchBlogs(); 
-            }
-        }
-
-        // NEW: DELETE ALL FUNCTION
-        async function deleteAllBlogs() {
-            if(confirm("ARE YOU SURE? Ye saare live tasks aur links ko permanently delete kar dega!")) {
-                const { error } = await _supabase.from('admin_blogs').delete().neq('title', 'placeholder_force_delete');
-                if(!error) {
-                    alert("All Tasks Deleted!");
-                    fetchBlogs();
-                } else { alert("Error: " + error.message); }
-            }
-        }
-
-        function copyText(t) { 
-            navigator.clipboard.writeText(t).then(() => {
-                alert("Unique Link Copied Successfully!");
-            }).catch(err => {
-                alert("Manual Copy: " + t);
-            });
-        }
-        
         function showTab(e, id) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.nav-tabs div').forEach(t => t.classList.remove('active-tab'));
@@ -296,4 +211,3 @@
     </script>
 </body>
 </html>
-
