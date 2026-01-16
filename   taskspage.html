@@ -6,78 +6,19 @@
     <title>Task Validation - Arham Insights</title>
     <meta name="referrer" content="no-referrer-when-downgrade" />
 
-    <script type="text/javascript" src="//data527.click/76978ffabd4a5bbf4a70/488a487bd1/?placementName=default"></script>
-    <script type="text/javascript" src="//data527.click/9468aa4929d2864965b3/2ee51d2de4/?placementName=default"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
         :root { --primary: #ff9933; --success: #27ae60; --dark: #2c3e50; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: #fdf2e9; text-align: center; padding: 10px; margin: 0; }
-        
-        .task-container { 
-            max-width: 800px; 
-            margin: 15px auto; 
-            background: white; 
-            padding: 20px; 
-            border-radius: 15px; 
-            box-shadow: 0 5px 25px rgba(0,0,0,0.1); 
-            border-top: 8px solid var(--primary); 
-            min-height: 80vh;
-        }
-
-        .ad-space { 
-            margin: 15px 0; 
-            min-height: 60px; 
-            background: #fdfdfd;
-            border: 1px dashed #ddd;
-            border-radius: 8px;
-            overflow: hidden;
-            padding: 5px;
-        }
-
-        .timer-box { 
-            font-size: 2em; 
-            font-weight: bold; 
-            color: var(--primary); 
-            margin: 15px 0; 
-            background: #fff4e6;
-            display: inline-block;
-            padding: 10px 30px;
-            border-radius: 50px;
-            border: 3px solid var(--primary);
-            box-shadow: 0 4px 10px rgba(255,153,51,0.2);
-        }
-
-        #task-body { 
-            text-align: left; 
-            color: #333; 
-            line-height: 1.8; 
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            font-size: 1.1em;
-            background: #fff;
-            padding: 20px;
-            border: 1px solid #f0f0f0;
-            border-radius: 12px;
-        }
-
-        #secret-code-section { 
-            display: none; 
-            background: #f0fff4; 
-            padding: 25px; 
-            border: 3px solid var(--success); 
-            border-radius: 15px; 
-            margin-top: 25px;
-            animation: fadeIn 0.5s ease-in;
-        }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
+        body { font-family: 'Segoe UI', sans-serif; background-color: #fdf2e9; text-align: center; padding: 10px; margin: 0; overflow-x: hidden; }
+        .task-container { max-width: 800px; margin: 15px auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.1); border-top: 8px solid var(--primary); min-height: 80vh; position: relative; z-index: 5; }
+        .ad-space { margin: 15px 0; min-height: 60px; background: #fdfdfd; border-radius: 8px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+        .timer-box { font-size: 2.2em; font-weight: bold; color: var(--primary); margin: 15px 0; background: #fff4e6; display: inline-block; padding: 10px 35px; border-radius: 50px; border: 3px solid var(--primary); }
+        #task-body { text-align: left; color: #333; line-height: 1.8; white-space: pre-wrap; word-wrap: break-word; font-size: 1.1em; background: #fff; padding: 20px; border-radius: 12px; }
+        #secret-code-section { display: none; background: #f0fff4; padding: 25px; border: 3px solid var(--success); border-radius: 15px; margin-top: 25px; }
         .code-text { font-size: 1.8em; color: var(--success); font-weight: bold; letter-spacing: 3px; display: block; margin: 15px 0; background: white; padding: 10px; border-radius: 8px; border: 2px dashed var(--success); }
-        .copy-btn { background: var(--success); color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; max-width: 350px; font-size: 1.1em; }
-        
+        .copy-btn { background: var(--success); color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; max-width: 350px; font-size: 1.1em; position: relative; z-index: 100; }
         .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column; }
     </style>
 </head>
@@ -85,136 +26,122 @@
 
     <div id="loader" class="loading-overlay">
         <i class="fa fa-spinner fa-spin fa-3x" style="color:var(--primary)"></i>
-        <p>Fetching Blog Task...</p>
+        <p>Loading Task Content...</p>
     </div>
 
     <div class="task-container">
-        
         <div class="ad-space">
-            <ins style="width: 320px;height:50px" class="be2e2ac20d3" data-domain="//data527.click" data-affquery="/24cca9bed965b7820ebd/e2e2ac20d3/?placementName=default"></ins>
+            <script> atOptions = {'key':'ac3a34c448d39282025c11644797e3a1','format':'iframe','height':50,'width':320,'params':{}}; </script>
+            <script src="https://www.highperformanceformat.com/ac3a34c448d39282025c11644797e3a1/invoke.js"></script>
         </div>
 
-        <h2 style="color:var(--dark);"><i class="fa fa-clock"></i> Reading Validation</h2>
-        <div id="status-msg" style="color:#e67e22; font-weight:bold;">Wait for the timer to end...</div>
+        <h2 style="color:var(--dark);">Task Verification</h2>
+        <div id="status-msg" style="color:#e67e22; font-weight:bold;">Wait for the timer...</div>
         
         <div class="timer-box" id="timer">03:00</div>
 
-        <article id="article-content" style="margin-top: 20px;">
-            <h1 id="task-title" style="color: var(--dark); border-bottom: 3px solid var(--primary); padding-bottom: 12px; text-align: left; font-size: 1.5em;">Loading Article...</h1>
-            <div id="task-body">Content is loading from secure database...</div>
+        <div class="ad-space">
+            <script async="async" data-cfasync="false" src="https://pl28481408.effectivegatecpm.com/b104bb133c0e3abf10d65c6dca934730/invoke.js"></script>
+            <div id="container-b104bb133c0e3abf10d65c6dca934730"></div>
+        </div>
+
+        <article id="article-content">
+            <h1 id="task-title" style="text-align: left; color: var(--dark); border-bottom: 2px solid #eee;">...</h1>
+            <div id="task-body">Content is loading safely...</div>
         </article>
 
-        <div class="ad-space" style="margin-top:20px;">
-            <ins style="width: 320px;height:50px" class="be2e2ac20d3" data-domain="//data527.click" data-affquery="/24cca9bed965b7820ebd/e2e2ac20d3/?placementName=default"></ins>
+        <div class="ad-space">
+            <ins style="width: 300px;height:250px" data-width="300" data-height="250" class="pde6aa5416d" data-domain="//data527.click" data-affquery="/22eed5bea0245b608235/de6aa5416d/?placementName=default"></ins>
+            <script src="//data527.click/js/responsive.js" async></script>
         </div>
 
         <div id="secret-code-section">
-            <h3 style="color: var(--success); margin-top: 0;"><i class="fa fa-gift"></i> Task Completed!</h3>
-            <p style="font-size: 0.9em; color: #444;">Niche diya gaya code copy karein aur Dashboard par paste karein:</p>
-            <div class="code-text" id="final-code">GENERATING...</div>
-            <button class="copy-btn" id="copyBtn" onclick="copyCode()">
-                <i class="fa fa-copy"></i> Copy & Submit Now
-            </button>
+            <h3 style="color: var(--success);"><i class="fa fa-check-circle"></i> Success!</h3>
+            <div class="code-text" id="final-code">...</div>
+            <button class="copy-btn" id="copyBtn" onclick="copyCode()">COPY SECRET CODE</button>
         </div>
-
     </div>
 
+    <div id="ad-scripts-container"></div>
+
     <script>
-        const SUPABASE_URL = "https://mkzgmrxakattqgbjnwch.supabase.co";
-        const SUPABASE_KEY = "sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL";
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        let timeLeft = 180; // 3 Minutes
+        const _supabase = supabase.createClient("https://mkzgmrxakattqgbjnwch.supabase.co", "sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL");
+        let timeLeft = 180;
         let currentUser = null;
-        const urlParams = new URLSearchParams(window.location.search);
-        const taskId = urlParams.get('id');
+        const taskId = new URLSearchParams(window.location.search).get('id');
 
-        async function initPage() {
-            // 1. Session Check
+        // Logic: Pehle Blog, Phir Timer, Phir Popups
+        async function init() {
             const { data: { session } } = await _supabase.auth.getSession();
-            if (!session) {
-                window.location.href = "login.html";
-                return;
-            }
+            if (!session) { window.location.href = "login.html"; return; }
             currentUser = session.user;
-
-            // 2. Fetch Task Data
-            if(!taskId) {
-                alert("Invalid Task Link!");
-                window.location.href = "dashboard.html";
-                return;
+            
+            if(taskId) {
+                const { data } = await _supabase.from('admin_blogs').select('*').eq('id', taskId).single();
+                if(data) {
+                    document.getElementById('task-title').innerText = data.title;
+                    document.getElementById('task-body').innerText = data.content;
+                }
             }
             
-            await fetchTaskFromDB(taskId);
-            
-            // 3. Hide Loader & Start Timer
             document.getElementById('loader').style.display = 'none';
             startTimer();
-        }
-
-        window.onload = initPage;
-
-        async function fetchTaskFromDB(id) {
-            try {
-                const { data, error } = await _supabase.from('admin_blogs').select('*').eq('id', id).single();
-                
-                if(error || !data) {
-                    document.getElementById('task-title').innerText = "Task Not Found!";
-                    document.getElementById('task-body').innerText = "Ye task delete ho chuka hai ya link galat hai.";
-                    return;
-                }
-
-                document.getElementById('task-title').innerText = data.title;
-                document.getElementById('task-body').innerText = data.content;
-                document.title = data.title + " - Arham Insights";
-            } catch (err) {
-                console.error("DB Error:", err);
-            }
+            // Ads ko 2 second baad load karna shuru karein taaki page freeze na ho
+            setTimeout(injectHeavyAds, 2000);
         }
 
         function startTimer() {
             const countdown = setInterval(() => {
                 let m = Math.floor(timeLeft / 60);
                 let s = timeLeft % 60;
-                document.getElementById('timer').innerHTML = `${m}:${s < 10 ? '0'+s : s}`;
-                
+                document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`;
                 if (timeLeft <= 0) {
                     clearInterval(countdown);
                     document.getElementById('timer').style.display = 'none';
-                    document.getElementById('status-msg').innerText = "Congratulations! Task Finished.";
-                    generateTaskCode();
+                    showSecretCode();
                 }
                 timeLeft--;
             }, 1000);
         }
 
-        async function generateTaskCode() {
-            const generatedCode = "ARH-" + Math.floor(100000 + Math.random() * 900000);
-            document.getElementById('final-code').innerText = generatedCode;
+        function showSecretCode() {
+            const code = "ARH-" + Math.floor(100000 + Math.random() * 900000);
+            document.getElementById('final-code').innerText = code;
             document.getElementById('secret-code-section').style.display = 'block';
-            document.getElementById('secret-code-section').scrollIntoView({ behavior: 'smooth' });
-
-            // Automatically log the code as 'generated' for verification
-            try {
-                await _supabase.from('tasks').insert([{ 
-                    worker_email: currentUser.email, 
-                    task_code: generatedCode, 
-                    status: 'generated',
-                    blog_id: taskId // Linking task to specific blog
-                }]);
-            } catch (e) { console.log("Logging Error:", e); }
+            _supabase.from('tasks').insert([{ worker_email: currentUser.email, task_code: code, status: 'generated', blog_id: taskId }]);
         }
 
         function copyCode() {
             const code = document.getElementById('final-code').innerText;
             navigator.clipboard.writeText(code).then(() => {
-                alert("Success: Code Copied! Returning to Dashboard.");
-                // Redirect to Ad link as required
+                alert("Code Copied! Verify on Dashboard.");
                 window.open('https://www.effectivegatecpm.com/r1hbbzimi?key=a4d9598ee44995d5096461b0d43de968', '_blank');
-                // Optional: Short delay and redirect back to dashboard
-                setTimeout(() => { window.location.href = "dashboard.html"; }, 2000);
+                setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
             });
         }
+
+        // Heavy Ads ko ek-ek karke load karne ka function
+        function injectHeavyAds() {
+            const ads = [
+                "//cdn-server.live/62174ff4adedc31400a8/824f476f36/?placementName=default", // Push
+                "//data527.click/76978ffabd4a5bbf4a70/d47489b192/?placementName=default", // Popup
+                "https://pl28481415.effectivegatecpm.com/3d/7b/7a/3d7b7a38e12c6c19d3f05744b524b637.js", // Popunder
+                "https://pl28481397.effectivegatecpm.com/6a/13/24/6a132427188b052e88e7c0e78e69c6e2.js", // Socialbar
+                "//data527.click/9468aa4929d2864965b3/884f8e9569/?placementName=default", // Popunder 2
+                "//data527.click/321e90e8b8ce056c6954/069e4bdc83/?placementName=default"  // Tabunder
+            ];
+
+            ads.forEach((src, index) => {
+                setTimeout(() => {
+                    let s = document.createElement('script');
+                    s.src = src;
+                    s.async = true;
+                    document.body.appendChild(s);
+                }, index * 1500); // Har ad 1.5 second ke gap par aayega
+            });
+        }
+
+        window.onload = init;
     </script>
 </body>
 </html>
