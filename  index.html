@@ -6,18 +6,23 @@
     <title>Arham Insights - Sahi Disha, Sahi Pragati</title>
     
     <meta name="description" content="Arham Insights ek trusted platform hai jahan aap bina kisi investment ke daily tasks pure karke income generate kar sakte hain.">
+    <meta property="og:title" content="Arham Insights - Work From Home">
+    <meta property="og:description" content="Join Arham Insights and start earning daily rewards.">
+    <meta property="og:image" content="https://arhaminsightses.netlify.app/logo.png">
+    <meta property="og:url" content="https://arhaminsightses.netlify.app/">
+    <meta property="og:type" content="website">
+    
+    <link rel="icon" type="image/png" href="https://arhaminsightses.netlify.app/logo.png">
     
     <meta name="google-site-verification" content="_ovBok1XaIYK46LVbwbBQdj2Zoa7ZP7mwH91JrRwHbo" />
-    
     <meta name="2312e10d6571e47930fd86b4e73c3dc6c3d7b2ae" content="2312e10d6571e47930fd86b4e73c3dc6c3d7b2ae" />
-    
     <meta name="referrer" content="no-referrer-when-downgrade" />
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
         :root { --primary: #ff9933; --dark: #2c3e50; --light: #fffaf0; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; background-color: var(--light); color: #333; line-height: 1.6; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; background-color: var(--light); color: #333; line-height: 1.6; overflow-x: hidden; }
         
         header { 
             background-color: var(--primary); 
@@ -56,53 +61,67 @@
         }
 
         .text-logo { 
-            font-size: 2.2em; 
+            font-size: 1.8em; 
             font-weight: bold; 
-            border: 3.5px solid white; 
+            border: 3px solid white; 
             display: inline-block; 
-            padding: 10px 25px; 
-            letter-spacing: 2px; 
+            padding: 8px 20px; 
+            letter-spacing: 1.5px; 
             color: white; 
             text-transform: uppercase;
             background: rgba(255,255,255,0.15);
         }
 
-        .hero { padding: 50px 20px; text-align: center; background: white; margin: -30px auto 20px; max-width: 800px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border-top: 6px solid var(--primary); position: relative; z-index: 10; }
-        h1 { margin: 10px 0; font-size: 2.5em; color: var(--primary); }
-        .tagline { font-style: italic; color: #666; font-size: 1.1em; margin-bottom: 25px; }
+        .hero { 
+            padding: 40px 15px; 
+            text-align: center; 
+            background: white; 
+            margin: -30px auto 20px; 
+            max-width: 90%; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            border-top: 6px solid var(--primary); 
+            position: relative; 
+            z-index: 10; 
+        }
 
-        .btn-group { margin-top: 30px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
-        .btn { padding: 14px 35px; text-decoration: none; font-weight: bold; border-radius: 50px; display: inline-block; transition: 0.3s; font-size: 1em; }
+        h1 { margin: 10px 0; font-size: 2.2em; color: var(--primary); }
+        h2 { font-size: 1.4em; }
+        .tagline { font-style: italic; color: #666; font-size: 1em; margin-bottom: 25px; }
+
+        .btn-group { margin-top: 25px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+        .btn { padding: 12px 30px; text-decoration: none; font-weight: bold; border-radius: 50px; display: inline-block; transition: 0.3s; font-size: 0.95em; cursor: pointer; border: none; }
         .btn-join { background-color: var(--primary); color: white; box-shadow: 0 4px 15px rgba(255,153,51,0.3); }
-        .btn-login { border: 2.5px solid var(--primary); color: var(--primary); background: transparent; }
-        .btn:hover { transform: translateY(-3px); }
+        .btn-login { border: 2px solid var(--primary); color: var(--primary); background: transparent; }
+        .btn:hover { transform: translateY(-3px); opacity: 0.9; }
 
-        .features { display: flex; justify-content: center; flex-wrap: wrap; padding: 30px 10px; gap: 20px; }
-        .feature-box { background: white; padding: 25px; width: 250px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; border-bottom: 4px solid var(--primary); }
-        .feature-box i { font-size: 2em; color: var(--primary); margin-bottom: 15px; }
+        .features { display: flex; justify-content: center; flex-wrap: wrap; padding: 20px 10px; gap: 15px; }
+        .feature-box { background: white; padding: 20px; width: 100%; max-width: 260px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; border-bottom: 4px solid var(--primary); }
+        .feature-box i { font-size: 2em; color: var(--primary); margin-bottom: 10px; }
         
-        .support-box { background: #fff4e6; padding: 30px 20px; text-align: center; margin: 30px auto; max-width: 700px; border-radius: 15px; border: 2px dashed var(--primary); }
-        .support-email { color: #d35400; font-weight: bold; font-size: 1.2em; text-decoration: none; }
-        footer { text-align: center; padding: 30px 20px; font-size: 0.9em; color: #666; background: #fdf2e4; }
+        .support-box { background: #fff4e6; padding: 25px 15px; text-align: center; margin: 20px auto; max-width: 90%; border-radius: 15px; border: 2px dashed var(--primary); }
+        .support-email { color: #d35400; font-weight: bold; font-size: 1.1em; text-decoration: none; word-break: break-all; }
+        
+        footer { text-align: center; padding: 30px 20px; font-size: 0.85em; color: #666; background: #fdf2e4; border-top: 1px solid #eee; }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 1.8em; }
+            .text-logo { font-size: 1.4em; }
+            .hero { margin-top: -20px; }
+        }
     </style>
 </head>
 <body>
 
 <header>
     <div class="logo-box">
-        <img src="logo.png" alt="Arham Insights" class="logo-img" onerror="this.style.display='none'; document.getElementById('alt-logo').style.display='inline-block';">
+        <img src="https://arhaminsightses.netlify.app/logo.png" alt="Arham Insights" class="logo-img" onerror="this.style.display='none'; document.getElementById('alt-logo').style.display='inline-block';">
         <div id="alt-logo" class="text-logo" style="display:none;">ARHAM INSIGHTS</div>
     </div>
-    <p style="margin-top: 15px; font-weight: 600; font-size: 1.3em; letter-spacing: 0.5px;">Sahi Disha, Sahi Pragati</p>
+    <p style="margin-top: 15px; font-weight: 600; font-size: 1.2em; letter-spacing: 0.5px;">Sahi Disha, Sahi Pragati</p>
 </header>
 
 <main>
-    <div id="frame" style="width: 100%; margin: 20px auto; position: relative; z-index: 99998; text-align: center;">
-        <p style="font-size: 10px; color: #ccc; margin-bottom: 5px;">ADVERTISEMENT</p>
-        <iframe data-aa='2424210' src='//acceptable.a-ads.com/2424210/?size=Adaptive'
-                style='border:0; padding:0; width:70%; height:auto; min-height: 90px; overflow:hidden; display: block; margin: auto'></iframe>
-    </div>
-
     <section class="hero">
         <h1>Arham Insights</h1>
         <h2>Digital Work From Home</h2>
@@ -118,29 +137,30 @@
         <div class="feature-box">
             <i class="fa fa-mobile-alt"></i>
             <h3>Online Work</h3>
-            <p>Sirf smartphone se kaam karein.</p>
+            <p>Sirf smartphone se kaam karein aur paise kamayein.</p>
         </div>
         <div class="feature-box">
             <i class="fa fa-wallet"></i>
             <h3>Easy Payout</h3>
-            <p>Sahi aur turant hisaab.</p>
+            <p>Sahi aur turant hisaab aapke wallet mein.</p>
         </div>
         <div class="feature-box">
             <i class="fa fa-check-circle"></i>
             <h3>Safe & Secure</h3>
-            <p>100% transparent system.</p>
+            <p>100% transparent aur bharosemand system.</p>
         </div>
     </section>
 
     <section class="support-box">
-        <h3><i class="fa fa-headset"></i> Support</h3>
-        <p>Contact us:</p>
+        <h3><i class="fa fa-headset"></i> Support Team</h3>
+        <p>Contact us for any help:</p>
         <a href="mailto:arhaminsightshelp@gmail.com" class="support-email">arhaminsightshelp@gmail.com</a>
     </section>
 </main>
 
 <footer>
-    <p>&copy; 2026 <strong>Arham Insights</strong> | Managed by Naman, Akash and Sourav Bhai </p>
+    <p>&copy; 2026 <strong>Arham Insights</strong> | Digital Task Platform</p>
+    <p style="margin-top: 5px; opacity: 0.8;">Managed by Naman, Akash and Sourav Bhai</p>
 </footer>
 
 </body>

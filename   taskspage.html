@@ -12,13 +12,25 @@
     <style>
         :root { --primary: #ff9933; --success: #27ae60; --dark: #2c3e50; }
         body { font-family: 'Segoe UI', sans-serif; background-color: #fdf2e9; text-align: center; padding: 10px; margin: 0; overflow-x: hidden; }
-        .task-container { max-width: 800px; margin: 15px auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.1); border-top: 8px solid var(--primary); min-height: 80vh; position: relative; z-index: 5; }
-        .ad-space { margin: 15px 0; min-height: 60px; background: #fdfdfd; border-radius: 8px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
-        .timer-box { font-size: 2.2em; font-weight: bold; color: var(--primary); margin: 15px 0; background: #fff4e6; display: inline-block; padding: 10px 35px; border-radius: 50px; border: 3px solid var(--primary); }
-        #task-body { text-align: left; color: #333; line-height: 1.8; white-space: pre-wrap; word-wrap: break-word; font-size: 1.1em; background: #fff; padding: 20px; border-radius: 12px; }
-        #secret-code-section { display: none; background: #f0fff4; padding: 25px; border: 3px solid var(--success); border-radius: 15px; margin-top: 25px; }
+        
+        /* Layout Improvements */
+        .task-container { max-width: 800px; margin: 15px auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.1); border-top: 8px solid var(--primary); min-height: 80vh; position: relative; z-index: 5; text-align: left; }
+        
+        .timer-wrapper { text-align: center; position: sticky; top: 10px; z-index: 1000; }
+        .timer-box { font-size: 1.8em; font-weight: bold; color: var(--primary); background: #fff4e6; display: inline-block; padding: 8px 30px; border-radius: 50px; border: 3px solid var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        
+        #task-title { font-size: 1.5em; color: var(--dark); margin-top: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        #task-body { color: #333; line-height: 1.8; white-space: pre-wrap; word-wrap: break-word; font-size: 1.1em; background: #fff; padding: 10px 0; }
+        
+        /* Ads Section - Non Intrusive */
+        .ad-space { margin: 20px 0; padding: 10px; background: #fafafa; border-radius: 8px; text-align: center; border: 1px solid #eee; }
+        
+        #secret-code-section { display: none; background: #f0fff4; padding: 25px; border: 3px solid var(--success); border-radius: 15px; margin-top: 25px; text-align: center; }
         .code-text { font-size: 1.8em; color: var(--success); font-weight: bold; letter-spacing: 3px; display: block; margin: 15px 0; background: white; padding: 10px; border-radius: 8px; border: 2px dashed var(--success); }
-        .copy-btn { background: var(--success); color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; max-width: 350px; font-size: 1.1em; position: relative; z-index: 100; }
+        
+        .copy-btn { background: var(--success); color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; max-width: 350px; font-size: 1.1em; transition: 0.3s; }
+        .copy-btn:hover { background: #219150; transform: scale(1.02); }
+        
         .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column; }
     </style>
 </head>
@@ -26,7 +38,7 @@
 
     <div id="loader" class="loading-overlay">
         <i class="fa fa-spinner fa-spin fa-3x" style="color:var(--primary)"></i>
-        <p>Loading Task Content...</p>
+        <p>Loading Task Content Safely...</p>
     </div>
 
     <div class="task-container">
@@ -35,34 +47,28 @@
             <script src="https://www.highperformanceformat.com/ac3a34c448d39282025c11644797e3a1/invoke.js"></script>
         </div>
 
-        <h2 style="color:var(--dark);">Task Verification</h2>
-        <div id="status-msg" style="color:#e67e22; font-weight:bold;">Wait for the timer...</div>
-        
-        <div class="timer-box" id="timer">03:00</div>
-
-        <div class="ad-space">
-            <script async="async" data-cfasync="false" src="https://pl28481408.effectivegatecpm.com/b104bb133c0e3abf10d65c6dca934730/invoke.js"></script>
-            <div id="container-b104bb133c0e3abf10d65c6dca934730"></div>
+        <div class="timer-wrapper">
+            <div class="timer-box" id="timer">03:00</div>
+            <div id="status-msg" style="color:#e67e22; font-size: 0.9em; margin-top: 5px;">पढ़ना जारी रखें, कोड लोड हो रहा है...</div>
         </div>
 
         <article id="article-content">
-            <h1 id="task-title" style="text-align: left; color: var(--dark); border-bottom: 2px solid #eee;">...</h1>
+            <h1 id="task-title">Loading Title...</h1>
             <div id="task-body">Content is loading safely...</div>
         </article>
 
         <div class="ad-space">
-            <ins style="width: 300px;height:250px" data-width="300" data-height="250" class="pde6aa5416d" data-domain="//data527.click" data-affquery="/22eed5bea0245b608235/de6aa5416d/?placementName=default"></ins>
-            <script src="//data527.click/js/responsive.js" async></script>
+            <div id="container-b104bb133c0e3abf10d65c6dca934730"></div>
+            <script async="async" data-cfasync="false" src="https://pl28481408.effectivegatecpm.com/b104bb133c0e3abf10d65c6dca934730/invoke.js"></script>
         </div>
 
         <div id="secret-code-section">
-            <h3 style="color: var(--success);"><i class="fa fa-check-circle"></i> Success!</h3>
+            <h3 style="color: var(--success);"><i class="fa fa-check-circle"></i> Task Completed!</h3>
+            <p style="font-size: 0.9em; color: #666;">Copy this code and paste it in your Dashboard.</p>
             <div class="code-text" id="final-code">...</div>
             <button class="copy-btn" id="copyBtn" onclick="copyCode()">COPY SECRET CODE</button>
         </div>
     </div>
-
-    <div id="ad-scripts-container"></div>
 
     <script>
         const _supabase = supabase.createClient("https://mkzgmrxakattqgbjnwch.supabase.co", "sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL");
@@ -70,7 +76,6 @@
         let currentUser = null;
         const taskId = new URLSearchParams(window.location.search).get('id');
 
-        // Logic: Pehle Blog, Phir Timer, Phir Popups
         async function init() {
             const { data: { session } } = await _supabase.auth.getSession();
             if (!session) { window.location.href = "login.html"; return; }
@@ -86,8 +91,8 @@
             
             document.getElementById('loader').style.display = 'none';
             startTimer();
-            // Ads ko 2 second baad load karna shuru karein taaki page freeze na ho
-            setTimeout(injectHeavyAds, 2000);
+            // Interrupting ads ko timer ke baad load karne ke liye schedule kiya
+            setTimeout(injectSecondaryAds, 5000); 
         }
 
         function startTimer() {
@@ -97,7 +102,7 @@
                 document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`;
                 if (timeLeft <= 0) {
                     clearInterval(countdown);
-                    document.getElementById('timer').style.display = 'none';
+                    document.getElementById('timer').parentElement.style.display = 'none';
                     showSecretCode();
                 }
                 timeLeft--;
@@ -108,36 +113,52 @@
             const code = "ARH-" + Math.floor(100000 + Math.random() * 900000);
             document.getElementById('final-code').innerText = code;
             document.getElementById('secret-code-section').style.display = 'block';
-            _supabase.from('tasks').insert([{ worker_email: currentUser.email, task_code: code, status: 'generated', blog_id: taskId }]);
+            
+            // Database Entry
+            _supabase.from('tasks').insert([{ 
+                worker_email: currentUser.email, 
+                task_code: code, 
+                status: 'generated', 
+                blog_id: taskId 
+            }]);
+
+            // Timer khatam hone par heavy ads load karein (Income ke liye)
+            injectPopAds();
         }
 
         function copyCode() {
             const code = document.getElementById('final-code').innerText;
             navigator.clipboard.writeText(code).then(() => {
-                alert("Code Copied! Verify on Dashboard.");
-                window.open('https://www.effectivegatecpm.com/r1hbbzimi?key=a4d9598ee44995d5096461b0d43de968', '_blank');
-                setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
+                alert("Code Copied Successfully!");
+                // No automatic ad popup here - directly go to dashboard
+                window.location.href = "dashboard.html";
             });
         }
 
-        // Heavy Ads ko ek-ek karke load karne ka function
-        function injectHeavyAds() {
-            const ads = [
-                "//cdn-server.live/62174ff4adedc31400a8/824f476f36/?placementName=default", // Push
-                "//data527.click/76978ffabd4a5bbf4a70/d47489b192/?placementName=default", // Popup
-                "https://pl28481415.effectivegatecpm.com/3d/7b/7a/3d7b7a38e12c6c19d3f05744b524b637.js", // Popunder
-                "https://pl28481397.effectivegatecpm.com/6a/13/24/6a132427188b052e88e7c0e78e69c6e2.js", // Socialbar
-                "//data527.click/9468aa4929d2864965b3/884f8e9569/?placementName=default", // Popunder 2
-                "//data527.click/321e90e8b8ce056c6954/069e4bdc83/?placementName=default"  // Tabunder
+        // Yeh ads reading mein disturb nahi karenge
+        function injectSecondaryAds() {
+            const secondaryAds = [
+                "https://pl28481397.effectivegatecpm.com/6a/13/24/6a132427188b052e88e7c0e78e69c6e2.js" // Socialbar
             ];
+            secondaryAds.forEach(src => {
+                let s = document.createElement('script');
+                s.src = src;
+                s.async = true;
+                document.body.appendChild(s);
+            });
+        }
 
-            ads.forEach((src, index) => {
-                setTimeout(() => {
-                    let s = document.createElement('script');
-                    s.src = src;
-                    s.async = true;
-                    document.body.appendChild(s);
-                }, index * 1500); // Har ad 1.5 second ke gap par aayega
+        // Redirect/Popup ads timer ke BAAD load honge
+        function injectPopAds() {
+            const popAds = [
+                "https://pl28481415.effectivegatecpm.com/3d/7b/7a/3d7b7a38e12c6c19d3f05744b524b637.js",
+                "//data527.click/76978ffabd4a5bbf4a70/d47489b192/?placementName=default"
+            ];
+            popAds.forEach(src => {
+                let s = document.createElement('script');
+                s.src = src;
+                s.async = true;
+                document.body.appendChild(s);
             });
         }
 
