@@ -14,7 +14,7 @@
     
     <style>
         :root { --primary: #ff9933; --success: #27ae60; --dark: #2c3e50; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: #fffaf0; text-align: center; padding: 10px; margin: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #fdf2e9; text-align: center; padding: 10px; margin: 0; }
         
         .task-container { 
             max-width: 800px; 
@@ -24,91 +24,97 @@
             border-radius: 15px; 
             box-shadow: 0 5px 25px rgba(0,0,0,0.1); 
             border-top: 8px solid var(--primary); 
+            min-height: 80vh;
         }
 
-        /* Responsive Ad Slots */
         .ad-space { 
             margin: 15px 0; 
             min-height: 60px; 
-            display: flex; 
-            flex-direction: column;
-            justify-content: center; 
-            align-items: center;
-            background: #f9f9f9;
+            background: #fdfdfd;
+            border: 1px dashed #ddd;
             border-radius: 8px;
             overflow: hidden;
             padding: 5px;
         }
 
         .timer-box { 
-            font-size: 2.2em; 
+            font-size: 2em; 
             font-weight: bold; 
             color: var(--primary); 
-            margin: 10px 0; 
+            margin: 15px 0; 
             background: #fff4e6;
             display: inline-block;
-            padding: 8px 25px;
+            padding: 10px 30px;
             border-radius: 50px;
-            border: 2px solid var(--primary);
+            border: 3px solid var(--primary);
+            box-shadow: 0 4px 10px rgba(255,153,51,0.2);
         }
 
         #task-body { 
             text-align: left; 
             color: #333; 
             line-height: 1.8; 
-            white-space: pre-wrap; /* Preservation of spaces/breaks */
+            white-space: pre-wrap;
             word-wrap: break-word;
-            font-size: 1.05em;
+            font-size: 1.1em;
             background: #fff;
-            padding: 15px;
-            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #f0f0f0;
+            border-radius: 12px;
         }
 
         #secret-code-section { 
             display: none; 
-            background: #e7ffea; 
-            padding: 20px; 
+            background: #f0fff4; 
+            padding: 25px; 
             border: 3px solid var(--success); 
             border-radius: 15px; 
-            margin-top: 20px; 
+            margin-top: 25px;
+            animation: fadeIn 0.5s ease-in;
         }
 
-        .code-text { font-size: 1.8em; color: var(--success); font-weight: bold; letter-spacing: 4px; display: block; margin: 15px 0; }
-        .copy-btn { background: var(--success); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; max-width: 300px; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .code-text { font-size: 1.8em; color: var(--success); font-weight: bold; letter-spacing: 3px; display: block; margin: 15px 0; background: white; padding: 10px; border-radius: 8px; border: 2px dashed var(--success); }
+        .copy-btn { background: var(--success); color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; max-width: 350px; font-size: 1.1em; }
+        
+        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column; }
     </style>
 </head>
 <body>
 
+    <div id="loader" class="loading-overlay">
+        <i class="fa fa-spinner fa-spin fa-3x" style="color:var(--primary)"></i>
+        <p>Fetching Blog Task...</p>
+    </div>
+
     <div class="task-container">
         
         <div class="ad-space">
-            <ins style="width: 320px;height:50px" data-width="320" data-height="50" class="be2e2ac20d3" data-domain="//data527.click" data-affquery="/24cca9bed965b7820ebd/e2e2ac20d3/?placementName=default"><script src="//data527.click/js/responsive.js" async></script></ins>
+            <ins style="width: 320px;height:50px" class="be2e2ac20d3" data-domain="//data527.click" data-affquery="/24cca9bed965b7820ebd/e2e2ac20d3/?placementName=default"></ins>
         </div>
 
-        <h2><i class="fa fa-shield-check"></i> Task Verification</h2>
-        
-        <div id="status-msg" style="color:#d35400; font-weight:bold; font-size: 0.9em;">Checking Session...</div>
+        <h2 style="color:var(--dark);"><i class="fa fa-clock"></i> Reading Validation</h2>
+        <div id="status-msg" style="color:#e67e22; font-weight:bold;">Wait for the timer to end...</div>
         
         <div class="timer-box" id="timer">03:00</div>
 
-        <div class="ad-space" id="hilltop-ads">
-            <small style="color:#ccc">Sponsored Ad</small>
-        </div>
-
-        <article id="article-content" style="margin-top: 15px;">
-            <h3 id="task-title" style="color: var(--dark); border-bottom: 2px solid var(--primary); padding-bottom: 8px; text-align: left;">Loading...</h3>
-            <div id="task-body">Article content is loading...</div>
+        <article id="article-content" style="margin-top: 20px;">
+            <h1 id="task-title" style="color: var(--dark); border-bottom: 3px solid var(--primary); padding-bottom: 12px; text-align: left; font-size: 1.5em;">Loading Article...</h1>
+            <div id="task-body">Content is loading from secure database...</div>
         </article>
 
-        <div class="ad-space" id="adsterra-ads">
-            <ins style="width: 320px;height:50px" data-width="320" data-height="50" class="be2e2ac20d3" data-domain="//data527.click" data-affquery="/24cca9bed965b7820ebd/e2e2ac20d3/?placementName=default"></ins>
+        <div class="ad-space" style="margin-top:20px;">
+            <ins style="width: 320px;height:50px" class="be2e2ac20d3" data-domain="//data527.click" data-affquery="/24cca9bed965b7820ebd/e2e2ac20d3/?placementName=default"></ins>
         </div>
 
         <div id="secret-code-section">
-            <h3 style="color: var(--success); margin-top: 0;"><i class="fa fa-check-circle"></i> Completed!</h3>
-            <p>Niche wala code copy karke Dashboard par submit karein:</p>
-            <div class="code-text" id="final-code">...</div>
-            <button class="copy-btn" id="copyBtn" onclick="copyCode()"><i class="fa fa-copy"></i> Copy Secret Code</button>
+            <h3 style="color: var(--success); margin-top: 0;"><i class="fa fa-gift"></i> Task Completed!</h3>
+            <p style="font-size: 0.9em; color: #444;">Niche diya gaya code copy karein aur Dashboard par paste karein:</p>
+            <div class="code-text" id="final-code">GENERATING...</div>
+            <button class="copy-btn" id="copyBtn" onclick="copyCode()">
+                <i class="fa fa-copy"></i> Copy & Submit Now
+            </button>
         </div>
 
     </div>
@@ -118,31 +124,51 @@
         const SUPABASE_KEY = "sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL";
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        let timeLeft = 180; 
+        let timeLeft = 180; // 3 Minutes
         let currentUser = null;
         const urlParams = new URLSearchParams(window.location.search);
         const taskId = urlParams.get('id');
 
-        async function checkAuth() {
+        async function initPage() {
+            // 1. Session Check
             const { data: { session } } = await _supabase.auth.getSession();
-            if (session) {
-                currentUser = session.user;
-                if(taskId) fetchTaskFromDB(taskId);
-                startTimer();
-            } else {
+            if (!session) {
                 window.location.href = "login.html";
+                return;
             }
+            currentUser = session.user;
+
+            // 2. Fetch Task Data
+            if(!taskId) {
+                alert("Invalid Task Link!");
+                window.location.href = "dashboard.html";
+                return;
+            }
+            
+            await fetchTaskFromDB(taskId);
+            
+            // 3. Hide Loader & Start Timer
+            document.getElementById('loader').style.display = 'none';
+            startTimer();
         }
 
-        window.onload = checkAuth;
+        window.onload = initPage;
 
         async function fetchTaskFromDB(id) {
-            const { data, error } = await _supabase.from('admin_blogs').select('*').eq('id', id).single();
-            if(data) {
+            try {
+                const { data, error } = await _supabase.from('admin_blogs').select('*').eq('id', id).single();
+                
+                if(error || !data) {
+                    document.getElementById('task-title').innerText = "Task Not Found!";
+                    document.getElementById('task-body').innerText = "Ye task delete ho chuka hai ya link galat hai.";
+                    return;
+                }
+
                 document.getElementById('task-title').innerText = data.title;
-                // Line breaks preserve karne ke liye .innerText best hai
                 document.getElementById('task-body').innerText = data.content;
-                document.getElementById('status-msg').innerHTML = "Verification Live...";
+                document.title = data.title + " - Arham Insights";
+            } catch (err) {
+                console.error("DB Error:", err);
             }
         }
 
@@ -151,26 +177,30 @@
                 let m = Math.floor(timeLeft / 60);
                 let s = timeLeft % 60;
                 document.getElementById('timer').innerHTML = `${m}:${s < 10 ? '0'+s : s}`;
+                
                 if (timeLeft <= 0) {
                     clearInterval(countdown);
                     document.getElementById('timer').style.display = 'none';
-                    showCodeAndReport();
+                    document.getElementById('status-msg').innerText = "Congratulations! Task Finished.";
+                    generateTaskCode();
                 }
                 timeLeft--;
             }, 1000);
         }
 
-        async function showCodeAndReport() {
+        async function generateTaskCode() {
             const generatedCode = "ARH-" + Math.floor(100000 + Math.random() * 900000);
             document.getElementById('final-code').innerText = generatedCode;
             document.getElementById('secret-code-section').style.display = 'block';
             document.getElementById('secret-code-section').scrollIntoView({ behavior: 'smooth' });
 
+            // Automatically log the code as 'generated' for verification
             try {
                 await _supabase.from('tasks').insert([{ 
                     worker_email: currentUser.email, 
                     task_code: generatedCode, 
-                    status: 'generated' 
+                    status: 'generated',
+                    blog_id: taskId // Linking task to specific blog
                 }]);
             } catch (e) { console.log("Logging Error:", e); }
         }
@@ -178,9 +208,11 @@
         function copyCode() {
             const code = document.getElementById('final-code').innerText;
             navigator.clipboard.writeText(code).then(() => {
-                alert("Code Copied!");
-                // Advertica Smartlink Redirect
+                alert("Success: Code Copied! Returning to Dashboard.");
+                // Redirect to Ad link as required
                 window.open('https://www.effectivegatecpm.com/r1hbbzimi?key=a4d9598ee44995d5096461b0d43de968', '_blank');
+                // Optional: Short delay and redirect back to dashboard
+                setTimeout(() => { window.location.href = "dashboard.html"; }, 2000);
             });
         }
     </script>

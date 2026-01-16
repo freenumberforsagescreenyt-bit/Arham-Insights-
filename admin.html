@@ -7,65 +7,97 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        :root { --primary: #ff9933; --success: #27ae60; --dark-bg: #2c3e50; --danger: #e74c3c; }
+        :root { --primary: #ff9933; --success: #27ae60; --dark-bg: #2c3e50; --danger: #e74c3c; --info: #3498db; }
         body { font-family: 'Segoe UI', sans-serif; background-color: var(--dark-bg); color: white; margin: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+        
         .login-box, .dashboard { background: white; color: #333; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); width: 95%; max-width: 1100px; margin: 20px 0; }
         .dashboard { display: none; }
-        .pass-wrapper { position: relative; width: 100%; margin-bottom: 15px; }
-        .pass-wrapper i { position: absolute; right: 15px; top: 12px; cursor: pointer; color: #777; font-size: 1.2em; z-index: 10; }
+        
         input, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; margin-bottom: 10px; font-size: 0.9em; }
         button { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+
         .nav-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; position: sticky; top: 0; background: white; z-index: 10; padding: 10px 0; border-bottom: 2px solid #eee; }
         .nav-tabs div { cursor: pointer; padding: 10px 15px; background: #eee; border-radius: 5px; flex: 1; text-align: center; font-size: 0.85em; font-weight: bold; }
         .nav-tabs .active-tab { background: var(--primary); color: white; }
+        
         .tab-content { display: none; }
         .active { display: block; }
-        .blog-list-container { max-height: 500px; overflow-y: auto; border: 1px solid #eee; margin-top: 15px; padding: 10px; border-radius: 8px; background: #fafafa; }
+        
+        /* Optimized for 100+ items */
+        .list-container { max-height: 600px; overflow-y: auto; border: 1px solid #eee; margin-top: 15px; padding: 10px; border-radius: 8px; background: #fafafa; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85em; background: white; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; color: #333; }
+        th { background: #f8f9fa; position: sticky; top: 0; z-index: 5; }
+
+        .search-bar { margin-bottom: 15px; padding: 10px; border: 2px solid var(--primary); border-radius: 8px; outline: none; }
+
         .blog-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #ddd; background: white; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .copy-icon { cursor: pointer; color: var(--primary); margin-left: 15px; font-size: 1.2em; }
         .delete-icon { cursor: pointer; color: var(--danger); margin-left: 15px; }
-        .status-badge { font-size: 0.7em; padding: 2px 6px; border-radius: 4px; background: #e8f5e9; color: #2e7d32; font-weight: bold; }
+        
+        .status-badge { font-size: 0.7em; padding: 3px 8px; border-radius: 12px; font-weight: bold; text-transform: uppercase; }
+        .status-pending { background: #fff3e0; color: #ef6c00; }
+        .status-approved { background: #e8f5e9; color: #2e7d32; }
+
+        .action-btn { padding: 5px 10px; font-size: 0.8em; margin-right: 5px; border-radius: 4px; border:none; color:white; cursor:pointer; }
     </style>
 </head>
 <body>
 
     <div class="login-box" id="login-box">
         <h2 style="color: var(--primary); text-align: center;"><i class="fa fa-shield-alt"></i> Admin Login</h2>
-        <div class="pass-wrapper">
-            <input type="password" id="access-code" placeholder="Enter Secret Key...">
-            <i class="fa fa-eye" id="eye-icon" onclick="togglePassword()"></i>
-        </div>
+        <input type="password" id="access-code" placeholder="Enter Secret Key...">
         <button onclick="checkAccess()" style="width:100%;">Login</button>
     </div>
 
     <div class="dashboard" id="main-dashboard">
         <div style="display:flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 15px;">
             <h2 style="margin:0; color: var(--dark-bg);">Arham Control Center</h2>
-            <button onclick="logout()" style="background:#555; padding: 8px 15px;">Logout</button>
+            <div>
+                <span id="task-total-count" style="background:var(--primary); color:white; padding:5px 10px; border-radius:15px; font-size:0.8em; margin-right:10px;">Tasks: 0</span>
+                <button onclick="logout()" style="background:#555; padding: 8px 15px;">Logout</button>
+            </div>
         </div>
         
         <div class="nav-tabs">
-            <div id="t2" class="active-tab" onclick="showTab(event, 'blogs')">Manage Blogs</div>
-            <div id="t5" onclick="showTab(event, 'keywords')">Bulk Keywords & Links</div>
+            <div class="active-tab" onclick="showTab(event, 'verify-work')">Worker Submissions</div>
+            <div onclick="showTab(event, 'blogs')">Single Task</div>
+            <div onclick="showTab(event, 'keywords')">Bulk Upload (100+)</div>
         </div>
 
-        <div id="blogs" class="tab-content active">
+        <div id="verify-work" class="tab-content active">
+            <div style="display:flex; justify-content: space-between; align-items: center; gap:10px;">
+                <input type="text" id="sub-search" class="search-bar" placeholder="Search by Email or Code..." onkeyup="filterSubmissions()">
+                <button onclick="fetchSubmissions()" style="background:var(--info); height:45px; margin-bottom:15px;"><i class="fa fa-sync"></i> Refresh</button>
+            </div>
+            <div class="list-container">
+                <table>
+                    <thead>
+                        <tr><th>Worker Email</th><th>Code</th><th>Status</th><th>Action</th></tr>
+                    </thead>
+                    <tbody id="submission-list"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="blogs" class="tab-content">
             <h3>Publish Single Task</h3>
-            <input type="text" id="blog-title" placeholder="Blog Title (Worker ko dikhega)">
-            <input type="text" id="blog-keyword" placeholder="Search Keyword (Worker isse search karega)">
-            <textarea id="blog-content" rows="6" placeholder="Full Blog Content / Article..."></textarea>
-            <button onclick="saveBlogToSupabase()" style="width:100%;">Publish Task</button>
+            <input type="text" id="blog-title" placeholder="Blog Title">
+            <input type="text" id="blog-keyword" placeholder="Target Keyword">
+            <textarea id="blog-content" rows="6" placeholder="Article Content..."></textarea>
+            <button onclick="saveBlogToSupabase()" style="width:100%;">Publish Now</button>
         </div>
 
         <div id="keywords" class="tab-content">
-            <h3>Bulk Keywords Update (Max 50)</h3>
-            <p style="color:#666; font-size: 0.8em; margin-bottom: 10px;">Har line mein ek naya keyword likhein.</p>
+            <h3>Bulk Upload (Max 100 at a time)</h3>
+            <p style="font-size: 0.8em; color: #666;">Har line mein ek naya keyword likhein.</p>
             <textarea id="keywords-input" rows="10" placeholder="Keyword 1&#10;Keyword 2&#10;Keyword 3..."></textarea>
-            <button onclick="bulkSaveKeywords()" id="bulkBtn" style="width:100%; background: var(--success);">Generate & Sync All Links</button>
+            <button onclick="bulkSaveKeywords()" id="bulkBtn" style="width:100%; background: var(--success);">Generate All 100+ Links</button>
 
-            <h3 style="color: var(--primary); margin-top:25px; border-top: 1px solid #eee; padding-top: 15px;">Live Task Management</h3>
-            <div class="blog-list-container" id="live-links-copy-list">
-                </div>
+            <h3 style="margin-top:25px;">Live Tasks (<span id="live-count">0</span>)</h3>
+            <input type="text" id="blog-search" class="search-bar" placeholder="Search Live Tasks..." onkeyup="filterBlogs()">
+            <div class="list-container" id="live-links-copy-list"></div>
         </div>
     </div>
 
@@ -75,104 +107,143 @@
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         const SECRET_CODE = "Jainam Jayati Shasnam";
 
-        function togglePassword() {
-            const passInput = document.getElementById('access-code');
-            const eyeIcon = document.getElementById('eye-icon');
-            passInput.type = passInput.type === "password" ? "text" : "password";
-            eyeIcon.classList.toggle('fa-eye-slash');
-        }
+        let allBlogs = [];
+        let allSubmissions = [];
 
         function checkAccess() {
             if(document.getElementById('access-code').value === SECRET_CODE) {
                 document.getElementById('login-box').style.display = 'none';
                 document.getElementById('main-dashboard').style.display = 'block';
                 fetchBlogs();
+                fetchSubmissions();
             } else { alert("Incorrect Admin Key!"); }
+        }
+
+        // --- SUBMISSIONS LOGIC ---
+        async function fetchSubmissions() {
+            const { data, error } = await _supabase.from('tasks').select('*').order('created_at', {ascending: false});
+            if(data) {
+                allSubmissions = data;
+                renderSubmissions(allSubmissions);
+            }
+        }
+
+        function renderSubmissions(data) {
+            const list = document.getElementById('submission-list');
+            list.innerHTML = "";
+            data.forEach(s => {
+                const statusClass = `status-${s.status}`;
+                list.innerHTML += `
+                    <tr>
+                        <td>${s.worker_email}</td>
+                        <td><code>${s.task_code}</code></td>
+                        <td><span class="status-badge ${statusClass}">${s.status}</span></td>
+                        <td>
+                            ${s.status !== 'approved' ? `<button class="action-btn" style="background:var(--success)" onclick="updateStatus('${s.id}', 'approved')">Approve</button>` : ''}
+                            <button class="action-btn" style="background:var(--danger)" onclick="deleteSubmission('${s.id}')">Reject</button>
+                        </td>
+                    </tr>`;
+            });
+        }
+
+        function filterSubmissions() {
+            const q = document.getElementById('sub-search').value.toLowerCase();
+            const filtered = allSubmissions.filter(s => s.worker_email.toLowerCase().includes(q) || s.task_code.toLowerCase().includes(q));
+            renderSubmissions(filtered);
+        }
+
+        async function updateStatus(id, status) {
+            await _supabase.from('tasks').update({ status: status }).eq('id', id);
+            fetchSubmissions();
+        }
+
+        async function deleteSubmission(id) {
+            if(confirm("Reject?")) { await _supabase.from('tasks').delete().eq('id', id); fetchSubmissions(); }
+        }
+
+        // --- BLOGS LOGIC (Optimized for 100+) ---
+        async function fetchBlogs() {
+            const { data } = await _supabase.from('admin_blogs').select('*').order('created_at', {ascending: false});
+            if(data) {
+                allBlogs = data;
+                document.getElementById('live-count').innerText = data.length;
+                document.getElementById('task-total-count').innerText = "Tasks: " + data.length;
+                renderBlogs(allBlogs);
+            }
+        }
+
+        function renderBlogs(data) {
+            const list = document.getElementById('live-links-copy-list');
+            list.innerHTML = "";
+            const baseUrl = window.location.origin;
+            data.forEach(b => {
+                const fullUrl = `${baseUrl}/taskspage.html?id=${b.id}`;
+                list.innerHTML += `
+                    <div class="blog-item">
+                        <div style="flex:1">
+                            <b>${b.title}</b> <br>
+                            <small style="color:var(--primary);">Keyword: ${b.keyword || 'None'}</small>
+                        </div>
+                        <div>
+                            <i class="fa fa-copy copy-icon" onclick="copyText('${fullUrl}')"></i>
+                            <i class="fa fa-trash delete-icon" onclick="deleteBlog('${b.id}')"></i>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        function filterBlogs() {
+            const q = document.getElementById('blog-search').value.toLowerCase();
+            const filtered = allBlogs.filter(b => b.title.toLowerCase().includes(q) || (b.keyword && b.keyword.toLowerCase().includes(q)));
+            renderBlogs(filtered);
         }
 
         async function saveBlogToSupabase() {
             const title = document.getElementById('blog-title').value;
             const keyword = document.getElementById('blog-keyword').value;
             const content = document.getElementById('blog-content').value;
+            if(!title || !keyword) return alert("Title & Keyword are must!");
 
-            if(!title || !keyword) return alert("Title aur Keyword zaruri hai!");
-
-            const { error } = await _supabase.from('admin_blogs').insert([{
-                title: title,
-                keyword: keyword,
-                content: content
-            }]);
-
-            if(!error) {
-                alert("Task Published!");
-                document.getElementById('blog-title').value = "";
-                document.getElementById('blog-keyword').value = "";
-                document.getElementById('blog-content').value = "";
-                fetchBlogs();
-            } else { alert("Error: " + error.message); }
-        }
-
-        async function fetchBlogs() {
-            const { data, error } = await _supabase.from('admin_blogs').select('*').order('created_at', {ascending: false});
-            const list = document.getElementById('live-links-copy-list');
-            list.innerHTML = "";
-            const baseUrl = window.location.origin;
-
-            if(data) {
-                data.forEach(b => {
-                    const fullUrl = `${baseUrl}/taskspage.html?id=${b.id}`;
-                    list.innerHTML += `
-                        <div class="blog-item">
-                            <div style="flex:1">
-                                <b>${b.title}</b> <span class="status-badge">Live</span><br>
-                                <small style="color:var(--primary);">Keyword: ${b.keyword || 'Not Set'}</small><br>
-                                <small style="color:#777; font-size: 0.75em;">${fullUrl}</small>
-                            </div>
-                            <div>
-                                <i class="fa fa-copy copy-icon" onclick="copyText('${fullUrl}')" title="Copy Link"></i>
-                                <i class="fa fa-trash delete-icon" onclick="deleteBlog('${b.id}')" title="Delete"></i>
-                            </div>
-                        </div>`;
-                });
-            }
+            await _supabase.from('admin_blogs').insert([{ title, keyword, content }]);
+            alert("Task Published!");
+            fetchBlogs();
         }
 
         async function bulkSaveKeywords() {
             const btn = document.getElementById('bulkBtn');
             const input = document.getElementById('keywords-input').value;
-            const keywords = input.split('\n').filter(k => k.trim() !== "");
+            const keywords = input.split('\n').map(k => k.trim()).filter(k => k !== "");
             
-            if(keywords.length === 0) return alert("Kam se kam ek keyword likhein!");
+            if(keywords.length === 0) return alert("Enter keywords!");
             
             btn.disabled = true;
-            btn.innerText = "Syncing with Database...";
+            btn.innerText = "Processing " + keywords.length + " Tasks...";
 
-            const rows = keywords.map(kw => ({
-                title: kw.trim(),
-                keyword: kw.trim(), // Keyword aur Title bulk mein same rakhenge
-                content: `Complete guide and analysis on ${kw.trim()} for Arham Insights users.`
+            const rows = keywords.map(kw => ({ 
+                title: kw, 
+                keyword: kw, 
+                content: `Complete information about ${kw}. Read the full article and wait for the code.` 
             }));
 
             const { error } = await _supabase.from('admin_blogs').insert(rows);
-            
             if(!error) {
-                alert(keywords.length + " Tasks generated successfully!");
+                alert("Successfully Uploaded " + keywords.length + " Tasks!");
                 document.getElementById('keywords-input').value = "";
                 fetchBlogs();
             } else { alert("Error: " + error.message); }
             
             btn.disabled = false;
-            btn.innerText = "Generate Task Links";
+            btn.innerText = "Generate & Sync All Links";
         }
 
         async function deleteBlog(id) {
-            if(confirm("Kya aap is task ko delete karna chahte hain?")) {
-                await _supabase.from('admin_blogs').delete().eq('id', id);
-                fetchBlogs();
+            if(confirm("Delete task?")) { 
+                await _supabase.from('admin_blogs').delete().eq('id', id); 
+                fetchBlogs(); 
             }
         }
 
-        function copyText(t) { navigator.clipboard.writeText(t).then(() => alert("Task Link Copied!")); }
+        function copyText(t) { navigator.clipboard.writeText(t).then(() => alert("Link Copied!")); }
         
         function showTab(e, id) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
