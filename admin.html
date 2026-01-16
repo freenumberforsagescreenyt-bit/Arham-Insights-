@@ -24,13 +24,12 @@
         .tab-content { display: none; }
         .active { display: block; }
         
-        /* Optimized for 100+ items */
         .list-container { max-height: 600px; overflow-y: auto; border: 1px solid #eee; margin-top: 15px; padding: 10px; border-radius: 8px; background: #fafafa; }
         table { width: 100%; border-collapse: collapse; font-size: 0.85em; background: white; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; color: #333; }
         th { background: #f8f9fa; position: sticky; top: 0; z-index: 5; }
 
-        .search-bar { margin-bottom: 15px; padding: 10px; border: 2px solid var(--primary); border-radius: 8px; outline: none; }
+        .search-bar { margin-bottom: 15px; padding: 10px; border: 2px solid var(--primary); border-radius: 8px; outline: none; width: 100%; box-sizing: border-box;}
 
         .blog-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #ddd; background: white; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .copy-icon { cursor: pointer; color: var(--primary); margin-left: 15px; font-size: 1.2em; }
@@ -61,20 +60,20 @@
         </div>
         
         <div class="nav-tabs">
-            <div class="active-tab" onclick="showTab(event, 'verify-work')">Worker Submissions</div>
+            <div class="active-tab" onclick="showTab(event, 'verify-work')">Submissions</div>
             <div onclick="showTab(event, 'blogs')">Single Task</div>
-            <div onclick="showTab(event, 'keywords')">Bulk Upload (100+)</div>
+            <div onclick="showTab(event, 'keywords')">Bulk Upload (SEO)</div>
         </div>
 
         <div id="verify-work" class="tab-content active">
-            <div style="display:flex; justify-content: space-between; align-items: center; gap:10px;">
+            <div style="display:flex; justify-content: space-between; align-items: center; gap:10px; margin-bottom:10px;">
                 <input type="text" id="sub-search" class="search-bar" placeholder="Search by Email or Code..." onkeyup="filterSubmissions()">
-                <button onclick="fetchSubmissions()" style="background:var(--info); height:45px; margin-bottom:15px;"><i class="fa fa-sync"></i> Refresh</button>
+                <button onclick="fetchSubmissions()" style="background:var(--info); height:45px;"><i class="fa fa-sync"></i></button>
             </div>
             <div class="list-container">
                 <table>
                     <thead>
-                        <tr><th>Worker Email</th><th>Code</th><th>Status</th><th>Action</th></tr>
+                        <tr><th>Worker</th><th>Code</th><th>Status</th><th>Action</th></tr>
                     </thead>
                     <tbody id="submission-list"></tbody>
                 </table>
@@ -82,20 +81,20 @@
         </div>
 
         <div id="blogs" class="tab-content">
-            <h3>Publish Single Task</h3>
-            <input type="text" id="blog-title" placeholder="Blog Title">
-            <input type="text" id="blog-keyword" placeholder="Target Keyword">
+            <h3>Publish SEO Optimized Task</h3>
+            <input type="text" id="blog-title" placeholder="Main Title (e.g. Best Stocks to Buy)">
+            <input type="text" id="blog-keyword" placeholder="Base Keyword (System will add 'Arham Insights' auto)">
             <textarea id="blog-content" rows="6" placeholder="Article Content..."></textarea>
-            <button onclick="saveBlogToSupabase()" style="width:100%;">Publish Now</button>
+            <button id="singlePublishBtn" onclick="saveBlogToSupabase()" style="width:100%;">Publish & Sync Now</button>
         </div>
 
         <div id="keywords" class="tab-content">
-            <h3>Bulk Upload (Max 100 at a time)</h3>
-            <p style="font-size: 0.8em; color: #666;">Har line mein ek naya keyword likhein.</p>
-            <textarea id="keywords-input" rows="10" placeholder="Keyword 1&#10;Keyword 2&#10;Keyword 3..."></textarea>
-            <button onclick="bulkSaveKeywords()" id="bulkBtn" style="width:100%; background: var(--success);">Generate All 100+ Links</button>
+            <h3>Bulk Upload (SEO Optimized)</h3>
+            <p style="font-size: 0.85em; color: #d35400; font-weight: bold;">Har line mein 1 keyword daalein. Title/Search Keyword auto ban jayega.</p>
+            <textarea id="keywords-input" rows="10" placeholder="Stock Market&#10;iPhone 17 leaks&#10;How to earn money..."></textarea>
+            <button onclick="bulkSaveKeywords()" id="bulkBtn" style="width:100%; background: var(--success); font-size: 1.1em;">Generate 100+ SEO Tasks</button>
 
-            <h3 style="margin-top:25px;">Live Tasks (<span id="live-count">0</span>)</h3>
+            <h3 style="margin-top:25px;">Live Task Links</h3>
             <input type="text" id="blog-search" class="search-bar" placeholder="Search Live Tasks..." onkeyup="filterBlogs()">
             <div class="list-container" id="live-links-copy-list"></div>
         </div>
@@ -119,13 +118,9 @@
             } else { alert("Incorrect Admin Key!"); }
         }
 
-        // --- SUBMISSIONS LOGIC ---
         async function fetchSubmissions() {
             const { data, error } = await _supabase.from('tasks').select('*').order('created_at', {ascending: false});
-            if(data) {
-                allSubmissions = data;
-                renderSubmissions(allSubmissions);
-            }
+            if(data) { allSubmissions = data; renderSubmissions(allSubmissions); }
         }
 
         function renderSubmissions(data) {
@@ -133,16 +128,15 @@
             list.innerHTML = "";
             data.forEach(s => {
                 const statusClass = `status-${s.status}`;
-                list.innerHTML += `
-                    <tr>
-                        <td>${s.worker_email}</td>
-                        <td><code>${s.task_code}</code></td>
-                        <td><span class="status-badge ${statusClass}">${s.status}</span></td>
-                        <td>
-                            ${s.status !== 'approved' ? `<button class="action-btn" style="background:var(--success)" onclick="updateStatus('${s.id}', 'approved')">Approve</button>` : ''}
-                            <button class="action-btn" style="background:var(--danger)" onclick="deleteSubmission('${s.id}')">Reject</button>
-                        </td>
-                    </tr>`;
+                list.innerHTML += `<tr>
+                    <td>${s.worker_email}</td>
+                    <td><code>${s.task_code}</code></td>
+                    <td><span class="status-badge ${statusClass}">${s.status}</span></td>
+                    <td>
+                        ${s.status !== 'approved' ? `<button class="action-btn" style="background:var(--success)" onclick="updateStatus('${s.id}', 'approved')">Approve</button>` : ''}
+                        <button class="action-btn" style="background:var(--danger)" onclick="deleteSubmission('${s.id}')">Delete</button>
+                    </td>
+                </tr>`;
             });
         }
 
@@ -158,10 +152,9 @@
         }
 
         async function deleteSubmission(id) {
-            if(confirm("Reject?")) { await _supabase.from('tasks').delete().eq('id', id); fetchSubmissions(); }
+            if(confirm("Permanently delete?")) { await _supabase.from('tasks').delete().eq('id', id); fetchSubmissions(); }
         }
 
-        // --- BLOGS LOGIC (Optimized for 100+) ---
         async function fetchBlogs() {
             const { data } = await _supabase.from('admin_blogs').select('*').order('created_at', {ascending: false});
             if(data) {
@@ -178,66 +171,87 @@
             const baseUrl = window.location.origin;
             data.forEach(b => {
                 const fullUrl = `${baseUrl}/taskspage.html?id=${b.id}`;
-                list.innerHTML += `
-                    <div class="blog-item">
-                        <div style="flex:1">
-                            <b>${b.title}</b> <br>
-                            <small style="color:var(--primary);">Keyword: ${b.keyword || 'None'}</small>
-                        </div>
-                        <div>
-                            <i class="fa fa-copy copy-icon" onclick="copyText('${fullUrl}')"></i>
-                            <i class="fa fa-trash delete-icon" onclick="deleteBlog('${b.id}')"></i>
-                        </div>
-                    </div>`;
+                list.innerHTML += `<div class="blog-item">
+                    <div style="flex:1">
+                        <b>${b.title}</b> <br>
+                        <small style="color:var(--primary); font-weight:bold;">Keyword: ${b.keyword}</small>
+                    </div>
+                    <div>
+                        <i class="fa fa-copy copy-icon" title="Copy Link" onclick="copyText('${fullUrl}')"></i>
+                        <i class="fa fa-trash delete-icon" title="Delete Task" onclick="deleteBlog('${b.id}')"></i>
+                    </div>
+                </div>`;
             });
         }
 
         function filterBlogs() {
             const q = document.getElementById('blog-search').value.toLowerCase();
-            const filtered = allBlogs.filter(b => b.title.toLowerCase().includes(q) || (b.keyword && b.keyword.toLowerCase().includes(q)));
+            const filtered = allBlogs.filter(b => b.title.toLowerCase().includes(q) || b.keyword.toLowerCase().includes(q));
             renderBlogs(filtered);
         }
 
+        // --- REPAIRED PUBLISH BLOG FUNCTION ---
         async function saveBlogToSupabase() {
-            const title = document.getElementById('blog-title').value;
-            const keyword = document.getElementById('blog-keyword').value;
-            const content = document.getElementById('blog-content').value;
-            if(!title || !keyword) return alert("Title & Keyword are must!");
+            const btn = document.getElementById('singlePublishBtn');
+            const rawTitle = document.getElementById('blog-title').value.trim();
+            const rawKeyword = document.getElementById('blog-keyword').value.trim();
+            const content = document.getElementById('blog-content').value.trim();
 
-            await _supabase.from('admin_blogs').insert([{ title, keyword, content }]);
-            alert("Task Published!");
-            fetchBlogs();
+            if(!rawTitle || !rawKeyword) return alert("Title & Keyword are required!");
+
+            // Auto-Sync SEO Logic
+            const seoTitle = `${rawTitle} | Arham Insights`;
+            const seoKeyword = `${rawKeyword} Arham Insights`;
+
+            btn.disabled = true; btn.innerText = "Syncing...";
+
+            const { error } = await _supabase.from('admin_blogs').insert([{ 
+                title: seoTitle, 
+                keyword: seoKeyword, 
+                content: content || `Latest updates on ${rawTitle}. Full guide for 2026.` 
+            }]);
+
+            if(!error) {
+                alert("Published & Synced with SEO!");
+                document.getElementById('blog-title').value = "";
+                document.getElementById('blog-keyword').value = "";
+                document.getElementById('blog-content').value = "";
+                fetchBlogs();
+            } else { alert("Error: " + error.message); }
+            
+            btn.disabled = false; btn.innerText = "Publish & Sync Now";
         }
 
+        // --- BULK UPLOAD WITH SEO SYNC ---
         async function bulkSaveKeywords() {
             const btn = document.getElementById('bulkBtn');
             const input = document.getElementById('keywords-input').value;
             const keywords = input.split('\n').map(k => k.trim()).filter(k => k !== "");
             
-            if(keywords.length === 0) return alert("Enter keywords!");
+            if(keywords.length === 0) return alert("Enter some keywords!");
             
             btn.disabled = true;
-            btn.innerText = "Processing " + keywords.length + " Tasks...";
+            btn.innerText = "Generating " + keywords.length + " SEO Tasks...";
 
             const rows = keywords.map(kw => ({ 
-                title: kw, 
-                keyword: kw, 
-                content: `Complete information about ${kw}. Read the full article and wait for the code.` 
+                title: `${kw} (2026 Update) | Arham Insights`, 
+                keyword: `${kw} Arham Insights`, 
+                content: `Everything you need to know about ${kw}. Read this complete guide by Arham Insights to stay updated with latest trends in 2026.` 
             }));
 
             const { error } = await _supabase.from('admin_blogs').insert(rows);
             if(!error) {
-                alert("Successfully Uploaded " + keywords.length + " Tasks!");
+                alert("Successfully Synced " + keywords.length + " Tasks!");
                 document.getElementById('keywords-input').value = "";
                 fetchBlogs();
             } else { alert("Error: " + error.message); }
             
             btn.disabled = false;
-            btn.innerText = "Generate & Sync All Links";
+            btn.innerText = "Generate 100+ SEO Tasks";
         }
 
         async function deleteBlog(id) {
-            if(confirm("Delete task?")) { 
+            if(confirm("Delete this blog task?")) { 
                 await _supabase.from('admin_blogs').delete().eq('id', id); 
                 fetchBlogs(); 
             }
