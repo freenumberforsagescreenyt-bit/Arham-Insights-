@@ -32,7 +32,8 @@
         .search-bar { margin-bottom: 15px; padding: 10px; border: 2px solid var(--primary); border-radius: 8px; outline: none; width: 100%; box-sizing: border-box;}
 
         .blog-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #ddd; background: white; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .copy-icon { cursor: pointer; color: var(--primary); margin-left: 15px; font-size: 1.2em; }
+        .copy-icon { cursor: pointer; color: var(--primary); margin-left: 15px; font-size: 1.2em; transition: 0.2s; }
+        .copy-icon:hover { transform: scale(1.2); }
         .delete-icon { cursor: pointer; color: var(--danger); margin-left: 15px; }
         
         .status-badge { font-size: 0.7em; padding: 3px 8px; border-radius: 12px; font-weight: bold; text-transform: uppercase; }
@@ -40,6 +41,7 @@
         .status-approved { background: #e8f5e9; color: #2e7d32; }
 
         .action-btn { padding: 5px 10px; font-size: 0.8em; margin-right: 5px; border-radius: 4px; border:none; color:white; cursor:pointer; }
+        .danger-zone { margin-top: 20px; padding: 15px; border: 2px dashed var(--danger); border-radius: 10px; background: #fff5f5; }
     </style>
 </head>
 <body>
@@ -62,7 +64,7 @@
         <div class="nav-tabs">
             <div class="active-tab" onclick="showTab(event, 'verify-work')">Submissions</div>
             <div onclick="showTab(event, 'blogs')">Single Task</div>
-            <div onclick="showTab(event, 'keywords')">Bulk Upload (SEO)</div>
+            <div onclick="showTab(event, 'keywords')">Bulk Upload & Live Links</div>
         </div>
 
         <div id="verify-work" class="tab-content active">
@@ -78,6 +80,10 @@
                     <tbody id="submission-list"></tbody>
                 </table>
             </div>
+            <div class="danger-zone">
+                <h4 style="color:var(--danger); margin-top:0;">Danger Zone</h4>
+                <button onclick="deleteAllSubmissions()" style="background:var(--danger); font-size: 0.8em;">Clear All Submissions</button>
+            </div>
         </div>
 
         <div id="blogs" class="tab-content">
@@ -90,13 +96,18 @@
 
         <div id="keywords" class="tab-content">
             <h3>Bulk Upload (SEO Optimized)</h3>
-            <p style="font-size: 0.85em; color: #d35400; font-weight: bold;">Har line mein 1 keyword daalein. Title/Search Keyword auto ban jayega.</p>
+            <p style="font-size: 0.85em; color: #d35400; font-weight: bold;">Har line mein 1 keyword daalein. Link auto generate ho jayega.</p>
             <textarea id="keywords-input" rows="10" placeholder="Stock Market&#10;iPhone 17 leaks&#10;How to earn money..."></textarea>
             <button onclick="bulkSaveKeywords()" id="bulkBtn" style="width:100%; background: var(--success); font-size: 1.1em;">Generate 100+ SEO Tasks</button>
 
-            <h3 style="margin-top:25px;">Live Task Links</h3>
+            <h3 style="margin-top:25px;">Live Task Links (Auto-Generated)</h3>
             <input type="text" id="blog-search" class="search-bar" placeholder="Search Live Tasks..." onkeyup="filterBlogs()">
-            <div class="list-container" id="live-links-copy-list"></div>
+            <div class="list-container" id="live-links-copy-list">Loading Links...</div>
+            
+            <div class="danger-zone">
+                <h4 style="color:var(--danger); margin-top:0;">Danger Zone</h4>
+                <button onclick="deleteAllBlogs()" style="background:var(--danger); font-size: 0.8em;">Delete All Live Blog Tasks</button>
+            </div>
         </div>
     </div>
 
@@ -118,6 +129,7 @@
             } else { alert("Incorrect Admin Key!"); }
         }
 
+        // --- SUBMISSIONS LOGIC ---
         async function fetchSubmissions() {
             const { data, error } = await _supabase.from('tasks').select('*').order('created_at', {ascending: false});
             if(data) { allSubmissions = data; renderSubmissions(allSubmissions); }
@@ -140,10 +152,15 @@
             });
         }
 
-        function filterSubmissions() {
-            const q = document.getElementById('sub-search').value.toLowerCase();
-            const filtered = allSubmissions.filter(s => s.worker_email.toLowerCase().includes(q) || s.task_code.toLowerCase().includes(q));
-            renderSubmissions(filtered);
+        async function deleteAllSubmissions() {
+            if(confirm("KYA AAP SURE HAIN? Saare worker submissions delete ho jayenge!")) {
+                const { error } = await _supabase.from('tasks').delete().neq('status', 'xyz'); 
+                if(!error) { alert("All Submissions Cleared!"); fetchSubmissions(); }
+            }
+        }
+
+        async function deleteSubmission(id) {
+            if(confirm("Permanently delete?")) { await _supabase.from('tasks').delete().eq('id', id); fetchSubmissions(); }
         }
 
         async function updateStatus(id, status) {
@@ -151,15 +168,11 @@
             fetchSubmissions();
         }
 
-        async function deleteSubmission(id) {
-            if(confirm("Permanently delete?")) { await _supabase.from('tasks').delete().eq('id', id); fetchSubmissions(); }
-        }
-
+        // --- REPAIRED BLOG & LINK LOGIC ---
         async function fetchBlogs() {
-            const { data } = await _supabase.from('admin_blogs').select('*').order('created_at', {ascending: false});
+            const { data, error } = await _supabase.from('admin_blogs').select('*').order('created_at', {ascending: false});
             if(data) {
                 allBlogs = data;
-                document.getElementById('live-count').innerText = data.length;
                 document.getElementById('task-total-count').innerText = "Tasks: " + data.length;
                 renderBlogs(allBlogs);
             }
@@ -167,16 +180,21 @@
 
         function renderBlogs(data) {
             const list = document.getElementById('live-links-copy-list');
+            if(data.length === 0) { list.innerHTML = "<p style='text-align:center;color:#999;'>No active tasks found.</p>"; return; }
+            
             list.innerHTML = "";
-            const baseUrl = window.location.origin;
+            // Hardcoded filename ensure karega ki link hamesha sahi bane
+            const pagePath = "taskspage.html"; 
+            const currentOrigin = window.location.origin + window.location.pathname.replace('admin.html', '');
+
             data.forEach(b => {
-                const fullUrl = `${baseUrl}/taskspage.html?id=${b.id}`;
+                const fullUrl = `${currentOrigin}${pagePath}?id=${b.id}`;
                 list.innerHTML += `<div class="blog-item">
                     <div style="flex:1">
                         <b>${b.title}</b> <br>
                         <small style="color:var(--primary); font-weight:bold;">Keyword: ${b.keyword}</small>
                     </div>
-                    <div>
+                    <div style="display:flex; align-items:center;">
                         <i class="fa fa-copy copy-icon" title="Copy Link" onclick="copyText('${fullUrl}')"></i>
                         <i class="fa fa-trash delete-icon" title="Delete Task" onclick="deleteBlog('${b.id}')"></i>
                     </div>
@@ -184,13 +202,6 @@
             });
         }
 
-        function filterBlogs() {
-            const q = document.getElementById('blog-search').value.toLowerCase();
-            const filtered = allBlogs.filter(b => b.title.toLowerCase().includes(q) || b.keyword.toLowerCase().includes(q));
-            renderBlogs(filtered);
-        }
-
-        // --- REPAIRED PUBLISH BLOG FUNCTION ---
         async function saveBlogToSupabase() {
             const btn = document.getElementById('singlePublishBtn');
             const rawTitle = document.getElementById('blog-title').value.trim();
@@ -199,7 +210,6 @@
 
             if(!rawTitle || !rawKeyword) return alert("Title & Keyword are required!");
 
-            // Auto-Sync SEO Logic
             const seoTitle = `${rawTitle} | Arham Insights`;
             const seoKeyword = `${rawKeyword} Arham Insights`;
 
@@ -212,17 +222,15 @@
             }]);
 
             if(!error) {
-                alert("Published & Synced with SEO!");
+                alert("Published! Link Generated in List below.");
                 document.getElementById('blog-title').value = "";
                 document.getElementById('blog-keyword').value = "";
                 document.getElementById('blog-content').value = "";
                 fetchBlogs();
-            } else { alert("Error: " + error.message); }
-            
+            }
             btn.disabled = false; btn.innerText = "Publish & Sync Now";
         }
 
-        // --- BULK UPLOAD WITH SEO SYNC ---
         async function bulkSaveKeywords() {
             const btn = document.getElementById('bulkBtn');
             const input = document.getElementById('keywords-input').value;
@@ -231,7 +239,7 @@
             if(keywords.length === 0) return alert("Enter some keywords!");
             
             btn.disabled = true;
-            btn.innerText = "Generating " + keywords.length + " SEO Tasks...";
+            btn.innerText = "Generating SEO Links...";
 
             const rows = keywords.map(kw => ({ 
                 title: `${kw} (2026 Update) | Arham Insights`, 
@@ -241,13 +249,11 @@
 
             const { error } = await _supabase.from('admin_blogs').insert(rows);
             if(!error) {
-                alert("Successfully Synced " + keywords.length + " Tasks!");
+                alert("Successfully Synced " + keywords.length + " Links!");
                 document.getElementById('keywords-input').value = "";
                 fetchBlogs();
-            } else { alert("Error: " + error.message); }
-            
-            btn.disabled = false;
-            btn.innerText = "Generate 100+ SEO Tasks";
+            }
+            btn.disabled = false; btn.innerText = "Generate 100+ SEO Tasks";
         }
 
         async function deleteBlog(id) {
@@ -257,8 +263,27 @@
             }
         }
 
-        function copyText(t) { navigator.clipboard.writeText(t).then(() => alert("Link Copied!")); }
+        async function deleteAllBlogs() {
+            if(confirm("WARNING! Saare live blog links delete ho jayenge. Proceed?")) {
+                const { error } = await _supabase.from('admin_blogs').delete().neq('title', 'xyz');
+                if(!error) { alert("All Tasks Deleted!"); fetchBlogs(); }
+            }
+        }
+
+        function copyText(t) { 
+            navigator.clipboard.writeText(t).then(() => {
+                alert("Task Link Copied Successfully!");
+            }).catch(() => {
+                alert("Manual Copy: " + t);
+            });
+        }
         
+        function filterBlogs() {
+            const q = document.getElementById('blog-search').value.toLowerCase();
+            const filtered = allBlogs.filter(b => b.title.toLowerCase().includes(q) || b.keyword.toLowerCase().includes(q));
+            renderBlogs(filtered);
+        }
+
         function showTab(e, id) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.nav-tabs div').forEach(t => t.classList.remove('active-tab'));
@@ -267,6 +292,12 @@
         }
 
         function logout() { location.reload(); }
+        function filterSubmissions() {
+            const q = document.getElementById('sub-search').value.toLowerCase();
+            const filtered = allSubmissions.filter(s => s.worker_email.toLowerCase().includes(q) || s.task_code.toLowerCase().includes(q));
+            renderSubmissions(filtered);
+        }
     </script>
 </body>
 </html>
+
