@@ -26,16 +26,18 @@
             border-top: 8px solid var(--primary); 
         }
 
-        /* Fixed: Ad Banner Layout */
+        /* Responsive Ad Slots */
         .ad-space { 
             margin: 15px 0; 
             min-height: 60px; 
             display: flex; 
+            flex-direction: column;
             justify-content: center; 
             align-items: center;
             background: #f9f9f9;
             border-radius: 8px;
             overflow: hidden;
+            padding: 5px;
         }
 
         .timer-box { 
@@ -50,12 +52,11 @@
             border: 2px solid var(--primary);
         }
 
-        /* Fixed: Blog Content formatting (Spaces and Line breaks) */
         #task-body { 
             text-align: left; 
             color: #333; 
             line-height: 1.8; 
-            white-space: pre-wrap; /* Yeh line breaks aur spaces ko preserve karega */
+            white-space: pre-wrap; /* Preservation of spaces/breaks */
             word-wrap: break-word;
             font-size: 1.05em;
             background: #fff;
@@ -70,13 +71,9 @@
             border: 3px solid var(--success); 
             border-radius: 15px; 
             margin-top: 20px; 
-            animation: slideIn 0.5s ease;
         }
 
-        @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
         .code-text { font-size: 1.8em; color: var(--success); font-weight: bold; letter-spacing: 4px; display: block; margin: 15px 0; }
-        .instruction { color: #555; font-size: 0.95em; line-height: 1.5; background: #fdf2e4; padding: 12px; border-radius: 8px; margin-bottom: 10px; }
         .copy-btn { background: var(--success); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; max-width: 300px; }
     </style>
 </head>
@@ -90,28 +87,26 @@
 
         <h2><i class="fa fa-shield-check"></i> Task Verification</h2>
         
-        <div class="instruction">
-            Kripya timer khatam hone tak wait karein. <br> 
-            <b>Secret Code timer ke baad hi milega.</b>
-        </div>
-
-        <div id="status-msg" style="color:#d35400; font-weight:bold; font-size: 0.8em; margin-bottom: 5px;">Checking...</div>
+        <div id="status-msg" style="color:#d35400; font-weight:bold; font-size: 0.9em;">Checking Session...</div>
         
         <div class="timer-box" id="timer">03:00</div>
 
+        <div class="ad-space" id="hilltop-ads">
+            <small style="color:#ccc">Sponsored Ad</small>
+        </div>
+
         <article id="article-content" style="margin-top: 15px;">
-            <h3 id="task-title" style="color: var(--dark); border-bottom: 2px solid var(--primary); padding-bottom: 8px; text-align: left;">Loading Task...</h3>
-            
-            <div id="task-body">Loading article content...</div>
+            <h3 id="task-title" style="color: var(--dark); border-bottom: 2px solid var(--primary); padding-bottom: 8px; text-align: left;">Loading...</h3>
+            <div id="task-body">Article content is loading...</div>
         </article>
 
-        <div class="ad-space">
+        <div class="ad-space" id="adsterra-ads">
             <ins style="width: 320px;height:50px" data-width="320" data-height="50" class="be2e2ac20d3" data-domain="//data527.click" data-affquery="/24cca9bed965b7820ebd/e2e2ac20d3/?placementName=default"></ins>
         </div>
 
         <div id="secret-code-section">
             <h3 style="color: var(--success); margin-top: 0;"><i class="fa fa-check-circle"></i> Completed!</h3>
-            <p style="color:#444;">Code copy karein aur dashboard mein submit karein:</p>
+            <p>Niche wala code copy karke Dashboard par submit karein:</p>
             <div class="code-text" id="final-code">...</div>
             <button class="copy-btn" id="copyBtn" onclick="copyCode()"><i class="fa fa-copy"></i> Copy Secret Code</button>
         </div>
@@ -145,7 +140,7 @@
             const { data, error } = await _supabase.from('admin_blogs').select('*').eq('id', id).single();
             if(data) {
                 document.getElementById('task-title').innerText = data.title;
-                // .innerText use karne se line breaks preserve hote hain
+                // Line breaks preserve karne ke liye .innerText best hai
                 document.getElementById('task-body').innerText = data.content;
                 document.getElementById('status-msg').innerHTML = "Verification Live...";
             }
@@ -177,17 +172,17 @@
                     task_code: generatedCode, 
                     status: 'generated' 
                 }]);
-            } catch (e) { console.log(e); }
+            } catch (e) { console.log("Logging Error:", e); }
         }
 
         function copyCode() {
             const code = document.getElementById('final-code').innerText;
             navigator.clipboard.writeText(code).then(() => {
                 alert("Code Copied!");
+                // Advertica Smartlink Redirect
                 window.open('https://www.effectivegatecpm.com/r1hbbzimi?key=a4d9598ee44995d5096461b0d43de968', '_blank');
             });
         }
     </script>
 </body>
 </html>
-
