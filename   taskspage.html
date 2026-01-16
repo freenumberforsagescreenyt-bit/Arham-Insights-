@@ -26,13 +26,12 @@
             z-index: 5; 
         }
 
-        /* Ad spaces optimized for non-interruption */
-        .ad-space { margin: 10px 0; min-height: 50px; background: #f9f9f9; border-radius: 8px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+        .ad-space { margin: 15px 0; min-height: 50px; background: #f9f9f9; border-radius: 8px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
 
         .timer-box { font-size: 1.8em; font-weight: bold; color: var(--primary); margin: 10px 0; background: #fff4e6; display: inline-block; padding: 8px 30px; border-radius: 50px; border: 3px solid var(--primary); }
         
         #article-content { text-align: left; margin-top: 15px; }
-        #task-title { font-size: 1.4em; color: var(--dark); border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        #task-title { font-size: 1.4em; color: var(--dark); border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px; }
         
         #task-body { 
             color: #333; 
@@ -42,12 +41,11 @@
             font-size: 1.05em; 
             background: #fff; 
             padding: 15px; 
-            border: 1px solid #eee;
             border-radius: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
-        #secret-code-section { display: none; background: #f0fff4; padding: 20px; border: 3px solid var(--success); border-radius: 15px; margin-top: 20px; }
+        #secret-code-section { display: none; background: #f0fff4; padding: 20px; border: 3px solid var(--success); border-radius: 15px; margin: 20px 0; }
         .code-text { font-size: 1.6em; color: var(--success); font-weight: bold; letter-spacing: 2px; display: block; margin: 15px 0; background: white; padding: 10px; border-radius: 8px; border: 2px dashed var(--success); }
         
         .copy-btn { 
@@ -63,11 +61,9 @@
             font-size: 1.1em; 
             transition: 0.3s;
         }
-        .copy-btn:active { transform: scale(0.98); }
 
         .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column; }
         
-        /* Mobile adjustment */
         @media (max-width: 480px) {
             .timer-box { font-size: 1.5em; }
             #task-title { font-size: 1.2em; }
@@ -78,37 +74,46 @@
 
     <div id="loader" class="loading-overlay">
         <i class="fa fa-spinner fa-spin fa-3x" style="color:var(--primary)"></i>
-        <p>Loading Arham Insights Task...</p>
+        <p>Arham Insights - Content Loading...</p>
     </div>
 
     <div class="task-container">
         <div class="ad-space">
             <script type="text/javascript">
-                atOptions = {'key':'ac3a34c448d39282025c11644797e3a1','format':'iframe','height':50,'width':320,'params':{}};
+                atOptions = {'key' : 'ac3a34c448d39282025c11644797e3a1', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {}};
             </script>
             <script type="text/javascript" src="https://www.highperformanceformat.com/ac3a34c448d39282025c11644797e3a1/invoke.js"></script>
         </div>
 
-        <h2 style="color:var(--dark); margin-bottom: 5px;">Verification Process</h2>
-        <div id="status-msg" style="color:#e67e22; font-size: 0.9em;">Please read the blog. Code will appear after timer.</div>
+        <h2 style="color:var(--dark); margin: 5px 0;">Task Verification</h2>
+        <div id="status-msg" style="color:#e67e22; font-weight: bold;">Keep Reading! Timer is running...</div>
         
         <div class="timer-box" id="timer">03:00</div>
 
-        <article id="article-content">
-            <h1 id="task-title">Loading Title...</h1>
-            <div id="task-body">Content is loading safely...</div>
-        </article>
-
-        <div id="secret-code-section">
-            <h3 style="color: var(--success); margin: 0;"><i class="fa fa-check-circle"></i> Task Completed!</h3>
-            <div class="code-text" id="final-code">...</div>
-            <button class="copy-btn" id="copyBtn" onclick="handleCodeCopy()">COPY CODE & FINISH</button>
-            <p id="copy-msg" style="display:none; color: var(--success); font-weight: bold; margin-top: 10px;">✅ Code Copied Successfully!</p>
+        <div class="ad-space">
+            <script async="async" data-cfasync="false" src="https://pl28481408.effectivegatecpm.com/b104bb133c0e3abf10d65c6dca934730/invoke.js"></script>
+            <div id="container-b104bb133c0e3abf10d65c6dca934730"></div>
         </div>
 
-        <div class="ad-space" style="margin-top: 20px;">
-            <ins style="width: 300px;height:250px" data-width="300" data-height="250" class="pde6aa5416d" data-domain="//data527.click" data-affquery="/22eed5bea0245b608235/de6aa5416d/?placementName=default"></ins>
+        <article id="article-content">
+            <h1 id="task-title">Loading...</h1>
+            <div id="task-body">Content is being verified...</div>
+        </article>
+
+        <div class="ad-space">
+            <ins style="width: 320px;height:50px" data-width="320" data-height="50" class="pde6aa5416d" data-domain="//data527.click" data-affquery="/22eed5bea0245b608235/de6aa5416d/?placementName=default"></ins>
             <script src="//data527.click/js/responsive.js" async></script>
+        </div>
+
+        <div id="secret-code-section">
+            <h3 style="color: var(--success); margin: 0;"><i class="fa fa-check-circle"></i> Verification Successful!</h3>
+            <div class="code-text" id="final-code">...</div>
+            <button class="copy-btn" id="copyBtn" onclick="handleCodeCopy()">COPY CODE & FINISH</button>
+            <p id="copy-msg" style="display:none; color: var(--success); font-weight: bold; margin-top: 10px;">✅ Code Copied! Redirecting...</p>
+        </div>
+
+        <div class="ad-space" style="min-height: 250px;">
+            <ins style="width: 300px;height:250px" data-width="300" data-height="250" class="pde6aa5416d" data-domain="//data527.click" data-affquery="/22eed5bea0245b608235/de6aa5416d/?placementName=default"></ins>
         </div>
     </div>
 
@@ -133,7 +138,7 @@
             
             document.getElementById('loader').style.display = 'none';
             startTimer();
-            setTimeout(injectSecondaryAds, 3000); 
+            setTimeout(injectAds, 3000); 
         }
 
         function startTimer() {
@@ -144,7 +149,7 @@
                 if (timeLeft <= 0) {
                     clearInterval(countdown);
                     document.getElementById('timer').style.display = 'none';
-                    document.getElementById('status-msg').innerText = "Scroll down to get your code!";
+                    document.getElementById('status-msg').innerText = "Task Finished! Get your code below.";
                     showSecretCode();
                 }
                 timeLeft--;
@@ -156,7 +161,6 @@
             document.getElementById('final-code').innerText = code;
             document.getElementById('secret-code-section').style.display = 'block';
             
-            // Database update
             await _supabase.from('tasks').insert([{ 
                 worker_email: currentUser.email, 
                 task_code: code, 
@@ -165,43 +169,34 @@
             }]);
         }
 
-        // --- NEW COPY LOGIC ---
         function handleCodeCopy() {
-            const codeField = document.getElementById('final-code');
+            const code = document.getElementById('final-code').innerText;
             const btn = document.getElementById('copyBtn');
             const msg = document.getElementById('copy-msg');
 
-            // 1. Copy to Clipboard
-            navigator.clipboard.writeText(codeField.innerText).then(() => {
-                // 2. UI Update
+            navigator.clipboard.writeText(code).then(() => {
                 msg.style.display = 'block';
                 btn.innerText = "COPIED!";
-                btn.style.background = "#2c3e50";
+                btn.disabled = true;
+                btn.style.opacity = "0.7";
                 
-                // 3. Ad and Redirect logic after delay
                 setTimeout(() => {
-                    // Open Ad in NEW tab
+                    // Ad in new tab
                     window.open('https://www.effectivegatecpm.com/r1hbbzimi?key=a4d9598ee44995d5096461b0d43de968', '_blank');
-                    // Go to Dashboard in CURRENT tab
+                    // Back to dashboard
                     window.location.href = "dashboard.html";
-                }, 1500);
-            }).catch(err => {
-                // Fallback for some browsers
-                alert("Please manually copy the code: " + codeField.innerText);
+                }, 1200);
             });
         }
 
-        // Ads ko background mein load karne ke liye
-        function injectSecondaryAds() {
-            const ads = [
+        function injectAds() {
+            const scripts = [
                 "https://pl28481415.effectivegatecpm.com/3d/7b/7a/3d7b7a38e12c6c19d3f05744b524b637.js",
                 "https://pl28481397.effectivegatecpm.com/6a/13/24/6a132427188b052e88e7c0e78e69c6e2.js"
             ];
-
-            ads.forEach((src) => {
+            scripts.forEach(src => {
                 let s = document.createElement('script');
-                s.src = src;
-                s.async = true;
+                s.src = src; s.async = true;
                 document.body.appendChild(s);
             });
         }
@@ -210,4 +205,3 @@
     </script>
 </body>
 </html>
-
