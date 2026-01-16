@@ -15,49 +15,58 @@
         
         .task-container { 
             max-width: 800px; 
-            margin: 15px auto; 
+            margin: 10px auto; 
             background: white; 
-            padding: 20px; 
+            padding: 15px; 
             border-radius: 15px; 
             box-shadow: 0 5px 25px rgba(0,0,0,0.1); 
             border-top: 8px solid var(--primary); 
-            min-height: 70vh; 
+            min-height: 80vh; 
             position: relative; 
-            z-index: 10; 
+            z-index: 5; 
         }
 
-        .timer-box { font-size: 1.8em; font-weight: bold; color: var(--primary); margin: 15px 0; background: #fff4e6; display: inline-block; padding: 8px 30px; border-radius: 50px; border: 3px solid var(--primary); }
+        .timer-box { font-size: 1.8em; font-weight: bold; color: var(--primary); margin: 10px 0; background: #fff4e6; display: inline-block; padding: 8px 30px; border-radius: 50px; border: 3px solid var(--primary); }
         
-        #article-content { text-align: left; margin-top: 20px; }
-        #task-title { font-size: 1.5em; color: var(--dark); border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px; }
+        #article-content { text-align: left; margin-top: 15px; }
+        #task-title { font-size: 1.4em; color: var(--dark); border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px; }
         
         #task-body { 
             color: #333; 
-            line-height: 1.8; 
+            line-height: 1.6; 
             white-space: pre-wrap; 
             word-wrap: break-word; 
-            font-size: 1.1em; 
+            font-size: 1.05em; 
             background: #fff; 
+            padding: 15px; 
+            border-radius: 12px;
+            margin-bottom: 10px;
         }
 
-        #secret-code-section { display: none; background: #f0fff4; padding: 25px; border: 3px solid var(--success); border-radius: 15px; margin: 20px 0; }
-        .code-text { font-size: 1.8em; color: var(--success); font-weight: bold; letter-spacing: 2px; display: block; margin: 15px 0; background: white; padding: 12px; border-radius: 8px; border: 2px dashed var(--success); }
+        #secret-code-section { display: none; background: #f0fff4; padding: 20px; border: 3px solid var(--success); border-radius: 15px; margin: 20px 0; }
+        .code-text { font-size: 1.6em; color: var(--success); font-weight: bold; letter-spacing: 2px; display: block; margin: 15px 0; background: white; padding: 10px; border-radius: 8px; border: 2px dashed var(--success); }
         
         .copy-btn { 
             background: var(--success); 
             color: white; 
             border: none; 
-            padding: 16px; 
-            border-radius: 10px; 
+            padding: 15px; 
+            border-radius: 8px; 
             cursor: pointer; 
             font-weight: bold; 
             width: 100%; 
             max-width: 350px; 
-            font-size: 1.2em; 
+            font-size: 1.1em; 
             transition: 0.3s;
         }
+        .copy-btn:disabled { background: #95a5a6; cursor: not-allowed; }
 
         .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+        
+        @media (max-width: 480px) {
+            .timer-box { font-size: 1.5em; }
+            #task-title { font-size: 1.2em; }
+        }
     </style>
 </head>
 <body>
@@ -68,19 +77,19 @@
     </div>
 
     <div class="task-container">
-        <h2 style="color:var(--dark); margin: 10px 0;">Task Verification</h2>
-        <div id="status-msg" style="color:#e67e22; font-weight: bold;">Article padhein, timer khatam hone ka intezar karein...</div>
+        <h2 style="color:var(--dark); margin: 5px 0;">Task Verification</h2>
+        <div id="status-msg" style="color:#e67e22; font-weight: bold;">Keep Reading! Timer is running...</div>
         
         <div class="timer-box" id="timer">03:00</div>
 
         <article id="article-content">
-            <h1 id="task-title">Blog Loading...</h1>
-            <div id="task-body">Content dhoonda ja raha hai...</div>
+            <h1 id="task-title">Loading...</h1>
+            <div id="task-body">Content is being verified...</div>
         </article>
 
         <div id="secret-code-section">
             <h3 style="color: var(--success); margin: 0;"><i class="fa fa-check-circle"></i> Verification Successful!</h3>
-            <p style="color: #666;">Is code ko copy karein aur Dashboard mein submit karein.</p>
+            <p style="font-size: 0.8em; color: #666;">Copy this code and submit it on the dashboard.</p>
             <div class="code-text" id="final-code">...</div>
             <button class="copy-btn" id="copyBtn" onclick="handleCodeCopy()">COPY CODE & FINISH</button>
             <p id="copy-msg" style="display:none; color: var(--success); font-weight: bold; margin-top: 10px;">✅ Code Copied! Redirecting...</p>
@@ -90,22 +99,20 @@
     <script>
         const _supabase = supabase.createClient("https://mkzgmrxakattqgbjnwch.supabase.co", "sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL");
         let timeLeft = 180;
+        let currentUser = null;
         let generatedCode = null;
         const taskId = new URLSearchParams(window.location.search).get('id');
 
         async function init() {
-            // Check session
             const { data: { session } } = await _supabase.auth.getSession();
             if (!session) { window.location.href = "login.html"; return; }
+            currentUser = session.user;
             
-            // Fetch Blog Content
             if(taskId) {
-                const { data, error } = await _supabase.from('admin_blogs').select('*').eq('id', taskId).single();
+                const { data } = await _supabase.from('admin_blogs').select('*').eq('id', taskId).single();
                 if(data) {
                     document.getElementById('task-title').innerText = data.title;
                     document.getElementById('task-body').innerText = data.content;
-                } else {
-                    document.getElementById('task-title').innerText = "Content Not Found";
                 }
             }
             
@@ -121,7 +128,7 @@
                 if (timeLeft <= 0) {
                     clearInterval(countdown);
                     document.getElementById('timer').style.display = 'none';
-                    document.getElementById('status-msg').innerText = "Task Complete! Code niche hai.";
+                    document.getElementById('status-msg').innerText = "Task Finished! Get your code below.";
                     showSecretCode();
                 }
                 timeLeft--;
@@ -133,27 +140,33 @@
             document.getElementById('final-code').innerText = generatedCode;
             document.getElementById('secret-code-section').style.display = 'block';
             
-            // Admin panel ko notify karein ki code ban gaya hai
+            // Database mein insert karein
             await _supabase.from('tasks').insert([{ 
-                task_code: generatedCode, 
-                status: 'generated' 
+                generated_code: generatedCode, 
+                status: 'generated_by_user', 
+                blog_id: taskId 
             }]);
         }
 
-        function handleCodeCopy() {
+        async function handleCodeCopy() {
             const btn = document.getElementById('copyBtn');
             const msg = document.getElementById('copy-msg');
 
-            navigator.clipboard.writeText(generatedCode).then(() => {
+            navigator.clipboard.writeText(generatedCode).then(async () => {
                 msg.style.display = 'block';
                 btn.innerText = "COPIED!";
                 btn.disabled = true;
+                btn.style.opacity = "0.7";
+                
+                // Status update
+                await _supabase.from('tasks').update({ status: 'generated_by_user' }).eq('generated_code', generatedCode);
                 
                 setTimeout(() => {
-                    // Sirf ye ek ads redirection (Optional)
-                    window.open('https://www.effectivegatecpm.com/r1hbbzimi?key=a4d9598ee44995d5096461b0d43de968', '_blank');
+                    // Seedha Dashboard par bhejye, bina kisi Ad redirect ke
                     window.location.href = "dashboard.html";
-                }, 1000);
+                }, 800);
+            }).catch(err => {
+                alert("Manual Copy Karein: " + generatedCode);
             });
         }
 
