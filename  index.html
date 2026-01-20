@@ -4,202 +4,213 @@
     <meta name="bidvertiser-navman-verification" content="2103430">
     <meta charset=<!-- Bidvertiser2103430 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arham Insights | Aapki Pragati, Humari Pehchan</title>
+    <title>Arham Insights | Sapno ki Udaan, Haqiqat ke Saath</title>
     
-    <meta name="description" content="Arham Insights: Bharat ka trusted digital platform. Bina investment ke income generate karein.">
+    <meta name="description" content="Arham Insights: Bharat ka sabse bharosemand digital parivaar. Bina investment ke ghar baithe samman ki kamai shuru karein.">
     <link rel="icon" type="image/png" href="https://arhaminsightses.netlify.app/logo.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Hind:wght@400;700&display=swap" rel="stylesheet">
+    
+    <script type="text/javascript" src="//cdn.p-n.io/push/678910.js"></script> <script type="text/javascript">
+        // Adcash Zone Integration
+        (function() {
+            var s = document.createElement('script');
+            s.type = 'text/javascript';
+            s.async = true;
+            s.src = '//api.adcash.com/script/autotag.js'; // Standard Adcash Lib
+            s.onload = function() {
+                aclib.runAutoTag({
+                    zoneId: 'mih7lairbk',
+                });
+            };
+            document.head.appendChild(s);
+        })();
+    </script>
+
     <style>
         :root { 
             --primary: #ff9933; 
-            --primary-light: #ffb366;
+            --secondary: #ef4444;
             --dark: #0f172a; 
             --light: #ffffff; 
-            --bg: #fdf2f2; 
+            --bg: #fffcf9; 
             --accent: #10b981; 
-            --heart: #ef4444; 
-            --glass: rgba(255, 255, 255, 0.85);
+            --glass: rgba(255, 255, 255, 0.9);
         }
         
-        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
-        body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; background: var(--bg); color: #334155; line-height: 1.8; overflow-x: hidden; }
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; scroll-behavior: smooth; }
+        body { font-family: 'Poppins', 'Hind', sans-serif; margin: 0; padding: 0; background: var(--bg); color: #334155; line-height: 1.8; overflow-x: hidden; }
 
-        /* Floating 3D Background Elements */
-        .floating-objects { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-        .obj { position: absolute; animation: float 18s infinite linear; opacity: 0.15; }
-        @keyframes float {
-            0% { transform: translateY(110vh) rotate(0deg) scale(0.8); }
-            100% { transform: translateY(-20vh) rotate(360deg) scale(1.4); }
-        }
+        /* Next-Gen Background */
+        .glow-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: radial-gradient(circle at 50% 50%, #fff4e6 0%, #fffcf9 100%); }
+        .orb { position: absolute; width: 400px; height: 400px; background: var(--primary); filter: blur(150px); opacity: 0.1; border-radius: 50%; animation: move 20s infinite alternate; }
+        @keyframes move { from { transform: translate(-10%, -10%); } to { transform: translate(20%, 20%); } }
 
         header { 
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(255, 153, 51, 0.85)), url('https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=1350&q=80');
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.92), rgba(255, 153, 51, 0.82)), url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1350&q=80');
             background-size: cover; background-position: center;
-            color: white; padding: 130px 20px; text-align: center; 
-            clip-path: ellipse(160% 100% at 50% 0%);
+            color: white; padding: 140px 20px; text-align: center; 
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%);
             position: relative;
         }
         
         .logo-img { 
-            height: 140px; width: 140px; border-radius: 45px; border: 8px solid var(--glass); 
-            background: white; transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            height: 150px; width: 150px; border-radius: 50px; border: 10px solid var(--glass); 
+            background: white; transition: 0.6s; box-shadow: 0 30px 60px rgba(0,0,0,0.4);
         }
-        .logo-img:hover { transform: scale(1.15) rotate(-8deg); border-color: var(--primary); }
+        .logo-img:hover { transform: rotate(360deg) scale(1.1); }
 
         .hero-card { 
-            background: var(--glass); backdrop-filter: blur(20px); padding: 70px 40px; margin: -110px auto 40px; 
-            max-width: 1050px; width: 92%; border-radius: 65px; 
-            box-shadow: 0 50px 100px rgba(0,0,0,0.1); text-align: center;
-            border: 1px solid rgba(255,255,255,0.5); border-bottom: 18px solid var(--primary);
+            background: var(--glass); backdrop-filter: blur(25px); padding: 80px 40px; margin: -120px auto 40px; 
+            max-width: 1100px; width: 94%; border-radius: 70px; 
+            box-shadow: 0 60px 120px rgba(255, 153, 51, 0.15); text-align: center;
+            border: 2px solid #ffffff; position: relative;
         }
 
-        h1 { font-size: 4.5em; color: var(--dark); margin: 0; font-weight: 800; letter-spacing: -2px; line-height: 1.1; }
+        h1 { font-size: 4.8em; color: var(--dark); margin: 0; font-weight: 800; letter-spacing: -3px; }
         .gradient-text { background: linear-gradient(to right, #ff9933, #ef4444); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        .problem-card { 
-            background: white; padding: 45px 35px; border-radius: 45px; margin: 15px; 
-            flex: 1; min-width: 300px; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.04); border: 1px solid #f1f5f9;
+        /* Emotion Section */
+        .empathy-box { padding: 100px 20px; max-width: 1200px; margin: 0 auto; text-align: center; }
+        .emotion-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-top: 60px; }
+        .emotion-card { 
+            background: white; padding: 50px 40px; border-radius: 50px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.03); border: 1px solid #fdf2f2; 
+            transition: 0.5s; position: relative; overflow: hidden;
         }
-        .problem-card:hover { transform: translateY(-25px); box-shadow: 0 35px 70px rgba(239, 68, 68, 0.12); border-color: var(--heart); }
-        .problem-card i { font-size: 4.5em; background: #fff5f5; padding: 25px; border-radius: 35px; color: var(--heart); margin-bottom: 25px; display: inline-block; }
+        .emotion-card::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: var(--primary); }
+        .emotion-card:hover { transform: scale(1.05); box-shadow: 0 40px 80px rgba(239, 68, 68, 0.1); }
+        .emotion-card i { font-size: 4em; color: var(--secondary); margin-bottom: 25px; }
 
-        .btn-group { display: flex; justify-content: center; gap: 30px; margin-top: 50px; flex-wrap: wrap; }
+        /* Premium Buttons */
+        .btn-group { display: flex; justify-content: center; gap: 30px; margin-top: 60px; flex-wrap: wrap; }
         .btn { 
-            padding: 24px 65px; text-decoration: none; font-weight: 700; border-radius: 35px; 
-            font-size: 1.4em; transition: 0.4s; display: flex; align-items: center; gap: 18px; 
-            box-shadow: 0 25px 50px rgba(0,0,0,0.15); border: none;
+            padding: 25px 70px; text-decoration: none; font-weight: 800; border-radius: 40px; 
+            font-size: 1.5em; transition: 0.5s; display: flex; align-items: center; gap: 20px; 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.1); border: none;
         }
-        .btn-join { background: linear-gradient(135deg, var(--primary), #ef4444); color: white; }
-        .btn-join:hover { transform: scale(1.05); box-shadow: 0 30px 60px rgba(255, 153, 51, 0.4); }
-        .btn-login { background: var(--dark); color: white; }
-        .btn-login:hover { background: #000; transform: scale(1.05); }
+        .btn-main { background: linear-gradient(135deg, #ff9933, #ef4444); color: white; }
+        .btn-main:hover { transform: translateY(-10px); box-shadow: 0 35px 70px rgba(255, 153, 51, 0.4); }
 
-        .step { 
-            display: flex; align-items: center; margin-bottom: 60px; background: white; 
-            padding: 50px; border-radius: 55px; box-shadow: 0 20px 60px rgba(0,0,0,0.05); 
-            border-left: 20px solid var(--primary); position: relative; overflow: hidden;
-        }
-        .step-num { font-size: 6em; font-weight: 900; color: #f1f5f9; position: absolute; right: 30px; top: 10px; z-index: 0; }
-        .step-text { position: relative; z-index: 1; }
-
-        .payment-info { 
-            background: linear-gradient(135deg, #1e293b, #0f172a); color: white;
-            padding: 90px 45px; border-radius: 80px; margin: 120px auto; 
-            max-width: 1050px; text-align: center; box-shadow: 0 50px 100px rgba(0, 0, 0, 0.3);
-            border: 2px solid rgba(255, 153, 51, 0.2);
+        /* Steps Section */
+        .step-container { background: #0f172a; color: white; padding: 120px 20px; border-radius: 100px; margin: 100px 20px; }
+        .step-item { display: flex; align-items: center; margin-bottom: 80px; max-width: 900px; margin-left: auto; margin-right: auto; }
+        .step-icon { width: 100px; height: 100px; background: var(--primary); border-radius: 30px; display: flex; align-items: center; justify-content: center; font-size: 3em; margin-right: 40px; flex-shrink: 0; }
+        
+        /* Payment Integrity */
+        .integrity-box { 
+            background: #fff5f5; border: 3px dashed var(--secondary); padding: 80px 40px; 
+            border-radius: 80px; margin: 100px auto; max-width: 1000px; text-align: center;
         }
 
-        .email-link { background: #fff4e6; color: var(--primary); padding: 25px 50px; border-radius: 25px; font-size: 1.5em; font-weight: 800; text-decoration: none; display: inline-block; margin-top: 30px; transition: 0.3s; }
-        .email-link:hover { background: var(--primary); color: white; transform: rotate(-2deg); }
+        footer { background: var(--dark); color: #94a3b8; padding: 150px 20px; text-align: center; border-top-left-radius: 200px; }
+        .social-links a { color: white; font-size: 3.5em; margin: 0 30px; transition: 0.5s; display: inline-block; }
+        .social-links a:hover { color: var(--primary); transform: rotate(15deg) scale(1.3); }
 
-        footer { background: var(--dark); color: #94a3b8; padding: 130px 20px; text-align: center; border-top-left-radius: 160px; }
-        .social-links a { color: white; font-size: 3.2em; margin: 0 30px; transition: 0.5s; display: inline-block; }
-        .social-links a:hover { color: var(--primary); transform: translateY(-20px); }
-
-        @media (max-width: 768px) { h1 { font-size: 3em; } .step { flex-direction: column; text-align: center; } .step-num { position: relative; font-size: 4em; right: 0; } }
+        @media (max-width: 768px) { 
+            h1 { font-size: 3.2em; } 
+            .step-item { flex-direction: column; text-align: center; } 
+            .step-icon { margin-right: 0; margin-bottom: 20px; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="floating-objects">
-        <div class="obj" style="top:15%; left:8%; font-size: 6rem;"></div>
-        <div class="obj" style="top:45%; left:85%; animation-delay: 3s; font-size: 5rem;"></div>
-        <div class="obj" style="top:75%; left:12%; animation-delay: 6s; font-size: 7rem;"></div>
-        <div class="obj" style="top:25%; left:75%; animation-delay: 9s; font-size: 4rem;"></div>
-        <div class="obj" style="top:88%; left:65%; animation-delay: 4s; font-size: 6rem;"></div>
+    <div class="glow-bg">
+        <div class="orb" style="top: 10%; left: 10%;"></div>
+        <div class="orb" style="bottom: 10%; right: 10%; background: #ef4444;"></div>
     </div>
 
 <header>
     <img src="https://arhaminsightses.netlify.app/logo.png" alt="Arham Insights" class="logo-img">
-    <p style="font-size: 1.7em; margin-top: 35px; letter-spacing: 8px; font-weight: 300; text-transform: uppercase;">Aapka Sapna, Humari Zimmedari </p>
+    <p style="font-size: 1.8em; margin-top: 40px; letter-spacing: 10px; font-weight: 300; text-transform: uppercase;">Har Ghar Ka Vishwas ❤️</p>
 </header>
 
 <main>
     <section class="hero-card">
-        <h1>Arham <span class="gradient-text">Insights</span> </h1>
-        <p style="font-size: 2em; color: var(--dark); font-weight: 800; margin-top: 15px;">Sahi Disha, Sahi Pragati </p>
-        <p style="font-size: 1.4em; color: #475569; max-width: 850px; margin: 35px auto; font-weight: 400;">
-            Arham Insights sirf ek platform nahi, ek bharosa hai. Hum Bharat ke yuvaon aur housewives ko ghar baithe digital aazadi dilane ke liye pratibaddh hain. 
+        <h1>Arham <span class="gradient-text">Insights</span> ✨</h1>
+        <p style="font-size: 2.2em; color: var(--dark); font-weight: 800; margin-top: 20px;">Aapka Parishram, Hamari Zimmedari!</p>
+        <p style="font-size: 1.5em; color: #64748b; max-width: 900px; margin: 40px auto; line-height: 2;">
+            Duniya mein har koi paisa kama raha hai, par hum "Bharosa" kamate hain. Hum yahan aapko ameer banane ka jhootha sapna nahi, balki ek **Samman-janak Kamai** ka rasta dikhane aaye hain. 🇮🇳
         </p>
         
         <div class="btn-group">
-            <a href="register.html" class="btn btn-join"><i class="fa fa-fire"></i> Start Earning Now</a>
-            <a href="login.html" class="btn btn-login"><i class="fa fa-lock"></i> User Portal</a>
+            <a href="register.html" class="btn btn-main"><i class="fa fa-heart-pulse"></i> Aaj hi Parivaar se Judein</a>
+            <a href="login.html" class="btn" style="background: var(--dark); color: white;"><i class="fa fa-fingerprint"></i> Mera Dashboard</a>
         </div>
     </section>
 
-    <section class="empathy-section" style="padding: 100px 20px; text-align: center; max-width: 1200px; margin: 0 auto;">
-        <h2 style="font-size: 3.5em; font-weight: 900; margin-bottom: 20px;">Mushkilein <span style="color:var(--heart)">Purani</span>, Solution Naya! </h2>
-        <div style="display: flex; flex-wrap: wrap; justify-content: center; margin-top: 60px;">
-            <div class="problem-card">
-                <i class="fa fa-hand-holding-dollar"></i>
-                <h3>Financial Freedom</h3>
-                <p>Ab mahine ke aakhir mein paison ki chinta bhool jaiye. </p>
+    <section class="empathy-box">
+        <h2 style="font-size: 3.8em; font-weight: 900; letter-spacing: -2px;">Kyun <span style="color:var(--secondary)">Arham Insights</span> hi Kyun?</h2>
+        <div class="emotion-grid">
+            <div class="emotion-card">
+                <i class="fa fa-hand-holding-heart"></i>
+                <h3>Hum Dard Samajhte Hain</h3>
+                <p>Hum jaante hain mahine ke aakhir mein wallet khali hone ka dard. Hum yahan us darr ko khatam karne aaye hain. 🤗</p>
             </div>
-            <div class="problem-card">
-                <i class="fa fa-laptop-house"></i>
-                <h3>Work From Anywhere</h3>
-                <p>Aapka kitchen ho ya college balcony, kaam kahin se bhi. </p>
+            <div class="emotion-card" style="background: #fffcf0;">
+                <i class="fa fa-shield-cat"></i>
+                <h3>Puri Suraksha</h3>
+                <p>Aapki mehnat ka ek-ek second keemti hai. Hum ad networks ke saath milkar aapka payout surakshit rakhte hain. 🛡️</p>
             </div>
-            <div class="problem-card">
-                <i class="fa fa-award"></i>
-                <h3>Skill Development</h3>
-                <p>Digital duniya ki samajh aur extra income ek saath. </p>
+            <div class="emotion-card">
+                <i class="fa fa-people-roof"></i>
+                <h3>Ghar se Barkat</h3>
+                <p>Ab maaon ko bachon se door nahi jana padega. Ghar sambhalein aur apna kharch khud uthayein. 🏠</p>
             </div>
         </div>
     </section>
 
-    <section style="max-width: 1050px; margin: 120px auto; padding: 0 25px;">
-        <h2 style="text-align:center; font-size: 3.5em; font-weight: 800; margin-bottom: 80px;">Aakhir Kaam <span class="gradient-text">Kaise</span> Karein? </h2>
+    <div class="step-container">
+        <h2 style="text-align:center; font-size: 3.5em; margin-bottom: 100px;">Sirf 3 Kadam aur <span style="color:var(--primary)">Aazadi</span> 🦅</h2>
         
-        <div class="step">
-            <div class="step-num">01</div>
-            <div class="step-text">
-                <h3 style="font-size: 2em;">Simple Registration </h3>
-                <p style="font-size: 1.2em;">Apni basic details bharein aur hamare verified earner banein.</p>
+        <div class="step-item">
+            <div class="step-icon">01</div>
+            <div>
+                <h3 style="font-size: 2.5em; color: var(--primary);">Sachchi Shuruat</h3>
+                <p style="font-size: 1.3em; opacity: 0.8;">Bina kisi fees ke register karein. Hum vishwas bechte hain, registration nahi.</p>
             </div>
         </div>
-        <div class="step" style="border-left-color: #10b981;">
-            <div class="step-num">02</div>
-            <div class="step-text">
-                <h3 style="font-size: 2em;">Micro Tasks </h3>
-                <p style="font-size: 1.2em;">Hamare daily tasks aur keyword search ads par click karke points kamayein.</p>
+        
+        <div class="step-item">
+            <div class="step-icon" style="background: var(--accent);">02</div>
+            <div>
+                <h3 style="font-size: 2.5em; color: var(--accent);">Imaandari ka Kaam</h3>
+                <p style="font-size: 1.3em; opacity: 0.8;">Daily articles aur search tasks poore karein. Aapka har click aapki kamai hai.</p>
             </div>
         </div>
-        <div class="step" style="border-left-color: #ef4444;">
-            <div class="step-num">03</div>
-            <div class="step-text">
-                <h3 style="font-size: 2em;">Secure Payouts </h3>
-                <p style="font-size: 1.2em;">Aapki kamai har mahine seedhe aapke UPI ya Bank account mein.</p>
-            </div>
-        </div>
-    </section>
 
-    <section class="payment-info">
-        <i class="fa fa-user-check" style="font-size: 6em; color: var(--primary); margin-bottom: 40px;"></i>
-        <h2 style="font-size: 3.2em; margin-bottom: 30px;">Payment Kab Milegi? </h2>
-        <p style="font-size: 1.4em; line-height: 2.2; opacity: 0.95; max-width: 850px; margin: 0 auto; font-weight: 300;">
-            Hum aapke saath 100% imaandari rakhte hain. Humara revenue ad networks se aata hai. **Jab ad networks hamari payment release karte hain, tabhi hum aapke bank mein funds transfer karte hain.** <br><br>
-            Aapka har ek minute mehfooz hai. Bas thoda sabra (Patience) rakhein, hum long-term business mein vishwas rakhte hain. 
+        <div class="step-item">
+            <div class="step-icon" style="background: var(--secondary);">03</div>
+            <div>
+                <h3 style="font-size: 2.5em; color: var(--secondary);">Sahi Waqt par Payout</h3>
+                <p style="font-size: 1.3em; opacity: 0.8;">Jab ad networks humein pay karte hain, hum turant aapka hissa aapke UPI par bhejte hain.</p>
+            </div>
+        </div>
+    </div>
+
+    <section class="integrity-box">
+        <i class="fa fa-circle-check" style="font-size: 6em; color: var(--secondary); margin-bottom: 30px;"></i>
+        <h2 style="font-size: 3em; color: var(--dark);">Sacchai ka Vaada 🤝</h2>
+        <p style="font-size: 1.5em; line-height: 2.2; max-width: 800px; margin: 0 auto; color: #4b5563;">
+            Hum aapko dhokhe mein nahi rakhenge. Hamara model ads par tika hai. **Payment mein thoda waqt lag sakta hai kyunki hum tabhi bhej paate hain jab networks humein bhejte hain.** <br>
+            Lekin yaad rakhiye—**Der hai, par Andher nahi!** Aapka pasina hamare liye karz hai.
         </p>
     </section>
 
-    <section class="support-box" style="text-align:center; margin-bottom: 120px;">
-        <i class="fa fa-comments-dollar" style="font-size: 6em; color: var(--primary);"></i>
-        <h2 style="font-size: 3em; margin-top: 30px;">Koi Sawaal? Direct Poochye! </h2>
-        <p style="font-size: 1.3em; color: #64748b;">Humari support team 24/7 aapke liye hai:</p>
-        <a href="mailto:arhaminsightshelp@gmail.com" class="email-link">arhaminsightshelp@gmail.com</a>
+    <section style="text-align:center; padding: 100px 20px;">
+        <i class="fa fa-headset" style="font-size: 6em; color: var(--primary); margin-bottom: 30px;"></i>
+        <h2 style="font-size: 3.2em;">Hum Ek Call ki Doori Par Hain</h2>
+        <p style="font-size: 1.4em; color: #64748b;">Koi bhi pareshani ho, humein dil khol kar likhein:</p>
+        <a href="mailto:arhaminsightshelp@gmail.com" class="email-link" style="text-decoration:none; color: var(--primary); font-size: 2em; font-weight: 800; display: block; margin-top: 20px;">arhaminsightshelp@gmail.com</a>
     </section>
 </main>
 
 <footer>
     <div style="margin-bottom: 60px;">
-        <span style="font-size: 4em; font-weight: 900; color: white; letter-spacing: -3px;">ARHAM <span style="color:var(--primary)">INSIGHTS</span> </span>
-        <p style="font-size: 1.3em; margin-top: 20px; color: #64748b;">Empowering Bharat's Digital Future. </p>
+        <span style="font-size: 4.5em; font-weight: 900; color: white; letter-spacing: -4px;">ARHAM <span style="color:var(--primary)">INSIGHTS</span> 🚀</span>
+        <p style="font-size: 1.4em; margin-top: 20px; color: #64748b;">Bharat ka Digital Suraj. Sahi Disha, Sahi Pragati. 🇮🇳</p>
     </div>
     
     <div class="social-links">
@@ -208,9 +219,9 @@
         <a href="https://youtube.com/@arhaminsights?si=pElfF9rv_Q-mHT-w" target="_blank"><i class="fab fa-youtube"></i></a>
     </div>
 
-    <div style="margin-top: 100px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 50px;">
-        <p style="font-weight: 700; color: var(--primary); font-size: 1.2em;">Crafted with ❤️ by Arham Tech Team</p>
-        <p style="font-size: 1em; opacity: 0.3;">&copy; 2026 Arham Insights. All Rights Reserved.</p>
+    <div style="margin-top: 100px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 50px;">
+        <p style="font-weight: 700; color: var(--primary); font-size: 1.3em;">Proudly Created for Bharat by Arham Tech Team ❤️</p>
+        <p style="font-size: 1em; opacity: 0.3;">&copy; 2026 Arham Insights. Aapki tarakki hi hamari kamyabi hai.</p>
     </div>
 </footer>
 
