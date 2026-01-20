@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-    <meta name="bidvertiser-verification" content="2103430">
-    <meta charset="UTF-8">
+    <meta name="bidvertiser-navman-verification" content="2103430">
+    <meta charset=<!-- Bidvertiser2103430 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arham Insights | Aapki Pragati, Humari Pehchan</title>
     
     <meta name="description" content="Arham Insights: Bharat ka trusted digital platform. Bina investment ke income generate karein.">
     <link rel="icon" type="image/png" href="https://arhaminsightses.netlify.app/logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     
     <style>
         :root { 
@@ -19,186 +20,186 @@
             --bg: #fdf2f2; 
             --accent: #10b981; 
             --heart: #ef4444; 
-            --glass: rgba(255, 255, 255, 0.8);
+            --glass: rgba(255, 255, 255, 0.85);
         }
         
-        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; cursor: default; }
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
         body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; background: var(--bg); color: #334155; line-height: 1.8; overflow-x: hidden; }
 
-        /* Next-Level Background Animation */
+        /* Floating 3D Background Elements */
         .floating-objects { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-        .obj { position: absolute; animation: float 15s infinite linear; opacity: 0.2; filter: blur(1px); }
+        .obj { position: absolute; animation: float 18s infinite linear; opacity: 0.15; }
         @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg) scale(1); }
-            100% { transform: translateY(-20vh) rotate(360deg) scale(1.5); }
+            0% { transform: translateY(110vh) rotate(0deg) scale(0.8); }
+            100% { transform: translateY(-20vh) rotate(360deg) scale(1.4); }
         }
 
         header { 
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(255, 153, 51, 0.8)), url('https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=1350&q=80');
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(255, 153, 51, 0.85)), url('https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=1350&q=80');
             background-size: cover; background-position: center;
-            color: white; padding: 120px 20px; text-align: center; 
-            clip-path: ellipse(150% 100% at 50% 0%);
+            color: white; padding: 130px 20px; text-align: center; 
+            clip-path: ellipse(160% 100% at 50% 0%);
             position: relative;
         }
         
         .logo-img { 
             height: 140px; width: 140px; border-radius: 45px; border: 8px solid var(--glass); 
             background: white; transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
         }
-        .logo-img:hover { transform: scale(1.1) rotate(-10deg); border-color: var(--primary); }
+        .logo-img:hover { transform: scale(1.15) rotate(-8deg); border-color: var(--primary); }
 
         .hero-card { 
-            background: var(--glass); backdrop-filter: blur(15px); padding: 60px 40px; margin: -100px auto 40px; 
-            max-width: 1000px; width: 94%; border-radius: 60px; 
-            box-shadow: 0 40px 100px rgba(0,0,0,0.08); text-align: center;
-            border: 1px solid rgba(255,255,255,0.4); border-bottom: 15px solid var(--primary);
+            background: var(--glass); backdrop-filter: blur(20px); padding: 70px 40px; margin: -110px auto 40px; 
+            max-width: 1050px; width: 92%; border-radius: 65px; 
+            box-shadow: 0 50px 100px rgba(0,0,0,0.1); text-align: center;
+            border: 1px solid rgba(255,255,255,0.5); border-bottom: 18px solid var(--primary);
         }
 
-        h1 { font-size: 4em; color: var(--dark); margin: 0; font-weight: 900; letter-spacing: -1px; }
+        h1 { font-size: 4.5em; color: var(--dark); margin: 0; font-weight: 800; letter-spacing: -2px; line-height: 1.1; }
         .gradient-text { background: linear-gradient(to right, #ff9933, #ef4444); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* Problem Section with 3D feel */
         .problem-card { 
-            background: white; padding: 40px 30px; border-radius: 40px; margin: 15px; 
-            flex: 1; min-width: 300px; transition: 0.5s; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid #eee;
+            background: white; padding: 45px 35px; border-radius: 45px; margin: 15px; 
+            flex: 1; min-width: 300px; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.04); border: 1px solid #f1f5f9;
         }
-        .problem-card:hover { transform: translateY(-20px); box-shadow: 0 30px 60px rgba(239, 68, 68, 0.15); border-color: var(--heart); }
-        .problem-card i { font-size: 4em; background: #fff1f1; padding: 20px; border-radius: 30px; color: var(--heart); margin-bottom: 20px; display: inline-block; }
+        .problem-card:hover { transform: translateY(-25px); box-shadow: 0 35px 70px rgba(239, 68, 68, 0.12); border-color: var(--heart); }
+        .problem-card i { font-size: 4.5em; background: #fff5f5; padding: 25px; border-radius: 35px; color: var(--heart); margin-bottom: 25px; display: inline-block; }
 
-        /* Premium Buttons */
-        .btn-group { display: flex; justify-content: center; gap: 30px; margin-top: 40px; flex-wrap: wrap; }
+        .btn-group { display: flex; justify-content: center; gap: 30px; margin-top: 50px; flex-wrap: wrap; }
         .btn { 
-            padding: 22px 60px; text-decoration: none; font-weight: 800; border-radius: 30px; 
-            font-size: 1.3em; transition: 0.4s; display: flex; align-items: center; gap: 15px; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1); border: none;
+            padding: 24px 65px; text-decoration: none; font-weight: 700; border-radius: 35px; 
+            font-size: 1.4em; transition: 0.4s; display: flex; align-items: center; gap: 18px; 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15); border: none;
         }
         .btn-join { background: linear-gradient(135deg, var(--primary), #ef4444); color: white; }
-        .btn-join:hover { transform: translateY(-5px); box-shadow: 0 25px 50px rgba(255, 153, 51, 0.5); }
+        .btn-join:hover { transform: scale(1.05); box-shadow: 0 30px 60px rgba(255, 153, 51, 0.4); }
         .btn-login { background: var(--dark); color: white; }
-        .btn-login:hover { background: #000; transform: translateY(-5px); }
+        .btn-login:hover { background: #000; transform: scale(1.05); }
 
-        /* Modern Steps */
         .step { 
-            display: flex; align-items: center; margin-bottom: 50px; background: white; 
-            padding: 40px; border-radius: 50px; box-shadow: 0 15px 50px rgba(0,0,0,0.04); 
-            border-left: 15px solid var(--primary); position: relative;
+            display: flex; align-items: center; margin-bottom: 60px; background: white; 
+            padding: 50px; border-radius: 55px; box-shadow: 0 20px 60px rgba(0,0,0,0.05); 
+            border-left: 20px solid var(--primary); position: relative; overflow: hidden;
         }
-        .step-num { font-size: 5em; font-weight: 900; color: #f8fafc; position: absolute; right: 40px; z-index: 0; }
+        .step-num { font-size: 6em; font-weight: 900; color: #f1f5f9; position: absolute; right: 30px; top: 10px; z-index: 0; }
         .step-text { position: relative; z-index: 1; }
 
-        /* Payment Box */
         .payment-info { 
-            background: linear-gradient(135deg, #1e293b, #334155); color: white;
-            padding: 80px 40px; border-radius: 70px; margin: 100px auto; 
-            max-width: 1000px; text-align: center; box-shadow: 0 40px 80px rgba(15, 23, 42, 0.3);
+            background: linear-gradient(135deg, #1e293b, #0f172a); color: white;
+            padding: 90px 45px; border-radius: 80px; margin: 120px auto; 
+            max-width: 1050px; text-align: center; box-shadow: 0 50px 100px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 153, 51, 0.2);
         }
 
-        footer { background: var(--dark); color: #94a3b8; padding: 120px 20px; text-align: center; border-top-left-radius: 150px; }
-        .social-links a { color: white; font-size: 3em; margin: 0 25px; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: inline-block; }
-        .social-links a:hover { color: var(--primary); transform: translateY(-15px) scale(1.2); }
+        .email-link { background: #fff4e6; color: var(--primary); padding: 25px 50px; border-radius: 25px; font-size: 1.5em; font-weight: 800; text-decoration: none; display: inline-block; margin-top: 30px; transition: 0.3s; }
+        .email-link:hover { background: var(--primary); color: white; transform: rotate(-2deg); }
 
-        @media (max-width: 768px) { h1 { font-size: 2.8em; } .step { flex-direction: column; text-align: center; } .step-num { position: relative; right: 0; font-size: 3em; } }
+        footer { background: var(--dark); color: #94a3b8; padding: 130px 20px; text-align: center; border-top-left-radius: 160px; }
+        .social-links a { color: white; font-size: 3.2em; margin: 0 30px; transition: 0.5s; display: inline-block; }
+        .social-links a:hover { color: var(--primary); transform: translateY(-20px); }
+
+        @media (max-width: 768px) { h1 { font-size: 3em; } .step { flex-direction: column; text-align: center; } .step-num { position: relative; font-size: 4em; right: 0; } }
     </style>
 </head>
 <body>
 
     <div class="floating-objects">
-        <div class="obj" style="top:10%; left:5%; font-size: 6rem;">💎</div>
-        <div class="obj" style="top:40%; left:80%; animation-delay: 2s; font-size: 5rem;">🚀</div>
-        <div class="obj" style="top:70%; left:15%; animation-delay: 5s; font-size: 7rem;">💰</div>
-        <div class="obj" style="top:20%; left:70%; animation-delay: 8s; font-size: 4rem;">🧡</div>
-        <div class="obj" style="top:85%; left:60%; animation-delay: 3s; font-size: 6rem;">✨</div>
+        <div class="obj" style="top:15%; left:8%; font-size: 6rem;"></div>
+        <div class="obj" style="top:45%; left:85%; animation-delay: 3s; font-size: 5rem;"></div>
+        <div class="obj" style="top:75%; left:12%; animation-delay: 6s; font-size: 7rem;"></div>
+        <div class="obj" style="top:25%; left:75%; animation-delay: 9s; font-size: 4rem;"></div>
+        <div class="obj" style="top:88%; left:65%; animation-delay: 4s; font-size: 6rem;"></div>
     </div>
 
 <header>
     <img src="https://arhaminsightses.netlify.app/logo.png" alt="Arham Insights" class="logo-img">
-    <p style="font-size: 1.6em; margin-top: 30px; letter-spacing: 6px; font-weight: 300; text-transform: uppercase;">Vishwas Ka Naya Naam 🤝</p>
+    <p style="font-size: 1.7em; margin-top: 35px; letter-spacing: 8px; font-weight: 300; text-transform: uppercase;">Aapka Sapna, Humari Zimmedari </p>
 </header>
 
 <main>
     <section class="hero-card">
-        <h1>Arham <span class="gradient-text">Insights</span> 🌟</h1>
-        <p style="font-size: 1.8em; color: var(--dark); font-weight: 800; margin-top: 10px;">Sahi Disha, Sahi Pragati ❤️</p>
-        <p style="font-size: 1.3em; color: #64748b; max-width: 800px; margin: 30px auto;">
-            Arham Insights ek aisi digital kranti hai jo Bharat ke har ghar ko aatmanirbhar banane ka jazba rakhti hai. Bina kisi investment ke, sirf apne smartphone se apni takdeer badlein. 🇮🇳
+        <h1>Arham <span class="gradient-text">Insights</span> </h1>
+        <p style="font-size: 2em; color: var(--dark); font-weight: 800; margin-top: 15px;">Sahi Disha, Sahi Pragati </p>
+        <p style="font-size: 1.4em; color: #475569; max-width: 850px; margin: 35px auto; font-weight: 400;">
+            Arham Insights sirf ek platform nahi, ek bharosa hai. Hum Bharat ke yuvaon aur housewives ko ghar baithe digital aazadi dilane ke liye pratibaddh hain. 
         </p>
         
         <div class="btn-group">
-            <a href="register.html" class="btn btn-join"><i class="fa fa-rocket"></i> Shuru Karein Journey</a>
-            <a href="login.html" class="btn btn-login"><i class="fa fa-fingerprint"></i> Dashboard</a>
+            <a href="register.html" class="btn btn-join"><i class="fa fa-fire"></i> Start Earning Now</a>
+            <a href="login.html" class="btn btn-login"><i class="fa fa-lock"></i> User Portal</a>
         </div>
     </section>
 
-    <section class="empathy-section">
-        <h2 style="font-size: 3.2em; font-weight: 900;">Mushkilein Ab <span style="color:var(--heart)">Khatam!</span> 👋</h2>
-        <div style="display: flex; flex-wrap: wrap; justify-content: center; margin-top: 50px;">
+    <section class="empathy-section" style="padding: 100px 20px; text-align: center; max-width: 1200px; margin: 0 auto;">
+        <h2 style="font-size: 3.5em; font-weight: 900; margin-bottom: 20px;">Mushkilein <span style="color:var(--heart)">Purani</span>, Solution Naya! </h2>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; margin-top: 60px;">
             <div class="problem-card">
-                <i class="fa fa-umbrella-beach"></i>
-                <h3>Free Lifestyle</h3>
-                <p>Ab kisi boss ki sunne ki zaroorat nahi. Jab mann kare, tab kaam karein. 🏝️</p>
+                <i class="fa fa-hand-holding-dollar"></i>
+                <h3>Financial Freedom</h3>
+                <p>Ab mahine ke aakhir mein paison ki chinta bhool jaiye. </p>
             </div>
             <div class="problem-card">
-                <i class="fa fa-chart-line"></i>
-                <h3>Zero Investment</h3>
-                <p>Ek bhi rupaya kharch kiye bina apna business shuru karein. 💸</p>
+                <i class="fa fa-laptop-house"></i>
+                <h3>Work From Anywhere</h3>
+                <p>Aapka kitchen ho ya college balcony, kaam kahin se bhi. </p>
             </div>
             <div class="problem-card">
-                <i class="fa fa-medal"></i>
-                <h3>Digital Recognition</h3>
-                <p>Hamare saath judkar digital duniya mein apni pehchan banayein. 🏆</p>
+                <i class="fa fa-award"></i>
+                <h3>Skill Development</h3>
+                <p>Digital duniya ki samajh aur extra income ek saath. </p>
             </div>
         </div>
     </section>
 
-    <section style="max-width: 1000px; margin: 100px auto; padding: 0 20px;">
-        <h2 style="text-align:center; font-size: 3.2em; font-weight: 900; margin-bottom: 70px;">Sirf 3 <span class="gradient-text">Aasaan</span> Steps 🎯</h2>
+    <section style="max-width: 1050px; margin: 120px auto; padding: 0 25px;">
+        <h2 style="text-align:center; font-size: 3.5em; font-weight: 800; margin-bottom: 80px;">Aakhir Kaam <span class="gradient-text">Kaise</span> Karein? </h2>
         
         <div class="step">
             <div class="step-num">01</div>
             <div class="step-text">
-                <h3>Quick Sign Up 📝</h3>
-                <p>Apni details bharein aur turant kaam shuru karne ke liye taiyar ho jayein.</p>
+                <h3 style="font-size: 2em;">Simple Registration </h3>
+                <p style="font-size: 1.2em;">Apni basic details bharein aur hamare verified earner banein.</p>
             </div>
         </div>
-        <div class="step" style="border-left-color: var(--accent);">
+        <div class="step" style="border-left-color: #10b981;">
             <div class="step-num">02</div>
             <div class="step-text">
-                <h3>Daily Tasks 📱</h3>
-                <p>Hamare bataye gaye ads dekhein aur keywords search karke points kamayein.</p>
+                <h3 style="font-size: 2em;">Micro Tasks </h3>
+                <p style="font-size: 1.2em;">Hamare daily tasks aur keyword search ads par click karke points kamayein.</p>
             </div>
         </div>
-        <div class="step" style="border-left-color: var(--heart);">
+        <div class="step" style="border-left-color: #ef4444;">
             <div class="step-num">03</div>
             <div class="step-text">
-                <h3>Monthly Payout 💰</h3>
-                <p>Aapki mehnat ka paisa har mahine aapke UPI/Bank account mein bhej diya jayega.</p>
+                <h3 style="font-size: 2em;">Secure Payouts </h3>
+                <p style="font-size: 1.2em;">Aapki kamai har mahine seedhe aapke UPI ya Bank account mein.</p>
             </div>
         </div>
     </section>
 
     <section class="payment-info">
-        <i class="fa fa-shield-halved" style="font-size: 5em; color: var(--primary); margin-bottom: 30px;"></i>
-        <h2 style="font-size: 2.8em; margin-bottom: 20px;">Hamari Transparency, Aapka Trust 🤝</h2>
-        <p style="font-size: 1.3em; line-height: 2; opacity: 0.9; max-width: 800px; margin: 0 auto;">
-            Arham Insights puri tarah se ads earning par chalta hai. **Hum tabhi pay karte hain jab ad networks se hamari monthly payment release hoti hai.** <br><br>
-            Aapka ek-ek paisa mehfooz hai. Hum long-term saath nibhane mein vishwas rakhte hain, dhokha dene mein nahi. Thoda dhairya rakhein aur vishwas banaye rakhein. 🙏
+        <i class="fa fa-user-check" style="font-size: 6em; color: var(--primary); margin-bottom: 40px;"></i>
+        <h2 style="font-size: 3.2em; margin-bottom: 30px;">Payment Kab Milegi? </h2>
+        <p style="font-size: 1.4em; line-height: 2.2; opacity: 0.95; max-width: 850px; margin: 0 auto; font-weight: 300;">
+            Hum aapke saath 100% imaandari rakhte hain. Humara revenue ad networks se aata hai. **Jab ad networks hamari payment release karte hain, tabhi hum aapke bank mein funds transfer karte hain.** <br><br>
+            Aapka har ek minute mehfooz hai. Bas thoda sabra (Patience) rakhein, hum long-term business mein vishwas rakhte hain. 
         </p>
     </section>
 
-    <section class="support-box">
-        <i class="fa fa-envelope-open-text" style="font-size: 5em; color: var(--primary);"></i>
-        <h2 style="font-size: 2.5em; margin-top: 20px;">Hum Aapki Help Ke Liye Hain ✨</h2>
-        <p style="font-size: 1.2em;">Koi sawal ho? Humein direct mail karein:</p>
+    <section class="support-box" style="text-align:center; margin-bottom: 120px;">
+        <i class="fa fa-comments-dollar" style="font-size: 6em; color: var(--primary);"></i>
+        <h2 style="font-size: 3em; margin-top: 30px;">Koi Sawaal? Direct Poochye! </h2>
+        <p style="font-size: 1.3em; color: #64748b;">Humari support team 24/7 aapke liye hai:</p>
         <a href="mailto:arhaminsightshelp@gmail.com" class="email-link">arhaminsightshelp@gmail.com</a>
     </section>
 </main>
 
 <footer>
-    <div style="margin-bottom: 50px;">
-        <span style="font-size: 3.5em; font-weight: 900; color: white; letter-spacing: -2px;">ARHAM <span style="color:var(--primary)">INSIGHTS</span> 💎</span>
-        <p style="font-size: 1.2em; margin-top: 15px;">Bharat ka emerging digital work platform. 🇮🇳</p>
+    <div style="margin-bottom: 60px;">
+        <span style="font-size: 4em; font-weight: 900; color: white; letter-spacing: -3px;">ARHAM <span style="color:var(--primary)">INSIGHTS</span> </span>
+        <p style="font-size: 1.3em; margin-top: 20px; color: #64748b;">Empowering Bharat's Digital Future. </p>
     </div>
     
     <div class="social-links">
@@ -207,9 +208,9 @@
         <a href="https://youtube.com/@arhaminsights?si=pElfF9rv_Q-mHT-w" target="_blank"><i class="fab fa-youtube"></i></a>
     </div>
 
-    <div style="margin-top: 80px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 40px;">
-        <p style="font-weight: 700; color: var(--primary);">Developed with 🧡 by Arham Creative Team</p>
-        <p style="font-size: 0.9em; opacity: 0.4;">&copy; 2026 Arham Insights. Sahi Disha, Sahi Pragati.</p>
+    <div style="margin-top: 100px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 50px;">
+        <p style="font-weight: 700; color: var(--primary); font-size: 1.2em;">Crafted with ❤️ by Arham Tech Team</p>
+        <p style="font-size: 1em; opacity: 0.3;">&copy; 2026 Arham Insights. All Rights Reserved.</p>
     </div>
 </footer>
 
