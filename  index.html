@@ -3,221 +3,163 @@
 <head>
     <meta name="clckd" content="02e1cd3c68cf86a8b300b829e305e4e2" />
     <meta name="bidvertiser-navman-verification" content="2103430">
-    <meta charset="<!-- Bidvertiser2103430 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arham Insights | Vishwas, Pragati aur Aapka Saath</title>
+    <meta charset=<!-- Bidvertiser2103430 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Arham Insights | Sach Ka Aaina</title>
     
-    <meta name="description" content="Arham Insights: Bharat ka sabse bharosemand digital parivaar. Bina investment ke samman ki kamai.">
     <link rel="icon" type="image/png" href="https://arhaminsightses.netlify.app/logo.png">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Hind:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Hind:wght@400;700&display=swap" rel="stylesheet">
     
     <script type="text/javascript">
         (function() {
             var s = document.createElement('script');
             s.type = 'text/javascript'; s.async = true;
             s.src = '//api.adcash.com/script/autotag.js';
-            s.onload = function() {
-                aclib.runAutoTag({ zoneId: 'mih7lairbk' });
-            };
+            s.onload = function() { aclib.runAutoTag({ zoneId: 'mih7lairbk' }); };
             document.head.appendChild(s);
         })();
     </script>
 
     <style>
         :root { 
-            --primary: #ff9933; 
-            --secondary: #ef4444;
-            --dark: #0f172a; 
-            --bg: #fffcf9; 
-            --accent: #10b981; 
-            --glass: rgba(255, 255, 255, 0.92);
+            --primary: #ff9933; --secondary: #ef4444; --dark: #070b14; 
+            --text-gray: #94a3b8; --white: #ffffff;
         }
         
-        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; scroll-behavior: smooth; }
-        body { font-family: 'Poppins', 'Hind', sans-serif; margin: 0; padding: 0; background: var(--bg); color: #334155; line-height: 1.8; overflow-x: hidden; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Poppins', 'Hind', sans-serif; background: var(--dark); color: var(--white); overflow-x: hidden; line-height: 1.6; }
 
-        /* Animated Soft Background */
-        .glow-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: #fffcf9; }
-        .shape { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.15; animation: move 25s infinite alternate; }
-        @keyframes move { from { transform: translate(0,0); } to { transform: translate(100px, 100px); } }
+        /* Section Spacing */
+        section { padding: 100px 20px; position: relative; }
 
+        /* Header / Hero */
         header { 
-            background: linear-gradient(160deg, rgba(15, 23, 42, 0.95), rgba(255, 153, 51, 0.85)), url('https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1350&q=80');
-            background-size: cover; background-position: center;
-            color: white; padding: 150px 20px 200px; text-align: center; 
-            clip-path: ellipse(150% 100% at 50% 0%);
+            min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; background: radial-gradient(circle at center, #1e293b 0%, #070b14 100%);
         }
-        
-        .logo-img { 
-            height: 160px; width: 160px; border-radius: 40%; border: 12px solid var(--glass); 
-            background: white; box-shadow: 0 40px 80px rgba(0,0,0,0.3); transition: 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        .logo { width: 120px; height: 120px; border-radius: 50%; border: 2px solid var(--primary); padding: 5px; margin-bottom: 20px; }
+        .tagline { font-size: 1.2em; letter-spacing: 5px; color: var(--primary); text-transform: uppercase; font-weight: 300; }
+        .main-title { font-size: clamp(2.5em, 8vw, 5em); font-weight: 800; line-height: 1; margin: 20px 0; }
+
+        /* The Deep Motivation - Opening */
+        .intro-motivation { max-width: 800px; margin: 0 auto; text-align: center; font-size: 1.4em; color: var(--text-gray); font-style: italic; }
+
+        /* The Mirror (Harsh Reality) */
+        .mirror-section { background: var(--white); color: var(--dark); border-radius: 60px 60px 0 0; padding-top: 120px; }
+        .section-label { color: var(--secondary); font-weight: 800; text-transform: uppercase; font-size: 0.9em; letter-spacing: 2px; display: block; margin-bottom: 10px; }
+        .harsh-title { font-size: clamp(2em, 5vw, 3.5em); font-weight: 800; margin-bottom: 50px; line-height: 1.2; }
+
+        .reality-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto; }
+        .reality-card { padding: 40px; border-left: 5px solid #e2e8f0; transition: 0.3s; }
+        .reality-card:hover { border-left-color: var(--secondary); background: #f8fafc; }
+        .reality-card h3 { font-size: 1.5em; margin-bottom: 15px; color: #1e293b; }
+        .reality-card p { color: #475569; font-size: 1.1em; }
+
+        /* World Stand Section */
+        .stand-section { background: #f1f5f9; color: var(--dark); padding: 100px 20px; text-align: center; }
+        .stat-box { font-size: 4em; font-weight: 900; color: var(--secondary); line-height: 1; }
+
+        /* Arham Insights - The Hope */
+        .hope-section { background: var(--dark); color: var(--white); border-radius: 60px 60px 0 0; margin-top: -60px; }
+        .hope-card { max-width: 900px; margin: 0 auto; text-align: center; }
+        .btn-register { 
+            display: inline-block; background: var(--primary); color: var(--dark); padding: 25px 60px; 
+            font-weight: 800; font-size: 1.4em; text-decoration: none; border-radius: 100px;
+            margin-top: 40px; transition: 0.4s; box-shadow: 0 10px 30px rgba(255,153,51,0.3);
         }
-        .logo-img:hover { transform: scale(1.1) rotate(5deg); border-radius: 20%; }
+        .btn-register:hover { transform: scale(1.05); box-shadow: 0 15px 40px rgba(255,153,51,0.5); }
 
-        .hero-card { 
-            background: var(--glass); backdrop-filter: blur(30px); padding: 80px 40px; margin: -140px auto 40px; 
-            max-width: 1100px; width: 94%; border-radius: 80px; 
-            box-shadow: 0 80px 160px rgba(255, 153, 51, 0.12); text-align: center;
-            border: 1px solid rgba(255,255,255,0.8);
-        }
+        /* Full Email Display */
+        .support-contact { margin-top: 100px; border: 1px solid rgba(255,255,255,0.1); padding: 40px; border-radius: 40px; }
+        .full-email { font-size: 1.5em; color: var(--primary); font-weight: 700; word-break: break-all; text-decoration: none; border-bottom: 1px solid var(--primary); }
 
-        h1 { font-size: 4.5em; color: var(--dark); margin: 0; font-weight: 800; letter-spacing: -2px; }
-        .gradient-text { background: linear-gradient(135deg, #ff9933, #ef4444); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        footer { padding: 80px 20px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; }
+        .social-links a { font-size: 2.5em; margin: 0 15px; color: var(--white); opacity: 0.6; }
 
-        /* Trust & Emotion Pillars */
-        .pillar-section { padding: 80px 20px; max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
-        .pillar-card { 
-            background: white; padding: 60px 40px; border-radius: 60px; text-align: center;
-            transition: 0.5s; border: 1px solid #f1f5f9; box-shadow: 0 20px 40px rgba(0,0,0,0.02);
-            position: relative;
-        }
-        .pillar-card:hover { transform: translateY(-20px); box-shadow: 0 40px 80px rgba(255, 153, 51, 0.1); border-color: var(--primary); }
-        .pillar-card i { font-size: 4.5em; background: linear-gradient(135deg, #fff7ed, #fff1f2); padding: 30px; border-radius: 40px; color: var(--secondary); margin-bottom: 30px; }
-
-        /* The "Why" - Relatable Copy */
-        .story-box { padding: 100px 20px; text-align: center; background: #fff; border-radius: 100px; margin: 50px 20px; }
-        .story-text { font-size: 1.6em; color: #475569; max-width: 850px; margin: 0 auto; font-family: 'Hind', sans-serif; font-weight: 500; }
-
-        .btn { 
-            padding: 26px 80px; text-decoration: none; font-weight: 800; border-radius: 50px; 
-            font-size: 1.6em; transition: 0.5s; display: inline-flex; align-items: center; gap: 20px; 
-            box-shadow: 0 30px 60px rgba(239, 68, 68, 0.2); border: none; cursor: pointer;
-        }
-        .btn-main { background: linear-gradient(135deg, #ff9933, #ef4444); color: white; }
-        .btn-main:hover { transform: scale(1.05) rotate(-1deg); box-shadow: 0 40px 80px rgba(255, 153, 51, 0.5); }
-
-        /* Modern Steps */
-        .modern-step { 
-            background: #0f172a; color: white; padding: 100px 40px; border-radius: 120px; margin: 100px 20px;
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 50px;
-        }
-        .step-circle { 
-            text-align: center; position: relative; 
-        }
-        .step-count { font-size: 7em; font-weight: 900; opacity: 0.1; position: absolute; top: -50px; left: 50%; transform: translateX(-50%); }
-
-        /* Integrity Alert */
-        .integrity-banner { 
-            background: linear-gradient(135deg, #fff1f2, #fff7ed); padding: 80px 40px; border-radius: 80px;
-            margin: 100px auto; max-width: 1000px; border: 2px solid rgba(255, 153, 51, 0.3); text-align: center;
-        }
-
-        footer { background: var(--dark); color: #94a3b8; padding: 150px 20px; text-align: center; border-top-left-radius: 250px; }
-        .social-link { font-size: 3.5em; color: white; margin: 0 25px; transition: 0.4s; }
-        .social-link:hover { color: var(--primary); transform: translateY(-15px); }
-
-        @media (max-width: 768px) { 
-            h1 { font-size: 3em; } 
-            header { padding-top: 100px; }
-            .hero-card { margin-top: -100px; padding: 50px 20px; }
+        @media (max-width: 768px) {
+            .main-title { font-size: 2.8em; }
+            .harsh-title { font-size: 1.8em; }
         }
     </style>
 </head>
 <body>
 
-    <div class="glow-bg">
-        <div class="shape" style="width: 500px; height: 500px; background: #ff9933; top: -10%; left: -10%;"></div>
-        <div class="shape" style="width: 400px; height: 400px; background: #ef4444; bottom: -10%; right: -10%; animation-delay: 5s;"></div>
-    </div>
-
 <header>
-    <img src="https://arhaminsightses.netlify.app/logo.png" alt="Arham Insights" class="logo-img">
-    <p style="font-size: 1.8em; margin-top: 40px; letter-spacing: 12px; font-weight: 300; text-transform: uppercase;">Aapka Apna Digital Parivaar </p>
+    <img src="https://arhaminsightses.netlify.app/logo.png" alt="Arham Insights" class="logo">
+    <div class="tagline">Badlo Halat, Badlo Pehchan</div>
+    <h1 class="main-title">Arham Insights</h1>
+    <div class="intro-motivation">
+        "School ne sikhaya ki 90% laoge toh duniya jhukegi,<br> 
+        Par sadak par utre toh pata chala ki duniya sirf 'Paisa' dekh kar rukegi."
+    </div>
 </header>
 
 <main>
-    <section class="hero-card">
-        <h1>Arham <span class="gradient-text">Insights</span> </h1>
-        <p style="font-size: 2.4em; color: var(--dark); font-weight: 800; margin-top: 20px; font-family: 'Hind';">Mehnat Aapki, Bharosa Hamara!</p>
-        <p style="font-size: 1.5em; color: #64748b; max-width: 900px; margin: 40px auto; line-height: 2;">
-            Hum jaante hain ki ek-ek rupaye ki ahmiyat kya hoti hai. Arham Insights koi "Get Rich Quick" scheme nahi, balki un logo ke liye ek zariya hai jo apne **Self-Respect** ke saath kamana chahte hain. 
-        </p>
-        
-        <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 50px;">
-            <a href="register.html" class="btn btn-main"><i class="fa fa-rocket"></i> Abhi Shuru Karein</a>
-            <a href="login.html" class="btn" style="background: var(--dark); color: white; box-shadow: none;"><i class="fa fa-user-lock"></i> Dashboard</a>
+    <section class="mirror-section">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <span class="section-label">Asli Duniya Ka Aaina</span>
+            <h2 class="harsh-title">School ki kitabein khatam ho gayi,<br>Lekin <span style="color:var(--secondary)">Asli Pariksha</span> toh ab shuru hui hai.</h2>
+            
+            <div class="reality-grid">
+                <div class="reality-card">
+                    <h3>Degrees vs Daal-Chawal</h3>
+                    <p>College ki degree file mein rakhi reh gayi, aur bahar nikle toh pata chala ki 10,000 ki naukri ke liye bhi 500 log line mein khade hain. Kya isi din ke liye padhai ki thi?</p>
+                </div>
+                <div class="reality-card">
+                    <h3>Maa-Baap Ki Chuppi</h3>
+                    <p>Pehle wo garv se kehte the "Mera beta bada aadmi banega", ab wo bas nazrein chura lete hain taaki aapko bura na lage. Unki wo chuppi khanjar ki tarah chubhti hai na?</p>
+                </div>
+                <div class="reality-card">
+                    <h3>"Social Media" Ka Dhokha</h3>
+                    <p>Duniya Instagram par reels bana rahi hai, vacations par ja rahi hai, aur aap bas unhe scroll kar rahe hain. Har scroll ke saath aapka confidence gir raha hai.</p>
+                </div>
+            </div>
         </div>
     </section>
 
-    <div class="story-box">
-        <p class="story-text">
-            "Kya aap bhi thak chuke hain un apps se jo vaade bade karti hain par kaam nahi aati? Hum yahan ek sachchi koshish kar rahe hain taaki Bharat ka har yuva aur har ghar ki mahila aatmanirbhar ban sake." 
-        </p>
-    </div>
-
-    <section class="pillar-section">
-        <div class="pillar-card">
-            <i class="fa fa-shield-heart"></i>
-            <h3 style="font-size: 1.8em;">Imaandari Pehle</h3>
-            <p>Hum vishwas rakhte hain transparency mein. Jo hai, jaisa hai, aapke samne hai. Koi chhupa hua charge nahi. </p>
-        </div>
-        <div class="pillar-card">
-            <i class="fa fa-house-chimney-user"></i>
-            <h3 style="font-size: 1.8em;">Apno Ke Liye</h3>
-            <p>Ghar se kaam karke apne parivaar ko waqt dein. Ab kamai ke liye apno se door jane ki zaroorat nahi. </p>
-        </div>
-        <div class="pillar-card">
-            <i class="fa fa-hand-holding-dollar"></i>
-            <h3 style="font-size: 1.8em;">Seedhi Kamai</h3>
-            <p>Aapke points, aapki mehnat. Har mahine ki fix date par aapka payout seedha aapke account mein. </p>
+    <section class="stand-section">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <h2 style="font-size: 2.5em; margin-bottom: 30px;">Aap Kahan Stand Karte Hain?</h2>
+            <div class="stat-box">0.01%</div>
+            <p style="font-size: 1.4em; margin-top: 20px; font-weight: 600;">Log hi is dal-dal se nikal paate hain.</p>
+            <p style="margin-top: 20px; color: #475569;">Baqi sab sirf 'Log kya kahenge' aur 'Kismat kharab hai' bolte reh jaate hain. Faisla aapka hai ki aapko kis taraf rehna hai.</p>
         </div>
     </section>
 
-    <section class="modern-step">
-        <div class="step-circle">
-            <span class="step-count">01</span>
-            <i class="fa fa-user-plus" style="font-size: 4em; color: var(--primary); margin-bottom: 20px; display: block;"></i>
-            <h3>Sahi Shuruat</h3>
-            <p>Basic details ke saath register karein aur hamare parivaar ka hissa banein.</p>
-        </div>
-        <div class="step-circle">
-            <span class="step-count">02</span>
-            <i class="fa fa-magnifying-glass-chart" style="font-size: 4em; color: var(--accent); margin-bottom: 20px; display: block;"></i>
-            <h3>Daily Tasks</h3>
-            <p>Hamare bataye gaye ads aur keywords par focus karein. Har search aapki pragati hai.</p>
-        </div>
-        <div class="step-circle">
-            <span class="step-count">03</span>
-            <i class="fa fa-wallet" style="font-size: 4em; color: var(--secondary); margin-bottom: 20px; display: block;"></i>
-            <h3>Khushiyon ka Payout</h3>
-            <p>Ad networks se payment aate hi, hum use bina deri ke aap tak pahunchate hain.</p>
-        </div>
-    </section>
+    <section class="hope-section">
+        <div class="hope-card">
+            <span class="section-label" style="color: var(--primary);">The Solution</span>
+            <h2 style="font-size: 3em; font-weight: 800; margin-bottom: 30px;">Arham Insights: Ek Saccha Saathi</h2>
+            <p style="font-size: 1.3em; color: var(--text-gray);">
+                Hum koi jaadu nahi dikhayenge. Hum wahi dikhayenge jo duniya ne aapse chupaya. Hum aapke wahi smartphone ko, jo aapki kamzori ban chuka hai, aapki **Sabse Badi Taaqat** banayenge. 
+            </p>
+            <p style="font-size: 1.2em; margin-top: 30px;">Hum saath milkar kamainge, saath milkar ladenge, aur saath milkar un sabko jawab denge jo aaj aap par has rahe hain.</p>
+            
+            <a href="register.html" class="btn-register">Apna Safar Shuru Karein</a>
+            <br>
+            <a href="login.html" style="color: var(--text-gray); display: inline-block; margin-top: 30px; text-decoration: none;">Purane Sadasya Yahan Login Karein →</a>
 
-    <section class="integrity-banner">
-        <i class="fa fa-circle-exclamation" style="font-size: 5em; color: var(--primary); margin-bottom: 30px;"></i>
-        <h2 style="font-size: 2.8em; margin-bottom: 20px;">Zaroori Baat </h2>
-        <p style="font-size: 1.4em; color: #4b5563; line-height: 1.8;">
-            Arham Insights ek ad-revenue based platform hai. **Hum tabhi pay karte hain jab global ad networks humein payment bhejte hain.** Isme kabhi kabhi thoda samay lag sakta hai, lekin humara vaada hai ki aapka ek-ek paisa mehfooz hai. Dhairya (Patience) hi kamyabi ki chabi hai. 
-        </p>
-    </section>
-
-    <section style="text-align: center; padding: 100px 20px;">
-        <i class="fa fa-comments" style="font-size: 6em; color: var(--primary); opacity: 0.2; position: absolute; left: 10%;"></i>
-        <h2 style="font-size: 3.2em;">Hum Aapki Baat Sunne Ke Liye Hain</h2>
-        <p style="font-size: 1.4em; color: #64748b;">Koi bhi doubt ho, humein mail karein:</p>
-        <a href="mailto:arhaminsightshelp@gmail.com" style="font-size: 2.2em; font-weight: 800; color: var(--secondary); text-decoration: none;">arhaminsightshelp@gmail.com</a>
+            <div class="support-contact">
+                <h3>Hum Har Pal Saath Hain</h3>
+                <p style="margin-bottom: 20px; opacity: 0.6;">Koi bhi sawaal, darr ya confusion ho, seedha likhein:</p>
+                <a href="mailto:arhaminsightshelp@gmail.com" class="full-email">arhaminsightshelp@gmail.com</a>
+            </div>
+        </div>
     </section>
 </main>
 
 <footer>
-    <div style="margin-bottom: 60px;">
-        <span style="font-size: 4.5em; font-weight: 900; color: white; letter-spacing: -4px;">ARHAM <span style="color:var(--primary)">INSIGHTS</span> </span>
-        <p style="font-size: 1.4em; margin-top: 20px; color: #94a3b8;">Bharat ka Rising Digital Platform. Sahi Disha, Sahi Pragati. </p>
+    <div style="margin-bottom: 40px;">
+        <h2 style="font-size: 2.5em; font-weight: 900; letter-spacing: -1px;">ARHAM <span style="color:var(--primary)">INSIGHTS</span></h2>
+        <p style="opacity: 0.5;">Bharat Ko Atmanirbhar Bharat Banane Ke Liye. With True ❤️. Proudly Made In India🇮🇳</p>
     </div>
-    
-    <div style="margin-bottom: 60px;">
-        <a href="https://t.me/+KoZ69QC_S_EwOWU1" class="social-link" target="_blank"><i class="fab fa-telegram"></i></a>
-        <a href="https://www.instagram.com/arhaminsights" class="social-link" target="_blank"><i class="fab fa-instagram"></i></a>
-        <a href="https://youtube.com/@arhaminsights" class="social-link" target="_blank"><i class="fab fa-youtube"></i></a>
+    <div class="social-links">
+        <a href="https://t.me/+KoZ69QC_S_EwOWU1"><i class="fab fa-telegram"></i></a>
+        <a href="https://www.instagram.com/arhaminsights"><i class="fab fa-instagram"></i></a>
+        <a href="https://youtube.com/@arhaminsights"><i class="fab fa-youtube"></i></a>
     </div>
-
-    <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 50px;">
-        <p style="font-weight: 700; color: var(--primary); font-size: 1.2em;">Developed with  for Every Indian</p>
-        <p style="font-size: 1em; opacity: 0.3;">&copy; 2026 Arham Insights. Sahi Disha, Sahi Pragati.</p>
-    </div>
+    <p style="margin-top: 50px; opacity: 0.3; font-size: 0.9em;">&copy; 2026 Arham Insights. All Truths Reserved.</p>
 </footer>
 
 </body>
