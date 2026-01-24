@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
+    <meta name='admaven-placement' content='Bqjw6rdC5'>
+    
     <meta name="kadam-verification" content="kadam52c436cee5147ab2ee1a9dd69fda73de" />
     <meta name="mnd-ver" content="zdjkgdlhrwuwqcpnszc6g" />
     <meta name="clckd" content="02e1cd3c68cf86a8b300b829e305e4e2" />
@@ -22,68 +24,71 @@
             document.head.appendChild(s);
         })();
     </script>
-
     <script async src="https://ss.mrmnd.com/native.js"></script>
 
     <style>
         :root { 
             --primary: #ff9933; --secondary: #ef4444; --dark: #070b14; 
-            --text-gray: #94a3b8; --white: #ffffff;
+            --text-gray: #94a3b8; --white: #ffffff; --accent-blue: #3b82f6;
         }
         
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; scroll-behavior: smooth; }
         body { font-family: 'Poppins', 'Hind', sans-serif; background: var(--dark); color: var(--white); overflow-x: hidden; line-height: 1.6; }
 
-        /* Section Spacing */
-        section { padding: 100px 20px; position: relative; }
+        /* Smooth Section Transitions */
+        section { padding: 120px 20px; position: relative; }
 
-        /* Header / Hero */
+        /* Header / Hero - High Impact Design */
         header { 
             min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
             text-align: center; background: radial-gradient(circle at center, #1e293b 0%, #070b14 100%);
+            border-bottom: 2px solid rgba(255,153,51,0.1);
         }
-        .logo { width: 120px; height: 120px; border-radius: 50%; border: 2px solid var(--primary); padding: 5px; margin-bottom: 20px; }
-        .tagline { font-size: 1.2em; letter-spacing: 5px; color: var(--primary); text-transform: uppercase; font-weight: 300; }
-        .main-title { font-size: clamp(2.5em, 8vw, 5em); font-weight: 800; line-height: 1; margin: 20px 0; }
+        .logo { width: 140px; height: 140px; border-radius: 50%; border: 3px solid var(--primary); padding: 5px; margin-bottom: 30px; box-shadow: 0 0 30px rgba(255,153,51,0.2); transition: 0.5s; }
+        .logo:hover { transform: rotate(360deg); }
+        .tagline { font-size: 1.1em; letter-spacing: 6px; color: var(--primary); text-transform: uppercase; font-weight: 600; margin-bottom: 10px; }
+        .main-title { font-size: clamp(3em, 10vw, 6em); font-weight: 800; line-height: 0.9; margin: 20px 0; letter-spacing: -2px; }
 
-        /* The Deep Motivation - Opening */
-        .intro-motivation { max-width: 800px; margin: 0 auto; text-align: center; font-size: 1.4em; color: var(--text-gray); font-style: italic; }
+        .intro-motivation { max-width: 850px; margin: 20px auto; text-align: center; font-size: 1.5em; color: var(--text-gray); font-style: italic; line-height: 1.4; border-left: 4px solid var(--primary); padding: 0 20px; }
 
-        /* The Mirror (Harsh Reality) */
-        .mirror-section { background: var(--white); color: var(--dark); border-radius: 60px 60px 0 0; padding-top: 120px; }
-        .section-label { color: var(--secondary); font-weight: 800; text-transform: uppercase; font-size: 0.9em; letter-spacing: 2px; display: block; margin-bottom: 10px; }
-        .harsh-title { font-size: clamp(2em, 5vw, 3.5em); font-weight: 800; margin-bottom: 50px; line-height: 1.2; }
+        /* The Mirror (Harsh Reality) - Design Update */
+        .mirror-section { background: #fdfdfd; color: var(--dark); border-radius: 80px 80px 0 0; padding-top: 140px; box-shadow: 0 -20px 40px rgba(0,0,0,0.2); }
+        .section-label { color: var(--secondary); font-weight: 800; text-transform: uppercase; font-size: 0.9em; letter-spacing: 3px; display: block; margin-bottom: 15px; }
+        .harsh-title { font-size: clamp(2.2em, 6vw, 4em); font-weight: 800; margin-bottom: 60px; line-height: 1.1; letter-spacing: -1px; }
 
-        .reality-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto; }
-        .reality-card { padding: 40px; border-left: 5px solid #e2e8f0; transition: 0.3s; }
-        .reality-card:hover { border-left-color: var(--secondary); background: #f8fafc; }
-        .reality-card h3 { font-size: 1.5em; margin-bottom: 15px; color: #1e293b; }
-        .reality-card p { color: #475569; font-size: 1.1em; }
+        .reality-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; max-width: 1250px; margin: 0 auto; }
+        .reality-card { padding: 50px; border-radius: 30px; background: #ffffff; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; transition: 0.4s; }
+        .reality-card:hover { transform: translateY(-10px); box-shadow: 0 20px 50px rgba(0,0,0,0.08); border-top: 5px solid var(--secondary); }
+        .reality-card h3 { font-size: 1.7em; margin-bottom: 20px; color: #0f172a; font-weight: 800; }
+        .reality-card p { color: #64748b; font-size: 1.1em; }
 
-        /* World Stand Section */
-        .stand-section { background: #f1f5f9; color: var(--dark); padding: 100px 20px; text-align: center; }
-        .stat-box { font-size: 4em; font-weight: 900; color: var(--secondary); line-height: 1; }
+        /* World Stand Section - High Visuals */
+        .stand-section { background: #0f172a; color: white; padding: 120px 20px; text-align: center; }
+        .stat-box { font-size: 6em; font-weight: 900; color: var(--primary); line-height: 1; text-shadow: 0 0 40px rgba(255,153,51,0.3); }
 
-        /* Arham Insights - The Hope */
-        .hope-section { background: var(--dark); color: var(--white); border-radius: 60px 60px 0 0; margin-top: -60px; }
-        .hope-card { max-width: 900px; margin: 0 auto; text-align: center; }
+        /* The Hope / Solution */
+        .hope-section { background: var(--dark); border-radius: 80px 80px 0 0; margin-top: -80px; position: relative; z-index: 5; }
+        .hope-card { max-width: 1000px; margin: 0 auto; text-align: center; }
+        
         .btn-register { 
-            display: inline-block; background: var(--primary); color: var(--dark); padding: 25px 60px; 
-            font-weight: 800; font-size: 1.4em; text-decoration: none; border-radius: 100px;
-            margin-top: 40px; transition: 0.4s; box-shadow: 0 10px 30px rgba(255,153,51,0.3);
+            display: inline-block; background: linear-gradient(45deg, var(--primary), #fbbf24); color: var(--dark); padding: 28px 70px; 
+            font-weight: 800; font-size: 1.5em; text-decoration: none; border-radius: 100px;
+            margin-top: 50px; transition: 0.4s; box-shadow: 0 15px 40px rgba(255,153,51,0.4);
         }
-        .btn-register:hover { transform: scale(1.05); box-shadow: 0 15px 40px rgba(255,153,51,0.5); }
+        .btn-register:hover { transform: scale(1.05) translateY(-5px); box-shadow: 0 20px 50px rgba(255,153,51,0.6); }
 
-        /* Full Email Display */
-        .support-contact { margin-top: 100px; border: 1px solid rgba(255,255,255,0.1); padding: 40px; border-radius: 40px; }
-        .full-email { font-size: 1.5em; color: var(--primary); font-weight: 700; word-break: break-all; text-decoration: none; border-bottom: 1px solid var(--primary); }
+        .full-email { font-size: 1.6em; color: var(--primary); font-weight: 700; text-decoration: none; transition: 0.3s; }
+        .full-email:hover { letter-spacing: 1px; }
 
-        footer { padding: 80px 20px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; }
-        .social-links a { font-size: 2.5em; margin: 0 15px; color: var(--white); opacity: 0.6; }
+        footer { padding: 100px 20px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; }
+        .social-links a { font-size: 2.8em; margin: 0 20px; color: var(--white); opacity: 0.5; transition: 0.3s; }
+        .social-links a:hover { opacity: 1; color: var(--primary); transform: translateY(-5px); }
 
         @media (max-width: 768px) {
-            .main-title { font-size: 2.8em; }
-            .harsh-title { font-size: 1.8em; }
+            .main-title { font-size: 3.2em; }
+            .intro-motivation { font-size: 1.2em; }
+            .harsh-title { font-size: 2em; }
+            section { padding: 80px 20px; }
         }
     </style>
 </head>
@@ -91,32 +96,32 @@
 
 <header>
     <img src="https://arhaminsightses.netlify.app/logo.png" alt="Arham Insights" class="logo">
-    <div class="tagline">Badlo Halat, Badlo Pehchan</div>
-    <h1 class="main-title">Arham Insights</h1>
+    <div class="tagline">Bharat ka naya aaghaz</div>
+    <h1 class="main-title">Arham <span style="color:var(--primary)">Insights</span></h1>
     <div class="intro-motivation">
-        "School ne sikhaya ki 90% laoge toh duniya jhukegi,<br> 
-        Par sadak par utre toh pata chala ki duniya sirf 'Paisa' dekh kar rukegi."
+        "College ki Degree ke liye laakhon kharche kiye,<br> 
+        Par kisine ye nahi bataya ki asli Paisa 'Skill' se banta hai, kagaz ke tukdon se nahi."
     </div>
 </header>
 
 <main>
     <section class="mirror-section">
         <div style="max-width: 1200px; margin: 0 auto;">
-            <span class="section-label">Asli Duniya Ka Aaina</span>
-            <h2 class="harsh-title">School ki kitabein khatam ho gayi,<br>Lekin <span style="color:var(--secondary)">Asli Pariksha</span> toh ab shuru hui hai.</h2>
+            <span class="section-label">Mirror of Truth</span>
+            <h2 class="harsh-title">Aapka waqt keemti tha,<br>Lekin <span style="color:var(--secondary)">Social Media</span> ne use sasta bana diya.</h2>
             
             <div class="reality-grid">
                 <div class="reality-card">
-                    <h3>Degrees vs Daal-Chawal</h3>
-                    <p>College ki degree file mein rakhi reh gayi, aur bahar nikle toh pata chala ki 10,000 ki naukri ke liye bhi 500 log line mein khade hain. Kya isi din ke liye padhai ki thi?</p>
+                    <h3>Paisa vs Degree</h3>
+                    <p>Aaj 12th pass bacha online mehnat karke mahine ke 50,000 kama raha hai, aur Engineering wala naukri dhoond raha hai. System purana ho chuka hai, aap kab badlenge?</p>
                 </div>
                 <div class="reality-card">
-                    <h3>Maa-Baap Ki Chuppi</h3>
-                    <p>Pehle wo garv se kehte the "Mera beta bada aadmi banega", ab wo bas nazrein chura lete hain taaki aapko bura na lage. Unki wo chuppi khanjar ki tarah chubhti hai na?</p>
+                    <h3>Khali Jeb, Bhari Chinta</h3>
+                    <p>Doston ke saath bahar jaane se pehle 10 baar sochna padta hai? Apni pasand ki cheez khareedne ke liye gharwalon se paise maangte waqt sharam aati hai? Ye kab tak chalega?</p>
                 </div>
                 <div class="reality-card">
-                    <h3>"Social Media" Ka Dhokha</h3>
-                    <p>Duniya Instagram par reels bana rahi hai, vacations par ja rahi hai, aur aap bas unhe scroll kar rahe hain. Har scroll ke saath aapka confidence gir raha hai.</p>
+                    <h3>Asli Aazadi</h3>
+                    <p>Aazadi ka matlab sirf jhanda lehrana nahi hai. Asli aazadi tab milti hai jab aapka bank balance aapko har kaam karne ki permission deta hai.</p>
                 </div>
             </div>
         </div>
@@ -124,29 +129,28 @@
 
     <section class="stand-section">
         <div style="max-width: 800px; margin: 0 auto;">
-            <h2 style="font-size: 2.5em; margin-bottom: 30px;">Aap Kahan Stand Karte Hain?</h2>
-            <div class="stat-box">0.01%</div>
-            <p style="font-size: 1.4em; margin-top: 20px; font-weight: 600;">Log hi is dal-dal se nikal paate hain.</p>
-            <p style="margin-top: 20px; color: #475569;">Baqi sab sirf 'Log kya kahenge' aur 'Kismat kharab hai' bolte reh jaate hain. Faisla aapka hai ki aapko kis taraf rehna hai.</p>
+            <h2 style="font-size: 2.5em; margin-bottom: 30px; font-weight: 800;">Duniya Aapke Baare Mein Kya Sochti Hai?</h2>
+            <div class="stat-box">99%</div>
+            <p style="font-size: 1.4em; margin-top: 20px; font-weight: 600;">Duniya aapko sirf ek 'User' maanti hai.</p>
+            <p style="margin-top: 20px; opacity: 0.8;">Company's chahti hain ki aap bas unki apps chalayein aur apna waqt barbaad karein. Hum chahte hain ki aap usi app ka use karke apna Career banayein.</p>
         </div>
     </section>
 
     <section class="hope-section">
         <div class="hope-card">
-            <span class="section-label" style="color: var(--primary);">The Solution</span>
-            <h2 style="font-size: 3em; font-weight: 800; margin-bottom: 30px;">Arham Insights: Ek Saccha Saathi</h2>
-            <p style="font-size: 1.3em; color: var(--text-gray);">
-                Hum koi jaadu nahi dikhayenge. Hum wahi dikhayenge jo duniya ne aapse chupaya. Hum aapke wahi smartphone ko, jo aapki kamzori ban chuka hai, aapki **Sabse Badi Taaqat** banayenge. 
+            <span class="section-label" style="color: var(--primary);">Mission Bharat</span>
+            <h2 style="font-size: 3.5em; font-weight: 800; margin-bottom: 30px; letter-spacing: -1px;">Ab Badlega <span style="color:var(--primary)">Bharat</span></h2>
+            <p style="font-size: 1.3em; color: var(--text-gray); max-width: 800px; margin: 0 auto;">
+                Arham Insights koi company nahi, ek kranti hai. Hum aapko wahi raasta dikhayenge jo sirf 'Top 1%' log jante hain. Hum aapka phone, aapka waqt, aur aapki mehnat—teeno ko **Gold** mein badal denge.
             </p>
-            <p style="font-size: 1.2em; margin-top: 30px;">Hum saath milkar kamainge, saath milkar ladenge, aur saath milkar un sabko jawab denge jo aaj aap par has rahe hain.</p>
             
-            <a href="register.html" class="btn-register">Apna Safar Shuru Karein</a>
+            <a href="register.html" class="btn-register">Apna Career Start Karein</a>
             <br>
-            <a href="login.html" style="color: var(--text-gray); display: inline-block; margin-top: 30px; text-decoration: none;">Purane Sadasya Yahan Login Karein →</a>
+            <a href="login.html" style="color: var(--text-gray); display: inline-block; margin-top: 40px; text-decoration: none; font-weight: 600; font-size: 1.1em;">Purane Member Login Karein →</a>
 
-            <div class="support-contact">
-                <h3>Hum Har Pal Saath Hain</h3>
-                <p style="margin-bottom: 20px; opacity: 0.6;">Koi bhi sawaal, darr ya confusion ho, seedha likhein:</p>
+            <div class="support-contact" style="margin-top: 120px; border: 1px solid rgba(255,255,255,0.05); padding: 50px; border-radius: 50px; background: rgba(255,255,255,0.02);">
+                <h3 style="margin-bottom: 15px;">Official Support Center</h3>
+                <p style="margin-bottom: 25px; opacity: 0.6; font-size: 1.1em;">Kisi bhi tarah ki mushkil mein humse sampark karein:</p>
                 <a href="mailto:arhaminsightshelp@gmail.com" class="full-email">arhaminsightshelp@gmail.com</a>
             </div>
         </div>
@@ -154,17 +158,18 @@
 </main>
 
 <footer>
-    <div style="margin-bottom: 40px;">
-        <h2 style="font-size: 2.5em; font-weight: 900; letter-spacing: -1px;">ARHAM <span style="color:var(--primary)">INSIGHTS</span></h2>
-        <p style="opacity: 0.5;">Bharat Ko Atmanirbhar Bharat Banane Ke Liye. With True ❤️. Proudly Made In India🇮🇳</p>
+    <div style="margin-bottom: 50px;">
+        <h2 style="font-size: 3em; font-weight: 900; letter-spacing: -2px; margin-bottom: 10px;">ARHAM <span style="color:var(--primary)">INSIGHTS</span></h2>
+        <p style="opacity: 0.6; font-size: 1.1em;">True Empowerment. True India. 🇮🇳</p>
     </div>
     <div class="social-links">
-        <a href="https://t.me/+KoZ69QC_S_EwOWU1"><i class="fab fa-telegram"></i></a>
-        <a href="https://www.instagram.com/arhaminsights"><i class="fab fa-instagram"></i></a>
-        <a href="https://youtube.com/@arhaminsights"><i class="fab fa-youtube"></i></a>
+        <a href="https://t.me/+KoZ69QC_S_EwOWU1" title="Telegram"><i class="fab fa-telegram"></i></a>
+        <a href="https://www.instagram.com/arhaminsights" title="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://youtube.com/@arhaminsights" title="YouTube"><i class="fab fa-youtube"></i></a>
     </div>
-    <p style="margin-top: 50px; opacity: 0.3; font-size: 0.9em;">&copy; 2026 Arham Insights. All Truths Reserved.</p>
+    <p style="margin-top: 60px; opacity: 0.4; font-size: 0.9em; letter-spacing: 1px;">&copy; 2026 ARHAM INSIGHTS. MADE WITH PRIDE FOR BHARAT.</p>
 </footer>
 
 </body>
 </html>
+
