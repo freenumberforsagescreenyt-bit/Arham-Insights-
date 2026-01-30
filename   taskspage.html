@@ -14,23 +14,86 @@
     <script async src="https://ss.mrmnd.com/native.js"></script>
     <script async src="https://js.wpadmngr.com/static/adManager.js" data-admpid="418185"></script>
 
-    <script>(function(s){s.dataset.zone='10509820',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-    <script>(function(s){s.dataset.zone='10490472',s.src='https://gizokraijaw.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+    <script>
+        (function(s){
+            s.dataset.zone='10509820';
+            s.src='https://nap5k.com/tag.min.js';
+        })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')));
+        
+        (function(s){
+            s.dataset.zone='10490472';
+            s.src='https://gizokraijaw.net/vignette.min.js';
+        })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')));
+    </script>
 
     <style>
         :root { --primary: #ff9933; --dark: #070b14; --card-bg: rgba(255,255,255,0.05); }
-        body { font-family: 'Poppins', sans-serif; background: var(--dark); color: white; text-align: center; margin: 0; padding: 0; overflow-x: hidden; }
-        #timer-container { background: var(--primary); color: black; padding: 12px 25px; font-weight: 800; border-radius: 50px; display: inline-block; margin: 20px auto; position: sticky; top: 10px; z-index: 9999; box-shadow: 0 5px 15px rgba(255,153,51,0.4); }
-        .ad-slot { min-height: 100px; margin: 20px auto; background: var(--card-bg); padding: 10px; border-radius: 15px; width: 95%; max-width: 728px; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; }
+        
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: var(--dark); 
+            color: white; 
+            text-align: center; 
+            margin: 0; 
+            padding-top: 80px; /* Space for sticky timer */
+            overflow-x: hidden; 
+        }
+
+        /* Visible Sticky Timer */
+        #timer-container { 
+            position: fixed; 
+            top: 10px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            background: var(--primary); 
+            color: black; 
+            padding: 12px 30px; 
+            font-weight: 800; 
+            border-radius: 50px; 
+            z-index: 100000; /* Max priority */
+            box-shadow: 0 5px 20px rgba(255,153,51,0.6); 
+            min-width: 150px;
+        }
+
+        /* Centralized Ad Slots */
+        .ad-slot { 
+            min-height: 100px; 
+            margin: 25px auto; 
+            background: var(--card-bg); 
+            padding: 15px; 
+            border-radius: 15px; 
+            width: 95%; 
+            max-width: 728px; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            justify-content: center;
+            overflow: hidden; 
+        }
+
         main { padding: 10px 20px; max-width: 850px; margin: 0 auto; }
-        #task-content { background: var(--card-bg); padding: 30px; border-radius: 20px; text-align: left; line-height: 1.8; margin: 20px 0; border: 1px solid rgba(255,255,255,0.05); }
+        
+        #task-content { 
+            background: var(--card-bg); 
+            padding: 30px; 
+            border-radius: 20px; 
+            text-align: left; 
+            line-height: 1.8; 
+            margin: 25px 0; 
+            border: 1px solid rgba(255,255,255,0.05); 
+            min-height: 200px;
+        }
+
+        h2 { color: var(--primary); margin-bottom: 5px; }
+        .refresh-notice { font-size: 0.7rem; opacity: 0.5; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
-    <div id="timer-container">⏳ Task Time: <span id="timer">05:00</span></div>
+    <div id="timer-container">⏳ समय शेष: <span id="timer">05:00</span></div>
 
-    <div class="ad-slot">
+    <div class="ad-slot" id="header-ads">
         <script> atOptions = { 'key' : 'ac3a34c448d39282025c11644797e3a1', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} }; </script>
         <script src="https://www.highperformanceformat.com/ac3a34c448d39282025c11644797e3a1/invoke.js"></script>
         
@@ -39,21 +102,23 @@
     </div>
 
     <main>
+        <h2>आपका प्रीमियम टास्क लोड हो रहा है</h2>
+        <p class="refresh-notice">एड्स हर 45 सेकंड में रिफ्रेश होंगे</p>
+
         <script async="async" data-cfasync="false" src="https://pl28481408.effectivegatecpm.com/b104bb133c0e3abf10d65c6dca934730/invoke.js"></script>
         <div id="container-b104bb133c0e3abf10d65c6dca934730"></div>
 
         <div id="task-content">
-            Blog is loading 
+            कंटेंट लोड हो रहा है, कृपया प्रतीक्षा करें...
         </div>
 
-        <div class="ad-slot">
+        <div class="ad-slot" id="mid-rectangle-ads">
             <SCRIPT data-cfasync="false" SRC="//bdv.bidvertiser.com/BidVertiser.dbm?pid=941237&bid=2103430" TYPE="text/javascript"></SCRIPT>
-            
             <ins class="e300x250" id="300x250" data-revive-hash="03f72371ba83e2e09e793c77727f82c4" data-revive-zoneid="65572" data-revive-id="f87497be83f6ed6b52c3b340d803ae0d"></ins>
             <script async src="//network.eonads.com/adserver/www/delivery/asyncjs.php"></script>
         </div>
 
-        <div class="ad-slot">
+        <div class="ad-slot" id="native-mix-ads">
             <div id="ntv_2103430"></div>
             <script type="text/javascript">
                 (function(d) {
@@ -66,45 +131,54 @@
             </script>
             <div data-mndazid="fd3241b3-7146-4b1d-aac0-4f35e94bb466"></div>
         </div>
-
-        <div class="ad-slot">
-            <ins class="e300x600" id="300x600" data-revive-hash="03f72371ba83e2e09e793c77727f82c4" data-revive-zoneid="65573" data-revive-id="f87497be83f6ed6b52c3b340d803ae0d"></ins>
-            <script async src="//network.eonads.com/adserver/www/delivery/asyncjs.php"></script>
-        </div>
     </main>
 
-    <div class="ad-slot" id="bottom-fixed">
+    <div class="ad-slot" id="footer-ads">
         <ins class="e728x90" id="728x90" data-revive-hash="03f72371ba83e2e09e793c77727f82c4" data-revive-zoneid="65574" data-revive-id="f87497be83f6ed6b52c3b340d803ae0d"></ins>
         <script async src="//network.eonads.com/adserver/www/delivery/asyncjs.php"></script>
         <div data-banner-id="1479032"></div>
     </div>
 
     <script>
-        // --- TIMER LOGIC ---
+        // --- 1. NON-RESETTING TIMER LOGIC ---
         let totalTime = 300; 
-        if (sessionStorage.getItem("taskTimer")) totalTime = parseInt(sessionStorage.getItem("taskTimer"));
-        
+        if (sessionStorage.getItem("taskTimer")) {
+            totalTime = parseInt(sessionStorage.getItem("taskTimer"));
+        }
+
         const timerDisplay = document.getElementById('timer');
         const countdown = setInterval(() => {
             let m = Math.floor(totalTime / 60);
             let s = totalTime % 60;
             timerDisplay.textContent = `${m}:${s < 10 ? '0' : ''}${s}`;
+            
             if (totalTime <= 0) {
                 clearInterval(countdown);
                 sessionStorage.removeItem("taskTimer");
-                alert("बधाई हो! टास्क पूरा हुआ। ✅");
+                alert("टास्क सफलतापूर्वक पूरा हुआ! ✅");
             } else {
                 totalTime--;
                 sessionStorage.setItem("taskTimer", totalTime);
             }
         }, 1000);
 
-        // --- DYNAMIC AD REFRESH (Every 45 Sec) ---
-        setInterval(() => {
-            console.log("Refreshing ads...");
-            // Trigger refresh for specific networks that support it
+        // --- 2. ADVANCED CENTRALIZED AD REFRESH ---
+        function refreshAdUnits() {
+            console.log("Refreshing Ad Units...");
+            const slots = ['header-ads', 'mid-rectangle-ads', 'footer-ads'];
+            
+            slots.forEach(id => {
+                const el = document.getElementById(id);
+                const currentContent = el.innerHTML;
+                el.innerHTML = ''; // Clear
+                setTimeout(() => { el.innerHTML = currentContent; }, 100); // Reload
+            });
+
+            // Trigger specific network refresh if available
             if(typeof aclib !== 'undefined') aclib.runBanner({ zoneId: '10825946' });
-        }, 45000);
+        }
+
+        setInterval(refreshAdUnits, 45000); 
     </script>
 </body>
 </html>
