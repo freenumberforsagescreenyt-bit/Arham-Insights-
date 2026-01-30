@@ -32,10 +32,10 @@
 
         .btn-save { background: var(--primary); color: white; border: none; width: 100%; padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(255, 153, 51, 0.3); }
         .btn-edit { background: white; color: var(--dark); border: 2px solid var(--dark); width: 100%; padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 10px; display: none; transition: 0.3s; }
+        .btn-edit:hover { background: #f1f5f9; }
 
         .note-alert { background: #fff1f2; border: 1px solid #fecdd3; padding: 15px; border-radius: 15px; display: flex; gap: 12px; color: #9f1239; font-size: 0.85rem; margin-bottom: 25px; }
 
-        /* Sync Logic Styles */
         .task-grid { display: grid; gap: 15px; }
         .task-item { background: white; padding: 20px; border-radius: 20px; border: 1px solid #f1f5f9; display: flex; flex-direction: column; gap: 10px; }
         .task-meta { display: flex; justify-content: space-between; align-items: center; }
@@ -43,16 +43,9 @@
         
         .copy-btn { flex: 1; background: #f1f5f9; color: var(--dark); border: 1px solid #e2e8f0; padding: 10px; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 0.85rem; }
         .do-btn { flex: 1; background: var(--primary); color: white; padding: 10px; border-radius: 10px; text-decoration: none; font-size: 0.85rem; font-weight: 700; text-align: center; }
-        
-        #loader { position: fixed; inset: 0; background: white; z-index: 2000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
     </style>
 </head>
 <body>
-
-    <div id="loader">
-        <img src="https://arhaminsightses.netlify.app/logo.png" width="70" style="border-radius:15px; margin-bottom: 10px;">
-        <p style="font-weight: 700; color: var(--primary);">Syncing Your Dashboard...</p>
-    </div>
 
     <nav class="navbar">
         <div style="font-weight: 900; letter-spacing: -0.5px;">ARHAM <span style="color:var(--primary)">INSIGHTS</span></div>
@@ -90,8 +83,8 @@
                     <input type="text" id="upi_id" placeholder="UPI ID fill karein" required>
                 </div>
                 <button type="submit" id="save-btn" class="btn-save">Save & Lock Details</button>
+                <button type="button" id="edit-btn" onclick="enableEditing()" class="btn-edit"><i class="fa-solid fa-pen-to-square"></i> Edit Details</button>
             </form>
-            <button id="edit-btn" onclick="enableEditing()" class="btn-edit"><i class="fa-solid fa-pen-to-square"></i> Edit Details</button>
         </div>
 
         <div class="glass-panel">
@@ -117,21 +110,21 @@
                 currentUserSession = session.user;
                 document.getElementById('user-email-header').innerText = currentUserSession.email;
                 await loadProfile();
-                await fetchTaskLinks(); // Yahi function admin ke links sync karega
+                await fetchTaskLinks();
                 await fetchUserProgress();
-                document.getElementById('loader').style.display = 'none';
             } else { window.location.href = "login.html"; }
         }
 
-        // Profile Logic (Preserved from your code)
         async function loadProfile() {
-            const { data } = await _supabase.from('profiles').select('*').eq('email', currentUserSession.email).maybeSingle();
-            if(data && (data.contact_email || data.upi_id || data.whatsapp)) {
-                document.getElementById('contact_email').value = data.contact_email || '';
-                document.getElementById('upi_id').value = data.upi_id || '';
-                document.getElementById('whatsapp_no').value = data.whatsapp || '';
-                lockInputs();
-            }
+            try {
+                const { data, error } = await _supabase.from('profiles').select('*').eq('email', currentUserSession.email).maybeSingle();
+                if(data && (data.contact_email || data.upi_id || data.whatsapp)) {
+                    document.getElementById('contact_email').value = data.contact_email || '';
+                    document.getElementById('upi_id').value = data.upi_id || '';
+                    document.getElementById('whatsapp_no').value = data.whatsapp || '';
+                    lockInputs();
+                }
+            } catch (err) { console.error("Profile load error:", err); }
         }
 
         async function saveProfile(e) {
@@ -139,10 +132,22 @@
             const manualEmail = document.getElementById('contact_email').value;
             const upi = document.getElementById('upi_id').value;
             const wa = document.getElementById('whatsapp_no').value;
+
             const { error } = await _supabase.from('profiles').upsert([
-                { email: currentUserSession.email, contact_email: manualEmail, upi_id: upi, whatsapp: wa }
+                { 
+                    email: currentUserSession.email, 
+                    contact_email: manualEmail, 
+                    upi_id: upi, 
+                    whatsapp: wa 
+                }
             ], { onConflict: 'email' });
-            if (!error) { alert("Details Saved! ✅"); lockInputs(); }
+
+            if (!error) { 
+                alert("Details Locked & Saved Successfully! ✅"); 
+                lockInputs(); 
+            } else { 
+                alert("Error saving: " + error.message); 
+            }
         }
 
         function lockInputs() {
@@ -161,17 +166,12 @@
             document.getElementById('edit-btn').style.display = 'none';
         }
 
-        // --- TASK SYNC LOGIC ---
         async function fetchTaskLinks() {
-            // Admin panel wali table 'admin_blogs' se saare tasks fetch karna
             const { data, error } = await _supabase.from('admin_blogs').select('*').order('created_at', {ascending: false});
             const list = document.getElementById('live-links-list');
-            
             if(data && data.length > 0) {
                 list.innerHTML = data.map(task => {
-                    // Unique link generate karna
                     const taskUrl = `https://arhaminsightses.netlify.app/taskspage.html?id=${task.id}`;
-                    
                     return `
                         <div class="task-item">
                             <div class="task-meta">
@@ -184,8 +184,7 @@
                                 </button>
                                 <a href="${taskUrl}" class="do-btn">Start Task</a>
                             </div>
-                        </div>
-                    `;
+                        </div>`;
                 }).join('');
             } else {
                 list.innerHTML = '<p style="text-align:center; color:#94a3b8;">Naye tasks jald hi aayenge...</p>';
@@ -193,9 +192,7 @@
         }
 
         function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert("Link Copied! ✅ Isse browser mein open karke task poora karein.");
-            });
+            navigator.clipboard.writeText(text).then(() => { alert("Link Copied! ✅"); });
         }
 
         async function fetchUserProgress() {
@@ -207,8 +204,7 @@
                     <div style="display:flex; justify-content:space-between; border-bottom:1px solid #f1f5f9; padding:10px 0;">
                         <span>Task ID: #${item.task_id}</span>
                         <span style="color:orange; font-weight:700">${item.status}</span>
-                    </div>
-                `).join('');
+                    </div>`).join('');
             }
         }
 
@@ -217,3 +213,7 @@
     </script>
 </body>
 </html>
+
+
+
+
