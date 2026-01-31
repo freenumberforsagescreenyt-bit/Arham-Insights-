@@ -13,12 +13,20 @@
         body { font-family: 'Poppins', sans-serif; background: var(--dark); color: white; text-align: center; margin: 0; padding-top: 80px; overflow-x: hidden; }
         #timer-container { position: fixed; top: 10px; left: 50%; transform: translateX(-50%); background: var(--primary); color: black; padding: 12px 30px; font-weight: 800; border-radius: 50px; z-index: 100000; box-shadow: 0 5px 20px rgba(255,153,51,0.6); min-width: 160px; }
         
-        .ad-slot { min-height: 100px; margin: 20px auto; background: var(--card-bg); padding: 15px; border-radius: 15px; width: 95%; max-width: 728px; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; display: flex; justify-content: center; align-items: center; }
+        .ad-slot { min-height: 100px; margin: 30px auto; background: var(--card-bg); padding: 15px; border-radius: 15px; width: 95%; max-width: 728px; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; display: flex; justify-content: center; align-items: center; }
         
         main { padding: 10px 20px; max-width: 850px; margin: 0 auto; }
-        #task-content p { margin-bottom: 20px; line-height: 1.8; text-align: left; color: #e2e8f0; font-size: 1.05rem; }
         
-        /* Unique Quote Style - Always at Top */
+        /* FIX: Increased paragraph spacing */
+        #task-content p { 
+            margin-bottom: 25px !important; 
+            line-height: 1.8; 
+            text-align: left; 
+            color: #e2e8f0; 
+            font-size: 1.1rem; 
+            display: block;
+        }
+        
         .unique-quote-box { background: linear-gradient(45deg, rgba(255,153,51,0.15), rgba(255,255,255,0.05)); border-radius: 15px; padding: 20px; margin: 15px auto; width: 95%; max-width: 728px; border: 1px dashed var(--primary); font-style: italic; font-weight: 600; color: #fff; }
         
         #status-overlay { display: none; position: fixed; inset: 0; background: rgba(7, 11, 20, 0.98); z-index: 200000; flex-direction: column; align-items: center; justify-content: center; }
@@ -92,11 +100,14 @@
             if (data) {
                 document.getElementById('task-title').innerText = data.keyword;
                 
-                // --- कंटेंट इंजेक्शन लॉजिक (Part-wise) ---
-                let paragraphs = data.content.split('</p>');
+                // --- FIX: Proper Line Break to Paragraph Logic ---
+                // अगर डेटा में <p> टैग नहीं हैं, तो हर नई लाइन को <p> में बदलें
+                let rawContent = data.content;
+                let formattedContent = rawContent.split('\n').filter(line => line.trim() !== "").map(line => `<p>${line}</p>`).join('');
+
+                let paragraphs = formattedContent.split('</p>');
                 let totalParas = paragraphs.length;
                 
-                // 30% और 70% कंटेंट के बाद एड डालना
                 let ad1Index = Math.floor(totalParas * 0.3);
                 let ad2Index = Math.floor(totalParas * 0.7);
 
@@ -119,7 +130,7 @@
                     paragraphs.splice(ad1Index, 0, adBlock1);
                     document.getElementById('task-content').innerHTML = paragraphs.join('</p>');
                 } else {
-                    document.getElementById('task-content').innerHTML = data.content + adBlock1;
+                    document.getElementById('task-content').innerHTML = formattedContent + adBlock1;
                 }
             }
         }
