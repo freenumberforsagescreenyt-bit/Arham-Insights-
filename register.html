@@ -17,11 +17,6 @@
         input { width: 100%; padding: 10px 10px 10px 40px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; margin-top: 5px; background: #fdfdfd; font-size: 0.9em; }
         input:focus { outline: none; border-color: #ff9933; box-shadow: 0 0 5px rgba(255,153,51,0.2); }
 
-        .tl-section { background: #fff5eb; padding: 10px; border-radius: 8px; border: 1px dashed #ff9933; margin-bottom: 15px; }
-        .tl-note { font-size: 0.75em; color: #d35400; margin-top: 5px; display: block; font-weight: bold; line-height: 1.5; }
-        .get-tl-link { color: #2c3e50; text-decoration: underline; cursor: pointer; font-weight: bold; }
-        .email-display { display: block; margin-top: 5px; color: #ff9933; background: #fff; padding: 5px; border-radius: 5px; font-size: 0.9em; border: 1px solid #ffe0b2; }
-
         .btn-register { background-color: #ff9933; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 1em; margin-top: 10px; }
         .btn-register:hover { background-color: #e67e22; transform: translateY(-2px); }
         .btn-register:disabled { background-color: #ccc; cursor: not-allowed; }
@@ -33,24 +28,11 @@
 <body>
 
     <div class="register-card">
-        <img src="Arham Insights logo.png" alt="Logo" style="max-height: 50px; margin-bottom: 10px;" onerror="this.style.display='none'">
+        <img src="https://i.ibb.co/N26BWZdY/Screenshot-20260130-221623.jpg" alt="Logo" style="max-height: 60px; border-radius: 50%; margin-bottom: 10px;" onerror="this.style.display='none'">
         <h2>Join Arham Insights</h2>
         <p class="sub-text">Sahi Disha, Sahi Pragati ke saath apna digital safar shuru karein.</p>
 
         <form id="registrationForm">
-            <div class="tl-section">
-                <div class="input-group" style="margin-bottom: 0;">
-                    <label>Team Leader (TL) Code</label>
-                    <i class="fa fa-id-card"></i>
-                    <input type="text" id="tlCode" placeholder="Enter Authorized TL Code" required>
-                </div>
-                <span class="tl-note">
-                    Bina TL code ke register nahi kar sakte. <br>
-                    <a href="mailto:arhaminsightshelp@gmail.com?subject=Need%20TL%20Code%20for%20Registration&body=Namaste%20Arham%20Team%2C%0AMujhe%20registration%20ke%20liye%20TL%20code%20chahiye.%0AMera%20naam%3A" class="get-tl-link">Get TL Code (Click Here)</a>
-                    <span class="email-display"><i class="fa fa-envelope"></i> arhaminsightshelp@gmail.com</span>
-                </span>
-            </div>
-
             <div class="input-group">
                 <label>Poora Naam</label>
                 <i class="fa fa-user"></i>
@@ -86,7 +68,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <script>
-        // Supabase Setup
         const SUPABASE_URL = "https://mkzgmrxakattqgbjnwch.supabase.co"; 
         const SUPABASE_KEY = "sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL"; 
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -97,48 +78,30 @@
         registrationForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const tlCode = document.getElementById('tlCode').value.trim();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             const fullName = document.getElementById('fullName').value.trim();
             const whatsapp = document.getElementById('whatsapp').value.trim();
 
             regBtn.disabled = true;
-            regBtn.innerText = "Verifying TL Code...";
+            regBtn.innerText = "Creating Account...";
 
             try {
-                // 1. TL Code check karein Database mein
-                const { data: tlData, error: tlError } = await _supabase
-                    .from('tl_auth')
-                    .select('tl_code, tl_name')
-                    .eq('tl_code', tlCode)
-                    .single();
-
-                if (tlError || !tlData) {
-                    alert("❌ Galat TL Code! Kripya sahi code dalein jo aapko aapke Team Leader ne diya hai.");
-                    regBtn.disabled = false;
-                    regBtn.innerText = "Account Banayein";
-                    return;
-                }
-
-                // 2. Agar Code sahi hai, toh Account Create karein (Auth)
-                regBtn.innerText = "Creating Account...";
+                // Account Create karein (Auth)
                 const { data: authData, error: authError } = await _supabase.auth.signUp({
                     email: email,
                     password: password,
                     options: {
                         data: {
                             full_name: fullName,
-                            whatsapp: whatsapp,
-                            tl_code: tlCode,
-                            tl_name: tlData.tl_name
+                            whatsapp: whatsapp
                         }
                     }
                 });
 
                 if (authError) throw authError;
 
-                alert("✅ Registration Successful! Kripya apni Email check karein (Spam folder bhi) aur account verify karein.");
+                alert("✅ Registration Successful! Kripya अपनी Email check karein aur account verify karein.");
                 window.location.href = "login.html";
 
             } catch (error) {

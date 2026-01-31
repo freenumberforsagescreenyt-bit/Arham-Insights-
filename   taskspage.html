@@ -9,21 +9,19 @@
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        :root { --primary: #ff9933; --dark: #070b14; --card-bg: rgba(255,255,255,0.05); --text-gray: #94a3b8; }
-        
-        /* FIX: Prevent horizontal scrolling */
-        html, body { overflow-x: hidden; width: 100%; margin: 0; padding: 0; touch-action: pan-y; }
-        body { font-family: 'Poppins', sans-serif; background: var(--dark); color: white; text-align: center; padding-top: 85px; box-sizing: border-box; }
+        :root { --primary: #ff9933; --dark: #070b14; --card-bg: rgba(255,255,255,0.05); }
+        html, body { overflow-x: hidden; width: 100%; margin: 0; padding: 0; touch-action: pan-y; background: var(--dark); }
+        body { font-family: 'Poppins', sans-serif; color: white; text-align: center; padding-top: 85px; box-sizing: border-box; }
         
         #timer-container { position: fixed; top: 10px; left: 50%; transform: translateX(-50%); background: var(--primary); color: black; padding: 12px 25px; font-weight: 800; border-radius: 50px; z-index: 100000; box-shadow: 0 5px 20px rgba(255,153,51,0.6); min-width: 150px; }
         
-        /* Ad Slots Grid */
-        .ad-slot { min-height: 100px; margin: 20px auto; background: var(--card-bg); padding: 10px; border-radius: 12px; width: 92%; max-width: 728px; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; display: flex; justify-content: center; align-items: center; box-sizing: border-box; }
+        /* High Density Ad Slots */
+        .ad-slot { min-height: 120px; margin: 15px auto; background: var(--card-bg); padding: 10px; border-radius: 12px; width: 94%; max-width: 728px; border: 1px solid rgba(255,153,51,0.2); overflow: hidden; display: flex; justify-content: center; align-items: center; box-sizing: border-box; clear: both; }
         
-        main { padding: 0 15px; max-width: 850px; margin: 0 auto; width: 100%; box-sizing: border-box; }
-        #task-content p { margin-bottom: 25px !important; line-height: 1.8; text-align: left; color: #e2e8f0; font-size: 1.1rem; word-wrap: break-word; }
+        main { padding: 0 10px; max-width: 850px; margin: 0 auto; width: 100%; box-sizing: border-box; position: relative; }
+        #task-content p { margin-bottom: 20px !important; line-height: 1.8; text-align: left; color: #e2e8f0; font-size: 1.1rem; word-wrap: break-word; }
         
-        .unique-quote-box { background: linear-gradient(45deg, rgba(255,153,51,0.15), rgba(255,255,255,0.05)); border-radius: 15px; padding: 18px; margin: 15px auto; width: 92%; max-width: 728px; border: 1px dashed var(--primary); font-style: italic; font-weight: 600; color: #fff; box-sizing: border-box; }
+        .unique-quote-box { background: linear-gradient(45deg, rgba(255,153,51,0.1), rgba(255,255,255,0.02)); border-radius: 15px; padding: 18px; margin: 15px auto; width: 94%; max-width: 728px; border: 1px dashed var(--primary); font-style: italic; font-weight: 600; color: #fff; box-sizing: border-box; }
         
         #status-overlay { display: none; position: fixed; inset: 0; background: rgba(7, 11, 20, 0.98); z-index: 200000; flex-direction: column; align-items: center; justify-content: center; }
         .loader-spin { width: 45px; height: 45px; border: 5px solid var(--card-bg); border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
@@ -34,7 +32,7 @@
 
     <div id="status-overlay">
         <div id="status-loader" class="loader-spin"></div>
-        <div id="status-msg" style="margin-top:20px; color:var(--primary); font-weight:bold;">Verifying Your Reward...</div>
+        <div id="status-msg" style="margin-top:20px; color:var(--primary); font-weight:bold;">Verifying Activity...</div>
     </div>
 
     <div id="timer-container">⏳ समय शेष: <span id="timer">05:00</span></div>
@@ -45,12 +43,12 @@
             <script src="https://www.highperformanceformat.com/ac3a34c448d39282025c11644797e3a1/invoke.js"></script>
         </div>
 
-        <h2 id="task-title" style="color:var(--primary); font-weight: 800; margin: 15px 0;">Premium Learning</h2>
+        <h2 id="task-title" style="color:var(--primary); font-weight: 800; margin: 10px 0;">Premium Learning</h2>
         
         <div id="unique-motivation" class="unique-quote-box">"जितना बड़ा संघर्ष होगा, सफलता उतनी ही शानदार होगी।"</div>
 
         <div id="task-content">
-            <p>कंटेंट लोड हो रहा है, कृपया प्रतीक्षा करें...</p>
+            <p>कंटेंट लोड हो रहा है...</p>
         </div>
 
         <div class="ad-slot" id="bottom-ad-refresh">
@@ -69,11 +67,7 @@
             if (session) {
                 currentUser = session.user;
                 const isAllowed = await checkDailyLimit();
-                if(!isAllowed) {
-                    alert("Daily Limit Reached! कल फिर आएं।");
-                    window.location.href = "dashboard.html";
-                    return;
-                }
+                if(!isAllowed) { alert("Daily Limit Reached!"); window.location.href = "dashboard.html"; return; }
                 await fetchAndProcessContent();
                 startTaskTimer();
                 setupAdRefresh();
@@ -88,53 +82,58 @@
 
         async function fetchAndProcessContent() {
             let { data } = await _supabase.from('admin_blogs').select('*').eq('id', taskId).maybeSingle();
-            if (!data) {
-                let { data: fallback } = await _supabase.from('admin_blogs').select('*').limit(1).maybeSingle();
-                data = fallback;
-            }
+            if (!data) { let { data: fallback } = await _supabase.from('admin_blogs').select('*').limit(1).maybeSingle(); data = fallback; }
 
             if (data) {
                 document.getElementById('task-title').innerText = data.keyword;
-                
                 let rawContent = data.content;
-                let formattedContent = rawContent.split('\n').filter(line => line.trim() !== "").map(line => `<p>${line}</p>`).join('');
-
-                let paragraphs = formattedContent.split('</p>');
-                let totalParas = paragraphs.length;
                 
-                // --- ULTRA AD INJECTION LOGIC ---
-                // Injects ads after every 2-3 paragraphs for maximum density
-                let newContent = "";
+                // Split content by lines and wrap in paragraphs
+                let paragraphs = rawContent.split('\n').filter(line => line.trim() !== "");
+                let contentWithAds = "";
+
                 paragraphs.forEach((para, index) => {
-                    newContent += para + "</p>";
+                    contentWithAds += `<p>${para}</p>`;
                     
-                    // Add an ad slot after every 2 paragraphs
-                    if ((index + 1) % 2 === 0 && index !== paragraphs.length - 1) {
-                        let adType = (index + 1) % 4 === 0 ? 'revive' : 'high';
-                        newContent += getDynamicAdSlot(`mid-ad-${index}`, adType);
+                    // Logic: Add ad after a topic ends (indicated by ? or : or .) OR after every 2 paragraphs
+                    if (para.includes('?') || para.includes(':') || (index + 1) % 2 === 0) {
+                        if (index !== paragraphs.length - 1) {
+                            contentWithAds += generateAdCode(`mid-ad-${index}`, index);
+                        }
                     }
                 });
-
-                document.getElementById('task-content').innerHTML = newContent;
+                document.getElementById('task-content').innerHTML = contentWithAds;
             }
         }
 
-        function getDynamicAdSlot(id, type) {
-            if (type === 'high') {
+        function generateAdCode(id, seed) {
+            // Rotating different ad providers for maximum coverage
+            if (seed % 3 === 0) {
                 return `<div class="ad-slot" id="${id}"><script> atOptions = { 'key' : 'ac3a34c448d39282025c11644797e3a1', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} }; <\/script><script src="https://www.highperformanceformat.com/ac3a34c448d39282025c11644797e3a1/invoke.js"><\/script></div>`;
-            } else {
+            } else if (seed % 3 === 1) {
                 return `<div class="ad-slot" id="${id}"><ins class="e300x250" id="300x250" data-revive-hash="03f72371ba83e2e09e793c77727f82c4" data-revive-zoneid="65572" data-revive-id="f87497be83f6ed6b52c3b340d803ae0d"></ins><script async src="//network.eonads.com/adserver/www/delivery/asyncjs.php"><\/script></div>`;
+            } else {
+                return `<div class="ad-slot" id="${id}"><script async="async" data-cfasync="false" src="https://pl28481408.effectivegatecpm.com/b104bb133c0e3abf10d65c6dca934730/invoke.js"><\/script><div id="container-b104bb133c0e3abf10d65c6dca934730"></div></div>`;
             }
         }
 
         function setupAdRefresh() {
             setInterval(() => {
-                // Select all elements with class 'ad-slot'
-                const allSlots = document.querySelectorAll('.ad-slot');
-                allSlots.forEach(slot => {
-                    slot.innerHTML = slot.innerHTML; // Global refresh all ad scripts
+                const slots = document.querySelectorAll('.ad-slot');
+                slots.forEach(slot => {
+                    // Force re-run scripts in ad slots
+                    const scripts = slot.querySelectorAll('script');
+                    scripts.forEach(oldScript => {
+                        const newScript = document.createElement('script');
+                        if (oldScript.src) {
+                            newScript.src = oldScript.src;
+                        } else {
+                            newScript.textContent = oldScript.textContent;
+                        }
+                        oldScript.parentNode.replaceChild(newScript, oldScript);
+                    });
                 });
-            }, 40000); 
+            }, 40000); // 40 Seconds Refresh
         }
 
         function startTaskTimer() {

@@ -4,17 +4,11 @@
     <meta property="og:title" content="Arham Insights | Badlo Halat, Badlo Pehchan">
     <meta property="og:description" content="Degree sirf kagaz hai, Hunar hi aapki asli daulat hai. Join Arham Insights today.">
     <meta property="og:image" content="https://i.ibb.co/N26BWZdY/Screenshot-20260130-221623.jpg">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
     <meta property="og:url" content="https://arhaminsightses.netlify.app/">
     <meta property="og:type" content="website">
 
     <link rel="icon" type="image/jpg" href="https://i.ibb.co/N26BWZdY/Screenshot-20260130-221623.jpg">
-    <link rel="apple-touch-icon" href="https://i.ibb.co/N26BWZdY/Screenshot-20260130-221623.jpg">
-    <meta name="theme-color" content="#070b14">
-
-    <meta name="profiton-domain-verification" content="a2b684f41a276c23232dd6f892cb49938215bd6b7f68c8f6b9e41695402d0bab"/>
-    <meta name='admaven-placement' content='Bqjw6rdC5'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Arham Insights | Badlo Halat, Badlo Pehchan</title>
@@ -26,124 +20,68 @@
             --glass: rgba(255, 255, 255, 0.05);
             --text-gray: #94a3b8;
             --secondary: #ef4444;
+            --success: #22c55e;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         html, body { overflow-x: hidden; width: 100%; position: relative; }
         
-        body { 
-            font-family: 'Poppins', sans-serif; 
-            background: var(--dark); 
-            color: white; 
-            text-align: center; 
-            line-height: 1.6;
-        }
+        body { font-family: 'Poppins', sans-serif; background: var(--dark); color: white; text-align: center; line-height: 1.6; }
 
-        /* Hero Section */
         header { 
             min-height: 100vh; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
             background: radial-gradient(circle at center, #1e293b 0%, #070b14 100%);
             padding: 40px 20px;
         }
 
-        .logo { 
-            width: 100px; height: 100px; 
-            border-radius: 50%; 
-            border: 2px solid var(--primary); 
-            margin-bottom: 20px;
-            box-shadow: 0 0 30px rgba(255,153,51,0.3);
-        }
+        .logo { width: 100px; height: 100px; border-radius: 50%; border: 2px solid var(--primary); margin-bottom: 20px; box-shadow: 0 0 30px rgba(255,153,51,0.3); }
 
         .main-title { 
-            font-size: clamp(2.2rem, 8vw, 4.5rem); 
-            font-weight: 900; 
-            line-height: 1.1; 
-            margin: 10px 0;
+            font-size: clamp(2.2rem, 8vw, 4.5rem); font-weight: 900; line-height: 1.1; margin: 10px 0;
             background: linear-gradient(to right, #fff, var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        .hero-motivation {
-            max-width: 700px;
-            font-size: 1.1rem;
-            color: var(--text-gray);
-            font-style: italic;
-            margin: 20px auto;
-            border-bottom: 1px solid var(--glass);
-            padding-bottom: 20px;
-        }
+        .hero-motivation { max-width: 700px; font-size: 1.1rem; color: var(--text-gray); font-style: italic; margin: 20px auto; }
 
-        /* The Reality Card */
+        /* Payout Info Section */
+        .payout-info {
+            background: linear-gradient(45deg, rgba(255,153,51,0.1), transparent);
+            border: 1px solid var(--glass);
+            border-radius: 20px; padding: 25px; margin: 30px auto; max-width: 90%;
+            display: flex; align-items: center; gap: 15px; text-align: left;
+        }
+        .payout-info i { font-size: 2rem; color: var(--success); }
+
         .mirror-card {
-            background: var(--glass);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 50px 20px;
-            margin: 40px auto;
-            border-radius: 30px;
-            max-width: 90%;
+            background: var(--glass); border: 1px solid rgba(255,255,255,0.1);
+            padding: 50px 20px; margin: 40px auto; border-radius: 30px; max-width: 90%;
         }
-
-        .mirror-title { color: var(--secondary); font-weight: 800; text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; }
 
         .process-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            padding: 20px;
-            max-width: 1100px;
-            margin: 0 auto;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px; padding: 20px; max-width: 1100px; margin: 0 auto;
         }
 
         .step-box {
-            background: rgba(255,255,255,0.03);
-            padding: 30px;
-            border-radius: 25px;
-            border: 1px solid var(--glass);
-            transition: 0.3s;
+            background: rgba(255,255,255,0.03); padding: 30px; border-radius: 25px;
+            border: 1px solid var(--glass); transition: 0.3s;
         }
-
         .step-box:hover { border-color: var(--primary); transform: translateY(-5px); }
         .step-box i { font-size: 2.5rem; color: var(--primary); margin-bottom: 15px; }
 
         .btn-main {
             background: linear-gradient(45deg, var(--primary), #fbbf24);
-            color: black;
-            padding: 18px 45px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 800;
-            display: inline-block;
-            margin: 20px 0;
-            box-shadow: 0 10px 30px rgba(255,153,51,0.4);
-            transition: 0.3s;
+            color: black; padding: 18px 45px; border-radius: 50px;
+            text-decoration: none; font-weight: 800; display: inline-block;
+            margin: 20px 0; box-shadow: 0 10px 30px rgba(255,153,51,0.4); transition: 0.3s;
         }
 
-        .support-section {
-            padding: 80px 20px;
-            background: #0b1120;
-            width: 100%;
-        }
-
-        .email-link {
-            color: var(--primary);
-            font-weight: bold;
-            text-decoration: none;
-            font-size: 1.3rem;
-            display: block;
-            margin: 15px auto;
-            word-break: break-all;
-        }
+        .support-section { padding: 80px 20px; background: #0b1120; width: 100%; }
+        .email-link { color: var(--primary); font-weight: bold; text-decoration: none; font-size: 1.3rem; display: block; margin: 15px auto; }
 
         footer { padding: 40px; border-top: 1px solid var(--glass); opacity: 0.5; font-size: 0.8rem; }
-
-        @media (max-width: 600px) {
-            .process-container { grid-template-columns: 1fr; }
-        }
     </style>
 </head>
 <body>
@@ -156,18 +94,24 @@
         "School ne kaha 90% laao toh duniya jhukegi, <br>
         Par sadak par utre toh pata chala, duniya sirf 'Paisa aur Knowledge' dekh kar rukegi."
     </p>
-    <a href="register.html" class="btn-main">Safar Shuru Karein</a>
+    
+    <a href="login.html" class="btn-main">Safar Shuru Karein (Login)</a>
+    
+    <div class="payout-info">
+        <i class="fa-solid fa-circle-check"></i>
+        <div>
+            <h4 style="color: var(--success);">Verified Payout Model</h4>
+            <p style="font-size: 0.85rem; color: var(--text-gray);">Arham Insights वैश्विक विज्ञापन भागीदारों (Global Ad Partners) के साथ मिलकर काम करता है, ताकि आपके सीखने के समय को कीमती बनाया जा सके।</p>
+        </div>
+    </div>
 </header>
 
 <main>
     <section class="mirror-card">
-        <div class="mirror-title">Asli Duniya Ka Kadwa Sach</div>
+        <div style="color: var(--secondary); font-weight: 800; text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem;">Asli Duniya Ka Kadwa Sach</div>
         <h2 style="margin: 20px 0;">Degree Sirf Kagaz Hai, <br><span style="color:var(--primary)">Hunar Hi Aapki Asli Daulat Hai.</span></h2>
         <p style="color: var(--text-gray); max-width: 750px; margin: 0 auto; font-size: 1.1rem;">
-            School और College ने हमें सिखाया कि 'क्या सोचना है', पर कभी यह नहीं सिखाया कि 'कैसे कमाना है'। हमने सालों खराब किए यह सोचकर कि ऊंचे परसेंटेज हमें अमीर बनाएंगे, पर असलियत में बिना <b>Real Knowledge</b> के वो सब शून्य है। 
-        </p>
-        <p style="color: white; margin-top: 20px; font-weight: 600;">
-            Arham Insights में आप सिर्फ काम करके पैसे नहीं कमा रहे, बल्कि आप दुनिया की उन बारीकियों का ज्ञान (Knowledge) ले रहे हैं जो किसी किताब में नहीं लिखी।
+            यहाँ हम सिर्फ़ काम नहीं करते, बल्कि Digital Monetization की ताक़त को समझते हैं। जब आप हमारे Premium Insights पढ़ते हैं, तो हमारे Ad-Network पार्टनर्स रेवेन्यू जनरेट करते हैं, जिसका एक बड़ा हिस्सा आपके वॉलेट में सीधे क्रेडिट किया जाता है।
         </p>
     </section>
 
@@ -176,19 +120,19 @@
         <p style="color: var(--text-gray); margin-bottom: 40px;">Yahan Earning se pehle Learning hai.</p>
         <div class="process-container">
             <div class="step-box">
-                <i class="fa-solid fa-user-graduate"></i>
-                <h3>1. Duniya Ko Samjhein</h3>
-                <p>Hum rozana aisi insights dete hain jo aapke dimag के कपाट खोल देंगी। दुनिया कैसे चलती है, यह यहाँ सीखें।</p>
+                <i class="fa-solid fa-microchip"></i>
+                <h3>1. Digital Literacy</h3>
+                <p>सीखें कि कैसे बड़ी कम्पनियाँ विज्ञापनों और डेटा के ज़रिए पैसा कमाती हैं। खुद को अपडेट रखें।</p>
             </div>
             <div class="step-box">
-                <i class="fa-solid fa-brain"></i>
-                <h3>2. Skill Develop Karein</h3>
-                <p>Task sirf ek bahana hai, asli maksad aapko duniya ki digital aur financial knowledge se jode rakhna hai.</p>
+                <i class="fa-solid fa-chart-line"></i>
+                <h3>2. Fair Distribution</h3>
+                <p>हमारे विज्ञापन रिवॉर्ड मॉडल के ज़रिए अपनी मेहनत का सही फल सीधे अपने UPI वॉलेट में पाएं।</p>
             </div>
             <div class="step-box">
-                <i class="fa-solid fa-wallet"></i>
-                <h3>3. Samman Se Kamaein</h3>
-                <p>Jab aapke paas sahi knowledge hogi, toh paisa khud-ba-khud aapke peeche aayega. Atmanirbhar banein.</p>
+                <i class="fa-solid fa-shield-halved"></i>
+                <h3>3. Transparency</h3>
+                <p>कोई छुपा हुआ चार्ज नहीं। आप जितना पढ़ेंगे और समय देंगे, उतना ही रिवॉर्ड आपको मिलेगा।</p>
             </div>
         </div>
     </section>
@@ -196,17 +140,19 @@
     <section class="support-section">
         <h2 style="color: var(--primary);">Badlo Halat, Badlo Pehchan</h2>
         <p style="color: var(--text-gray); max-width: 600px; margin: 20px auto;">
-            Agar aap sirf paise ke peeche bhagenge toh thak jayenge, lekin agar knowledge ke peeche bhagenge toh duniya aapke peeche bhagegi.
+            सच्चा ज्ञान और सही कमाई का संगम। आज ही अरहम इनसाइट्स परिवार का हिस्सा बनें।
         </p>
         <a href="mailto:arhaminsightshelp@gmail.com" class="email-link">arhaminsightshelp@gmail.com</a>
-        <div style="margin-top: 20px;">
-            <a href="login.html" style="color: white; text-decoration: none; border-bottom: 1px solid var(--primary);">Sadasya Login Karein →</a>
+        
+        <div style="margin-top: 30px;">
+            <p style="color: var(--text-gray); font-size: 0.9rem; margin-bottom: 10px;">Naye Member Hain?</p>
+            <a href="register.html" style="color: white; text-decoration: none; border-bottom: 1px solid var(--primary); font-weight: 700;">Registration Karein </a>
         </div>
     </section>
 </main>
 
 <footer>
-    <p>&copy; 2026 Arham Insights. Proudly Made for Bharat. 🇮🇳</p>
+    <p>&copy; 2026 Arham Insights. Powered by Digital Reward Model. Bharat 🇮🇳</p>
 </footer>
 
 </body>
