@@ -4,33 +4,29 @@
     <meta name="profiton-domain-verification" content="a2b684f41a276c23232dd6f892cb49938215bd6b7f68c8f6b9e41695402d0bab"/>
     <meta name='admaven-placement' content='Bqjw6rdC5'>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Arham Insights | Premium Learning</title>
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root { --primary: #ff9933; --dark: #070b14; --card-bg: rgba(255,255,255,0.05); --text-gray: #94a3b8; }
-        body { font-family: 'Poppins', sans-serif; background: var(--dark); color: white; text-align: center; margin: 0; padding-top: 80px; overflow-x: hidden; }
-        #timer-container { position: fixed; top: 10px; left: 50%; transform: translateX(-50%); background: var(--primary); color: black; padding: 12px 30px; font-weight: 800; border-radius: 50px; z-index: 100000; box-shadow: 0 5px 20px rgba(255,153,51,0.6); min-width: 160px; }
         
-        .ad-slot { min-height: 100px; margin: 30px auto; background: var(--card-bg); padding: 15px; border-radius: 15px; width: 95%; max-width: 728px; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; display: flex; justify-content: center; align-items: center; }
+        /* FIX: Prevent horizontal scrolling */
+        html, body { overflow-x: hidden; width: 100%; margin: 0; padding: 0; touch-action: pan-y; }
+        body { font-family: 'Poppins', sans-serif; background: var(--dark); color: white; text-align: center; padding-top: 85px; box-sizing: border-box; }
         
-        main { padding: 10px 20px; max-width: 850px; margin: 0 auto; }
+        #timer-container { position: fixed; top: 10px; left: 50%; transform: translateX(-50%); background: var(--primary); color: black; padding: 12px 25px; font-weight: 800; border-radius: 50px; z-index: 100000; box-shadow: 0 5px 20px rgba(255,153,51,0.6); min-width: 150px; }
         
-        /* FIX: Increased paragraph spacing */
-        #task-content p { 
-            margin-bottom: 25px !important; 
-            line-height: 1.8; 
-            text-align: left; 
-            color: #e2e8f0; 
-            font-size: 1.1rem; 
-            display: block;
-        }
+        /* Ad Slots Grid */
+        .ad-slot { min-height: 100px; margin: 20px auto; background: var(--card-bg); padding: 10px; border-radius: 12px; width: 92%; max-width: 728px; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; display: flex; justify-content: center; align-items: center; box-sizing: border-box; }
         
-        .unique-quote-box { background: linear-gradient(45deg, rgba(255,153,51,0.15), rgba(255,255,255,0.05)); border-radius: 15px; padding: 20px; margin: 15px auto; width: 95%; max-width: 728px; border: 1px dashed var(--primary); font-style: italic; font-weight: 600; color: #fff; }
+        main { padding: 0 15px; max-width: 850px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+        #task-content p { margin-bottom: 25px !important; line-height: 1.8; text-align: left; color: #e2e8f0; font-size: 1.1rem; word-wrap: break-word; }
+        
+        .unique-quote-box { background: linear-gradient(45deg, rgba(255,153,51,0.15), rgba(255,255,255,0.05)); border-radius: 15px; padding: 18px; margin: 15px auto; width: 92%; max-width: 728px; border: 1px dashed var(--primary); font-style: italic; font-weight: 600; color: #fff; box-sizing: border-box; }
         
         #status-overlay { display: none; position: fixed; inset: 0; background: rgba(7, 11, 20, 0.98); z-index: 200000; flex-direction: column; align-items: center; justify-content: center; }
-        .loader-spin { width: 50px; height: 50px; border: 5px solid var(--card-bg); border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+        .loader-spin { width: 45px; height: 45px; border: 5px solid var(--card-bg); border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
@@ -49,7 +45,7 @@
             <script src="https://www.highperformanceformat.com/ac3a34c448d39282025c11644797e3a1/invoke.js"></script>
         </div>
 
-        <h2 id="task-title" style="color:var(--primary); font-weight: 800;">Premium Learning</h2>
+        <h2 id="task-title" style="color:var(--primary); font-weight: 800; margin: 15px 0;">Premium Learning</h2>
         
         <div id="unique-motivation" class="unique-quote-box">"जितना बड़ा संघर्ष होगा, सफलता उतनी ही शानदार होगी।"</div>
 
@@ -100,48 +96,45 @@
             if (data) {
                 document.getElementById('task-title').innerText = data.keyword;
                 
-                // --- FIX: Proper Line Break to Paragraph Logic ---
-                // अगर डेटा में <p> टैग नहीं हैं, तो हर नई लाइन को <p> में बदलें
                 let rawContent = data.content;
                 let formattedContent = rawContent.split('\n').filter(line => line.trim() !== "").map(line => `<p>${line}</p>`).join('');
 
                 let paragraphs = formattedContent.split('</p>');
                 let totalParas = paragraphs.length;
                 
-                let ad1Index = Math.floor(totalParas * 0.3);
-                let ad2Index = Math.floor(totalParas * 0.7);
+                // --- ULTRA AD INJECTION LOGIC ---
+                // Injects ads after every 2-3 paragraphs for maximum density
+                let newContent = "";
+                paragraphs.forEach((para, index) => {
+                    newContent += para + "</p>";
+                    
+                    // Add an ad slot after every 2 paragraphs
+                    if ((index + 1) % 2 === 0 && index !== paragraphs.length - 1) {
+                        let adType = (index + 1) % 4 === 0 ? 'revive' : 'high';
+                        newContent += getDynamicAdSlot(`mid-ad-${index}`, adType);
+                    }
+                });
 
-                let adBlock1 = `
-                    <div class="ad-slot" id="mid-ad-1">
-                        <script> atOptions = { 'key' : 'ac3a34c448d39282025c11644797e3a1', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} }; <\/script>
-                        <script src="https://www.highperformanceformat.com/ac3a34c448d39282025c11644797e3a1/invoke.js"><\/script>
-                    </div>
-                `;
-                
-                let adBlock2 = `
-                    <div class="ad-slot" id="mid-ad-2">
-                        <ins class="e300x250" id="300x250" data-revive-hash="03f72371ba83e2e09e793c77727f82c4" data-revive-zoneid="65572" data-revive-id="f87497be83f6ed6b52c3b340d803ae0d"></ins>
-                        <script async src="//network.eonads.com/adserver/www/delivery/asyncjs.php"><\/script>
-                    </div>
-                `;
+                document.getElementById('task-content').innerHTML = newContent;
+            }
+        }
 
-                if (totalParas > 4) {
-                    paragraphs.splice(ad2Index, 0, adBlock2);
-                    paragraphs.splice(ad1Index, 0, adBlock1);
-                    document.getElementById('task-content').innerHTML = paragraphs.join('</p>');
-                } else {
-                    document.getElementById('task-content').innerHTML = formattedContent + adBlock1;
-                }
+        function getDynamicAdSlot(id, type) {
+            if (type === 'high') {
+                return `<div class="ad-slot" id="${id}"><script> atOptions = { 'key' : 'ac3a34c448d39282025c11644797e3a1', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} }; <\/script><script src="https://www.highperformanceformat.com/ac3a34c448d39282025c11644797e3a1/invoke.js"><\/script></div>`;
+            } else {
+                return `<div class="ad-slot" id="${id}"><ins class="e300x250" id="300x250" data-revive-hash="03f72371ba83e2e09e793c77727f82c4" data-revive-zoneid="65572" data-revive-id="f87497be83f6ed6b52c3b340d803ae0d"></ins><script async src="//network.eonads.com/adserver/www/delivery/asyncjs.php"><\/script></div>`;
             }
         }
 
         function setupAdRefresh() {
             setInterval(() => {
-                ['top-ad-refresh', 'mid-ad-1', 'mid-ad-2', 'bottom-ad-refresh'].forEach(id => {
-                    const el = document.getElementById(id);
-                    if(el) el.innerHTML = el.innerHTML; 
+                // Select all elements with class 'ad-slot'
+                const allSlots = document.querySelectorAll('.ad-slot');
+                allSlots.forEach(slot => {
+                    slot.innerHTML = slot.innerHTML; // Global refresh all ad scripts
                 });
-            }, 60000); 
+            }, 40000); 
         }
 
         function startTaskTimer() {
