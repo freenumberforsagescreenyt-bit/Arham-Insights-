@@ -1,173 +1,145 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-    <meta name="profiton-domain-verification" content="a2b684f41a276c23232dd6f892cb49938215bd6b7f68c8f6b9e41695402d0bab"/>
-    <meta name='admaven-placement' content='Bqjw6rdC5'>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Arham Insights | Premium Learning</title>
-    
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        :root { --primary: #ff9933; --dark: #070b14; --card-bg: rgba(255,255,255,0.05); }
-        html, body { overflow-x: hidden; width: 100%; margin: 0; padding: 0; touch-action: pan-y; background: var(--dark); }
-        body { font-family: 'Poppins', sans-serif; color: white; text-align: center; padding-top: 85px; box-sizing: border-box; }
-        
-        #timer-container { position: fixed; top: 10px; left: 50%; transform: translateX(-50%); background: var(--primary); color: black; padding: 12px 25px; font-weight: 800; border-radius: 50px; z-index: 100000; box-shadow: 0 5px 20px rgba(255,153,51,0.6); min-width: 150px; }
-        
-        /* High Density Ad Slots */
-        .ad-slot { min-height: 120px; margin: 15px auto; background: var(--card-bg); padding: 10px; border-radius: 12px; width: 94%; max-width: 728px; border: 1px solid rgba(255,153,51,0.2); overflow: hidden; display: flex; justify-content: center; align-items: center; box-sizing: border-box; clear: both; }
-        
-        main { padding: 0 10px; max-width: 850px; margin: 0 auto; width: 100%; box-sizing: border-box; position: relative; }
-        #task-content p { margin-bottom: 20px !important; line-height: 1.8; text-align: left; color: #e2e8f0; font-size: 1.1rem; word-wrap: break-word; }
-        
-        .unique-quote-box { background: linear-gradient(45deg, rgba(255,153,51,0.1), rgba(255,255,255,0.02)); border-radius: 15px; padding: 18px; margin: 15px auto; width: 94%; max-width: 728px; border: 1px dashed var(--primary); font-style: italic; font-weight: 600; color: #fff; box-sizing: border-box; }
-        
-        #status-overlay { display: none; position: fixed; inset: 0; background: rgba(7, 11, 20, 0.98); z-index: 200000; flex-direction: column; align-items: center; justify-content: center; }
-        .loader-spin { width: 45px; height: 45px; border: 5px solid var(--card-bg); border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Arham Insights | Premium Learning</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://www.adcash.com/script/lib.js"></script>
+<style>
+    :root{--primary:#ff9933;--dark:#070b14;--card-bg:rgba(255,153,51,0.05)}
+    body{margin:0;background:var(--dark);color:#fff;font-family:Poppins,sans-serif;padding-top:90px;padding-bottom:80px; overflow-x: hidden;}
+    main{max-width:850px;margin:auto;padding:0 15px}
+    #timer-container{position:fixed;top:10px;left:50%;transform:translateX(-50%);background:var(--primary);color:#000;padding:12px 26px;font-weight:800;border-radius:50px;z-index:99999;box-shadow: 0 5px 15px rgba(255,153,51,0.4);}
+    .premium-quote {background: linear-gradient(135deg, rgba(255,153,51,0.15), rgba(255,255,255,0.05)); border-radius: 15px; padding: 20px; margin: 20px 0; border-left: 5px solid var(--primary); font-style: italic; font-weight: 600; color: #ffd699; text-align: left;}
+    #task-content p{line-height:1.8;color:#e2e8f0;font-size:1.1rem;margin-bottom:22px;}
+    .ad-slot{margin:30px auto; width: 100%; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.02); border-radius:12px; border: 1px dashed rgba(255,153,51,0.1); overflow: visible; clear: both;}
+    .lb-slot{min-height:110px !important;} .hp-slot{min-height:620px !important;} .mid-slot{min-height:280px;}
+    #status-overlay{display:none;position:fixed;inset:0; background:rgba(7,11,20,.97); z-index:200000; align-items:center; justify-content:center; flex-direction:column}
+    .loader-spin{width:45px;height:45px;border:5px solid var(--card-bg); border-top:5px solid var(--primary); border-radius:50%; animation:spin 1s linear infinite}
+    @keyframes spin{100%{transform:rotate(360deg)}}
+</style>
 </head>
 <body>
 
-    <div id="status-overlay">
-        <div id="status-loader" class="loader-spin"></div>
-        <div id="status-msg" style="margin-top:20px; color:var(--primary); font-weight:bold;">Verifying Activity...</div>
-    </div>
+<div id="timer-container">⏳ Time Bacha Hai: <span id="timer">05:00</span></div>
 
-    <div id="timer-container">⏳ समय शेष: <span id="timer">05:00</span></div>
+<div id="status-overlay">
+    <div class="loader-spin"></div>
+    <div style="margin-top:20px;color:var(--primary);font-weight:bold">Aapka Reward Check Ho Raha Hai...</div>
+</div>
 
-    <main>
-        <div class="ad-slot" id="top-ad-refresh">
-            <script> atOptions = { 'key' : 'ac3a34c448d39282025c11644797e3a1', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} }; </script>
-            <script src="https://www.highperformanceformat.com/ac3a34c448d39282025c11644797e3a1/invoke.js"></script>
-        </div>
+<main>
+    <div class="ad-slot lb-slot" id="perm-lb"></div>
 
-        <h2 id="task-title" style="color:var(--primary); font-weight: 800; margin: 10px 0;">Premium Learning</h2>
+    <div class="premium-quote">"Aaj ka hardwork, kal ki success ki chabi hai." 🚀</div>
+
+    <h2 id="task-title" style="color:var(--primary); font-weight: 800; text-align: center;">Premium Learning</h2>
+    <div id="task-content"></div>
+
+    <div class="ad-slot hp-slot" id="perm-hp"></div>
+</main>
+
+<script>
+const sb=supabase.createClient("https://mkzgmrxakattqgbjnwch.supabase.co","sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL");
+let taskId=new URLSearchParams(location.search).get('id')||1;
+let currentUser=null;
+let adSetSwitch = true;
+
+// --- ALL 14 ROTATING ADS (Divided into 2 Sets of 7) ---
+const AD_SET_A = [
+    `<script async src="https://pl28481408.effectivegatecpm.com/b104bb133c0e3abf10d65c6dca934730/invoke.js"><\/script><div id="container-b104bb133c0e3abf10d65c6dca934730"></div>`, // Adsterra Native
+    `<script>atOptions={'key':'ac3a34c448d39282025c11644797e3a1','format':'iframe','height':50,'width':320};<\/script><script src="https://www.highperformanceformat.com/ac3a34c448d39282025c11644797e3a1/invoke.js"><\/script>`, // Adsterra 320x50
+    `<div id="ntv_2103430"></div><script type="text/javascript">(function(d){var p={bvwidgetid:"ntv_2103430",bvlinksownid:2103430,rows:1,cols:1,textpos:"below",imagewidth:150,mobilecols:1,cb:(new Date()).getTime()};p.bvwidgetid="ntv_2103430"+p.cb;d.getElementById("ntv_2103430").id=p.bvwidgetid;var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src="https://cdn.hyperpromote.com/bidvertiser/tags/active/bdvws.js?"+Object.keys(p).map(k=>k+'='+p[k]).join('&');d.getElementById(p.bvwidgetid).appendChild(s);})(document);<\/script>`, // Bidvertiser Native
+    `<script data-cfasync="false" src="//bdv.bidvertiser.com/BidVertiser.dbm?pid=941237&bid=2103430" type="text/javascript"><\/script>`, // Bidvertiser 300x250
+    `<script>aclib.runBanner({zoneId: '10825946'});<\/script>`, // Adcash 300x250
+    `<div data-mndbanid="bee316ae-ffd7-4f6e-9ae9-c76867234471"></div>`, // Popcash Banner
+    `<div data-banner-id="1479032"></div>` // Clickadilla
+];
+
+const AD_SET_B = [
+    `<ins class="e300x50" data-revive-zoneid="65571"></ins><script async src="//network.eonads.com/adserver/www/delivery/asyncjs.php"><\/script>`, // Eonads 300x50
+    `<ins class="e300x250" data-revive-zoneid="65572"></ins><script async src="//network.eonads.com/adserver/www/delivery/asyncjs.php"><\/script>`, // Eonads 300x250
+    `<div data-mndazid="fd3241b3-7146-4b1d-aac0-4f35e94bb466"></div>`, // Popcash Native
+    `<script>(function(jaknh){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=jaknh||{};s.src="\/\/wretchedadvantage.com\/bwXAVks\/d.GXlD0KYqW_cx\/Oermb9UuIZuUKl\/kdPjTzYd3hNHTAI\/1oNOzHM\/thN\/jKcj1FM\/jfUN3INeAM";s.async=true;l.parentNode.insertBefore(s,l);})({})<\/script>`, // Hilltop
+    `<div id="awn-z10825986"></div><script data-cfasync="false" src="//discovernative.com/script/native_render.js"><\/script>`, // Adcash Native
+    `<script async src="https://pl28481408.effectivegatecpm.com/b104bb133c0e3abf10d65c6dca934730/invoke.js"><\/script><div id="container-b104bb133c0e3abf10d65c6dca934730"></div>`, // Adsterra Native Clone
+    `<script data-cfasync="false" src="//bdv.bidvertiser.com/BidVertiser.dbm?pid=941237&bid=2103430" type="text/javascript"><\/script>` // Bidvertiser Clone
+];
+
+function safeInject(id, code) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const range = document.createRange();
+    const fragment = range.createContextualFragment(code);
+    el.innerHTML = "";
+    el.appendChild(fragment);
+}
+
+function refreshRotatingAds() {
+    const currentPool = adSetSwitch ? AD_SET_A : AD_SET_B;
+    document.querySelectorAll(".mid-slot").forEach((div, i) => {
+        if(currentPool[i]) safeInject(div.id, currentPool[i]);
+    });
+    adSetSwitch = !adSetSwitch; // Switch set for next 40s
+}
+
+async function loadContent(){
+    let {data}=await sb.from('admin_blogs').select('*').eq('id',taskId).maybeSingle();
+    if(data) {
+        document.getElementById("task-title").innerText=data.keyword;
+        const box=document.getElementById("task-content");
+        const paras=data.content.split('\n').filter(x=>x.trim());
+        box.innerHTML="";
         
-        <div id="unique-motivation" class="unique-quote-box">"जितना बड़ा संघर्ष होगा, सफलता उतनी ही शानदार होगी।"</div>
-
-        <div id="task-content">
-            <p>कंटेंट लोड हो रहा है...</p>
-        </div>
-
-        <div class="ad-slot" id="bottom-ad-refresh">
-             <script async="async" data-cfasync="false" src="https://pl28481408.effectivegatecpm.com/b104bb133c0e3abf10d65c6dca934730/invoke.js"></script>
-             <div id="container-b104bb133c0e3abf10d65c6dca934730"></div>
-        </div>
-    </main>
-
-    <script>
-        const _supabase = supabase.createClient("https://mkzgmrxakattqgbjnwch.supabase.co", "sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL");
-        let currentUser = null;
-        let taskId = new URLSearchParams(window.location.search).get('id') || "General_Task";
-
-        async function init() {
-            const { data: { session } } = await _supabase.auth.getSession();
-            if (session) {
-                currentUser = session.user;
-                const isAllowed = await checkDailyLimit();
-                if(!isAllowed) { alert("Daily Limit Reached!"); window.location.href = "dashboard.html"; return; }
-                await fetchAndProcessContent();
-                startTaskTimer();
-                setupAdRefresh();
-            } else { window.location.href = "login.html"; }
-        }
-
-        async function checkDailyLimit() {
-            const today = new Date().toISOString().split('T')[0];
-            const { count } = await _supabase.from('user_work').select('*', { count: 'exact', head: true }).eq('username', currentUser.email).gte('created_at', today);
-            return count < 100;
-        }
-
-        async function fetchAndProcessContent() {
-            let { data } = await _supabase.from('admin_blogs').select('*').eq('id', taskId).maybeSingle();
-            if (!data) { let { data: fallback } = await _supabase.from('admin_blogs').select('*').limit(1).maybeSingle(); data = fallback; }
-
-            if (data) {
-                document.getElementById('task-title').innerText = data.keyword;
-                let rawContent = data.content;
-                
-                // Split content by lines and wrap in paragraphs
-                let paragraphs = rawContent.split('\n').filter(line => line.trim() !== "");
-                let contentWithAds = "";
-
-                paragraphs.forEach((para, index) => {
-                    contentWithAds += `<p>${para}</p>`;
-                    
-                    // Logic: Add ad after a topic ends (indicated by ? or : or .) OR after every 2 paragraphs
-                    if (para.includes('?') || para.includes(':') || (index + 1) % 2 === 0) {
-                        if (index !== paragraphs.length - 1) {
-                            contentWithAds += generateAdCode(`mid-ad-${index}`, index);
-                        }
-                    }
-                });
-                document.getElementById('task-content').innerHTML = contentWithAds;
+        paras.forEach((t,i)=>{
+            const p=document.createElement("p"); p.innerText=t; box.appendChild(p);
+            // Exactly 7 slots in between paragraphs
+            if((i+1)%2 === 0 && document.querySelectorAll('.mid-slot').length < 7){
+                const midDiv = document.createElement("div");
+                midDiv.className = "ad-slot mid-slot"; midDiv.id = `mid-${i}`;
+                box.appendChild(midDiv);
             }
-        }
+        });
+        
+        // Permanent Ads Load
+        safeInject('perm-lb', `<ins class="e728x90" data-revive-zoneid="65574"></ins><script async src="//network.eonads.com/adserver/www/delivery/asyncjs.php"><\/script>`);
+        safeInject('perm-hp', `<ins class="e300x600" data-revive-zoneid="65573"></ins><script async src="//network.eonads.com/adserver/www/delivery/asyncjs.php"><\/script>`);
+        
+        refreshRotatingAds();
+    }
+}
 
-        function generateAdCode(id, seed) {
-            // Rotating different ad providers for maximum coverage
-            if (seed % 3 === 0) {
-                return `<div class="ad-slot" id="${id}"><script> atOptions = { 'key' : 'ac3a34c448d39282025c11644797e3a1', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} }; <\/script><script src="https://www.highperformanceformat.com/ac3a34c448d39282025c11644797e3a1/invoke.js"><\/script></div>`;
-            } else if (seed % 3 === 1) {
-                return `<div class="ad-slot" id="${id}"><ins class="e300x250" id="300x250" data-revive-hash="03f72371ba83e2e09e793c77727f82c4" data-revive-zoneid="65572" data-revive-id="f87497be83f6ed6b52c3b340d803ae0d"></ins><script async src="//network.eonads.com/adserver/www/delivery/asyncjs.php"><\/script></div>`;
-            } else {
-                return `<div class="ad-slot" id="${id}"><script async="async" data-cfasync="false" src="https://pl28481408.effectivegatecpm.com/b104bb133c0e3abf10d65c6dca934730/invoke.js"><\/script><div id="container-b104bb133c0e3abf10d65c6dca934730"></div></div>`;
-            }
-        }
+function startTimer(){
+    let t=300; const el=document.getElementById("timer");
+    const iv = setInterval(()=>{ 
+        if(t>0) {
+            let m=Math.floor(t/60), s=t%60;
+            el.textContent=`${m}:${s.toString().padStart(2,'0')}`; t--; 
+        } else { clearInterval(iv); submitTask(); }
+    },1000);
+}
 
-        function setupAdRefresh() {
-            setInterval(() => {
-                const slots = document.querySelectorAll('.ad-slot');
-                slots.forEach(slot => {
-                    // Force re-run scripts in ad slots
-                    const scripts = slot.querySelectorAll('script');
-                    scripts.forEach(oldScript => {
-                        const newScript = document.createElement('script');
-                        if (oldScript.src) {
-                            newScript.src = oldScript.src;
-                        } else {
-                            newScript.textContent = oldScript.textContent;
-                        }
-                        oldScript.parentNode.replaceChild(newScript, oldScript);
-                    });
-                });
-            }, 40000); // 40 Seconds Refresh
-        }
+async function submitTask(){
+    document.getElementById("status-overlay").style.display="flex";
+    await sb.from('user_work').insert([{username:currentUser.email, task_id:taskId.toString(), status:'Success', amount:5}]);
+    location.href="dashboard.html?status=success";
+}
 
-        function startTaskTimer() {
-            let totalTime = 300; 
-            if (sessionStorage.getItem("active_timer")) totalTime = parseInt(sessionStorage.getItem("active_timer"));
-            const timerDisplay = document.getElementById('timer');
-            const countdown = setInterval(async () => {
-                let m = Math.floor(totalTime / 60);
-                let s = totalTime % 60;
-                timerDisplay.textContent = `${m}:${s < 10 ? '0' : ''}${s}`;
-                if (totalTime <= 0) {
-                    clearInterval(countdown);
-                    sessionStorage.removeItem("active_timer");
-                    await submitTask();
-                } else {
-                    totalTime--;
-                    sessionStorage.setItem("active_timer", totalTime);
-                }
-            }, 1000);
-        }
-
-        async function submitTask() {
-            document.getElementById('status-overlay').style.display = 'flex';
-            const { error } = await _supabase.from('user_work').insert([{ username: currentUser.email, task_id: taskId, status: 'Success', amount: 5 }]);
-            if (!error) {
-                document.getElementById('status-msg').innerText = "Wallet Updated! Redirecting...";
-                setTimeout(() => { window.location.href = "dashboard.html?status=success"; }, 1500);
-            } else {
-                document.getElementById('status-overlay').style.display = 'none';
-                alert("Error saving task.");
-            }
-        }
-
-        window.onload = init;
-    </script>
+async function init(){
+    const {data:{session}}=await sb.auth.getSession();
+    if(!session){location.href="login.html";return;}
+    currentUser=session.user;
+    loadContent(); startTimer();
+    
+    // 40s Refresh logic
+    setInterval(() => {
+        refreshRotatingAds();
+        safeInject('perm-lb', `<ins class="e728x90" data-revive-zoneid="65574"></ins><script async src="//network.eonads.com/adserver/www/delivery/asyncjs.php"><\/script>`);
+        safeInject('perm-hp', `<ins class="e300x600" data-revive-zoneid="65573"></ins><script async src="//network.eonads.com/adserver/www/delivery/asyncjs.php"><\/script>`);
+    }, 40000);
+}
+window.onload=init;
+</script>
 </body>
 </html>
