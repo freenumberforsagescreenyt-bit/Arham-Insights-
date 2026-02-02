@@ -34,27 +34,26 @@
 
         .task-grid { display: grid; gap: 15px; }
         .task-item { background: white; padding: 20px; border-radius: 20px; border: 1px solid #f1f5f9; display: flex; flex-direction: column; gap: 10px; }
-        .do-btn { flex: 1; background: var(--primary); color: white; padding: 10px; border-radius: 10px; text-decoration: none; font-size: 0.85rem; font-weight: 700; text-align: center; }
+        .do-btn { flex: 1; background: var(--primary); color: white; padding: 12px; border-radius: 10px; text-decoration: none; font-size: 0.9rem; font-weight: 700; text-align: center; }
 
-        /* Scratch Card Styling */
+        /* Scratch Card Overlay */
         #scratch-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 5000; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
         .scratch-container { position: relative; width: 280px; height: 280px; background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 0 30px var(--primary); }
         #scratch-canvas { position: absolute; top: 0; left: 0; cursor: crosshair; z-index: 2; }
         .reward-content { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1; background: radial-gradient(circle, #fff 0%, #fff5e6 100%); }
         .reward-content i { font-size: 3rem; color: #ffd700; margin-bottom: 10px; }
 
-        /* 10k Alert Button */
         #withdraw-btn { display: none; background: #25d366; color: white; border: none; width: 100%; padding: 15px; border-radius: 12px; font-weight: 800; margin-top: 15px; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div id="scratch-overlay">
-        <h2 style="color:var(--primary); margin-bottom: 20px;">Reward Unlocked! 🎁</h2>
+        <h2 style="color:var(--primary); margin-bottom: 20px;">Reward Unlocked! </h2>
         <div class="scratch-container">
             <div class="reward-content">
                 <i class="fa-solid fa-coins"></i>
-                <h2>₹5.00</h2>
+                <h2 id="scratched-reward-text">0.00</h2>
                 <p style="color:#64748b; font-weight:600;">Reward Credited</p>
             </div>
             <canvas id="scratch-canvas" width="280" height="280"></canvas>
@@ -73,25 +72,25 @@
             <p id="user-email-header" style="opacity: 0.7; font-size: 0.9rem; margin: 5px 0 0 0;">Loading profile...</p>
             <div class="stats-row">
                 <div class="stat-item"><span>Tasks Done</span><b id="tasks-count">0</b></div>
-                <div class="stat-item"><span>Total Balance</span><b id="total-earning">₹0</b></div>
+                <div class="stat-item"><span>Total Balance</span><b id="total-earning">0</b></div>
             </div>
-            <button id="withdraw-btn" onclick="sendWhatsAppAlert()"><i class="fa-brands fa-whatsapp"></i> Withdraw ₹10,000 Now</button>
+            <button id="withdraw-btn" onclick="sendWhatsAppAlert()"><i class="fa-brands fa-whatsapp"></i> Withdraw 10,000 Now</button>
         </div>
 
         <div class="glass-panel">
             <div class="section-title"><i class="fa-solid fa-user-shield"></i> Profile & Payment Info</div>
             <form id="profile-form" onsubmit="saveProfile(event)">
                 <div class="input-group">
-                    <label>Registered Email</label>
-                    <input type="email" id="contact_email" placeholder="Contact Email" required>
+                    <label>Contact Email (Verification Ke Liye)</label>
+                    <input type="email" id="contact_email" placeholder="Email daalein" required>
                 </div>
                 <div class="input-group">
                     <label>WhatsApp Number</label>
-                    <input type="tel" id="whatsapp_no" placeholder="WhatsApp Number" required>
+                    <input type="tel" id="whatsapp_no" placeholder="WhatsApp no. daalein" required>
                 </div>
                 <div class="input-group">
-                    <label>UPI ID</label>
-                    <input type="text" id="upi_id" placeholder="UPI ID" required>
+                    <label>UPI ID (Payment Ke Liye)</label>
+                    <input type="text" id="upi_id" placeholder="UPI ID daalein" required>
                 </div>
                 <button type="submit" id="save-btn" class="btn-save">Save & Lock Details</button>
                 <button type="button" id="edit-btn" onclick="enableEditing()" class="btn-edit">Edit Details</button>
@@ -107,7 +106,6 @@
     <script>
         const _supabase = supabase.createClient("https://mkzgmrxakattqgbjnwch.supabase.co", "sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL");
         let currentUserSession = null;
-        let globalProfile = null;
         let currentBalance = 0;
 
         async function init() {
@@ -115,11 +113,12 @@
             if (session) {
                 currentUserSession = session.user;
                 document.getElementById('user-email-header').innerText = currentUserSession.email;
+                
+                // Sequence Fix: 1. Balance Calculation -> 2. Profile Sync
+                await fetchUserProgress();
                 await loadProfile();
                 await fetchTaskLinks();
-                await fetchUserProgress();
 
-                // Check for Scratch Card
                 if (new URLSearchParams(window.location.search).get('status') === 'success') {
                     showScratchCard();
                 }
@@ -129,24 +128,35 @@
         async function loadProfile() {
             const { data } = await _supabase.from('profiles').select('*').eq('email', currentUserSession.email).maybeSingle();
             if(data) {
-                globalProfile = data;
                 document.getElementById('contact_email').value = data.contact_email || '';
                 document.getElementById('upi_id').value = data.upi_id || '';
                 document.getElementById('whatsapp_no').value = data.whatsapp || '';
-                if(data.contact_email) lockInputs();
+                if(data.contact_email && data.upi_id) lockInputs();
             }
         }
 
         async function saveProfile(e) {
             e.preventDefault();
+            const saveBtn = document.getElementById('save-btn');
+            saveBtn.innerText = "Syncing...";
+            saveBtn.disabled = true;
+
             const payload = {
                 email: currentUserSession.email,
                 contact_email: document.getElementById('contact_email').value,
                 upi_id: document.getElementById('upi_id').value,
-                whatsapp: document.getElementById('whatsapp_no').value
+                whatsapp: document.getElementById('whatsapp_no').value,
+                wallet_balance: currentBalance
             };
+
             const { error } = await _supabase.from('profiles').upsert(payload, { onConflict: 'email' });
-            if (!error) { alert("Profile Locked! ✅"); lockInputs(); }
+            if (!error) {
+                alert("Details Saved & Locked! ");
+                lockInputs();
+            } else { alert("Sync Error: " + error.message); }
+            
+            saveBtn.innerText = "Save & Lock Details";
+            saveBtn.disabled = false;
         }
 
         function lockInputs() {
@@ -159,6 +169,20 @@
             document.querySelectorAll('#profile-form input').forEach(i => i.readOnly = false);
             document.getElementById('save-btn').style.display = 'block';
             document.getElementById('edit-btn').style.display = 'none';
+            document.getElementById('contact_email').focus();
+        }
+
+        async function fetchUserProgress() {
+            const { data } = await _supabase.from('user_work').select('amount').eq('username', currentUserSession.email);
+            if(data) {
+                document.getElementById('tasks-count').innerText = data.length;
+                currentBalance = data.reduce((sum, item) => sum + (item.amount || 0), 0);
+                document.getElementById('total-earning').innerText = "" + currentBalance;
+
+                if(currentBalance >= 10000) {
+                    document.getElementById('withdraw-btn').style.display = 'block';
+                }
+            }
         }
 
         async function fetchTaskLinks() {
@@ -168,32 +192,20 @@
                 list.innerHTML = data.map(task => `
                     <div class="task-item">
                         <b>${task.keyword}</b>
-                        <a href="taskspage.html?id=${task.id}" class="do-btn">Start Task (₹5)</a>
+                        <a href="taskspage.html?id=${task.id}" class="do-btn">Start Task (Reward Earn Karein)</a>
                     </div>`).join('');
             }
         }
 
-        async function fetchUserProgress() {
-            const { data } = await _supabase.from('user_work').select('*').eq('username', currentUserSession.email);
-            if(data) {
-                document.getElementById('tasks-count').innerText = data.length;
-                currentBalance = data.length * 5;
-                document.getElementById('total-earning').innerText = "₹" + currentBalance;
-
-                // 10k Alert Trigger
-                if(currentBalance >= 10000) {
-                    document.getElementById('withdraw-btn').style.display = 'block';
-                }
-            }
-        }
-
         function sendWhatsAppAlert() {
-            const msg = `🚨 *Withdrawal Request - Arham Insights* 🚨%0A👤 User: ${currentUserSession.email}%0A💰 Balance: ₹${currentBalance}%0A📱 WhatsApp: ${document.getElementById('whatsapp_no').value}%0A💳 UPI: ${document.getElementById('upi_id').value}`;
+            const msg = ` *Withdrawal Request*%0A User: ${currentUserSession.email}%0A Balance: ${currentBalance}%0A UPI: ${document.getElementById('upi_id').value}`;
             window.open(`https://wa.me/918769531125?text=${msg}`, '_blank');
         }
 
-        // --- Scratch Card Logic ---
         function showScratchCard() {
+            // Last task reward display logic
+            document.getElementById('scratched-reward-text').innerText = "" + (currentBalance > 0 ? "Reward Added" : "Processing");
+            
             const overlay = document.getElementById('scratch-overlay');
             const canvas = document.getElementById('scratch-canvas');
             const ctx = canvas.getContext('2d');
@@ -208,20 +220,20 @@
             const scratch = (e) => {
                 if (!isDrawing) return;
                 const rect = canvas.getBoundingClientRect();
-                const x = (e.pageX || e.touches[0].pageX) - rect.left;
-                const y = (e.pageY || e.touches[0].pageY) - rect.top;
+                const x = (e.pageX || (e.touches ? e.touches[0].pageX : 0)) - rect.left;
+                const y = (e.pageY || (e.touches ? e.touches[0].pageY : 0)) - rect.top;
                 ctx.globalCompositeOperation = 'destination-out';
-                ctx.beginPath(); ctx.arc(x, y, 25, 0, Math.PI * 2); ctx.fill();
+                ctx.beginPath(); ctx.arc(x, y, 30, 0, Math.PI * 2); ctx.fill();
                 scratched++;
-                if (scratched > 100) document.getElementById('close-scratch').style.display = 'block';
+                if (scratched > 80) document.getElementById('close-scratch').style.display = 'block';
             };
 
             canvas.addEventListener('mousedown', () => isDrawing = true);
-            canvas.addEventListener('touchstart', () => isDrawing = true);
+            canvas.addEventListener('touchstart', (e) => { isDrawing = true; e.preventDefault(); });
             window.addEventListener('mouseup', () => isDrawing = false);
             window.addEventListener('touchend', () => isDrawing = false);
             canvas.addEventListener('mousemove', scratch);
-            canvas.addEventListener('touchmove', scratch);
+            canvas.addEventListener('touchmove', (e) => { scratch(e); e.preventDefault(); });
         }
 
         function closeScratch() {
