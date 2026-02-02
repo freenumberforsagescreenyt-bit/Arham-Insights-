@@ -60,9 +60,9 @@ const sb=supabase.createClient("https://mkzgmrxakattqgbjnwch.supabase.co","sb_pu
 let taskId=new URLSearchParams(location.search).get('id')||1;
 let currentUser=null;
 let adSetSwitch = true;
-let timeLeft = 300; // Total 5 mins
+let timeLeft = 300; 
 
-// --- ADS POOLS (Rotation Logic) ---
+// --- ADS POOLS ---
 const AD_SET_A = [
     `<script async src="https://pl28481408.effectivegatecpm.com/b104bb133c0e3abf10d65c6dca934730/invoke.js"><\/script><div id="container-b104bb133c0e3abf10d65c6dca934730"></div>`, 
     `<script>atOptions={'key':'ac3a34c448d39282025c11644797e3a1','format':'iframe','height':50,'width':320};<\/script><script src="https://www.highperformanceformat.com/ac3a34c448d39282025c11644797e3a1/invoke.js"><\/script>`, 
@@ -100,19 +100,34 @@ function refreshRotatingAds() {
     adSetSwitch = !adSetSwitch;
 }
 
-// --- MUSIC LOGIC (Mashup Continuation) ---
+// --- MUSIC LOGIC (Auto-Convert GDrive Links) ---
 function setupMusic(url) {
     const audio = document.getElementById('task-audio');
     if (!url) return;
+
+    let finalUrl = url;
+
+    // Google Drive Link detection and conversion
+    if (url.includes('drive.google.com')) {
+        let fileId = "";
+        if (url.includes('/file/d/')) {
+            fileId = url.split('/file/d/')[1].split('/')[0];
+        } else if (url.includes('id=')) {
+            fileId = url.split('id=')[1].split('&')[0];
+        }
+        
+        if (fileId) {
+            finalUrl = `https://docs.google.com/uc?export=open&id=${fileId}`;
+        }
+    }
     
-    audio.src = url;
-    // Resume from last saved position
+    audio.src = finalUrl;
+    
     const savedPos = localStorage.getItem('arham_mashup_pos');
     if (savedPos) audio.currentTime = parseFloat(savedPos);
 
     audio.play().catch(() => console.log("User interaction required for audio"));
     
-    // Save position every second
     audio.ontimeupdate = () => {
         localStorage.setItem('arham_mashup_pos', audio.currentTime);
     };
@@ -135,20 +150,16 @@ async function loadContent(){
             }
         });
         
-        // Permanent Ads Load
         safeInject('perm-lb', `<ins class="e728x90" data-revive-zoneid="65574"></ins><script async src="//network.eonads.com/adserver/www/delivery/asyncjs.php"><\/script>`);
         safeInject('perm-hp', `<ins class="e300x600" data-revive-zoneid="65573"></ins><script async src="//network.eonads.com/adserver/www/delivery/asyncjs.php"><\/script>`);
         
         refreshRotatingAds();
-        if(data.song_url) setupMusic(data.song_url); // Load music from admin
+        if(data.song_url) setupMusic(data.song_url);
     }
 }
 
-// --- TIMER LOGIC (Persistence Fix) ---
 function startTimer(){
     const el=document.getElementById("timer");
-    
-    // Check if a timer was already running
     const savedTime = sessionStorage.getItem('task_timer_' + taskId);
     if(savedTime) timeLeft = parseInt(savedTime);
 
@@ -157,7 +168,6 @@ function startTimer(){
             timeLeft--;
             let m=Math.floor(timeLeft/60), s=timeLeft%60;
             el.textContent=`${m}:${s.toString().padStart(2,'0')}`; 
-            // Save current time in session
             sessionStorage.setItem('task_timer_' + taskId, timeLeft);
         } else { 
             clearInterval(iv); 
@@ -167,9 +177,10 @@ function startTimer(){
     },1000);
 }
 
+// Reward Amount updated to ₹3
 async function submitTask(){
     document.getElementById("status-overlay").style.display="flex";
-    await sb.from('user_work').insert([{username:currentUser.email, task_id:taskId.toString(), status:'Success', amount:2}]);
+    await sb.from('user_work').insert([{username:currentUser.email, task_id:taskId.toString(), status:'Success', amount:3}]);
     location.href="dashboard.html?status=success";
 }
 
