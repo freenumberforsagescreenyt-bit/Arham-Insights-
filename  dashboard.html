@@ -36,12 +36,14 @@
         .task-item { background: white; padding: 20px; border-radius: 20px; border: 1px solid #f1f5f9; display: flex; flex-direction: column; gap: 10px; }
         .do-btn { flex: 1; background: var(--primary); color: white; padding: 12px; border-radius: 10px; text-decoration: none; font-size: 0.9rem; font-weight: 700; text-align: center; }
 
-        /* Scratch Card Overlay */
+        /* --- Scratch Card Styling --- */
         #scratch-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 5000; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .scratch-container { position: relative; width: 280px; height: 280px; background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 0 30px var(--primary); }
+        .scratch-container { position: relative; width: 280px; height: 280px; background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 0 40px rgba(255, 153, 51, 0.5); border: 4px solid var(--primary); }
         #scratch-canvas { position: absolute; top: 0; left: 0; cursor: crosshair; z-index: 2; }
         .reward-content { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1; background: radial-gradient(circle, #fff 0%, #fff5e6 100%); }
-        .reward-content i { font-size: 3rem; color: #ffd700; margin-bottom: 10px; }
+        .reward-content i { font-size: 3.5rem; color: #ffd700; margin-bottom: 10px; }
+        .scratch-hint { margin-top: 15px; color: #fff; font-weight: 600; font-size: 1rem; letter-spacing: 0.5px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
 
         #withdraw-btn { display: none; background: #25d366; color: white; border: none; width: 100%; padding: 15px; border-radius: 12px; font-weight: 800; margin-top: 15px; cursor: pointer; }
     </style>
@@ -49,16 +51,17 @@
 <body>
 
     <div id="scratch-overlay">
-        <h2 style="color:var(--primary); margin-bottom: 20px;">Reward Unlocked! </h2>
+        <h2 style="color:var(--primary); margin-bottom: 20px;">Task Complete! 🎉</h2>
         <div class="scratch-container">
             <div class="reward-content">
-                <i class="fa-solid fa-coins"></i>
-                <h2 id="scratched-reward-text">0.00</h2>
-                <p style="color:#64748b; font-weight:600;">Reward Credited</p>
+                <i class="fa-solid fa-gift"></i>
+                <h2 style="color:var(--dark); font-size: 2.2rem; margin: 0;">₹3.00</h2>
+                <p style="color:#64748b; font-weight:700;">Reward Credited</p>
             </div>
             <canvas id="scratch-canvas" width="280" height="280"></canvas>
         </div>
-        <button id="close-scratch" class="btn-save" style="width:200px; margin-top:20px; display:none;" onclick="closeScratch()">Collect & Continue</button>
+        <div class="scratch-hint"><i class="fa-solid fa-hand-pointer"></i> Scratch the card to see reward</div>
+        <button id="close-scratch" class="btn-save" style="width:220px; margin-top:25px; display:none;" onclick="closeScratch()">Collect & Continue</button>
     </div>
 
     <nav class="navbar">
@@ -72,9 +75,9 @@
             <p id="user-email-header" style="opacity: 0.7; font-size: 0.9rem; margin: 5px 0 0 0;">Loading profile...</p>
             <div class="stats-row">
                 <div class="stat-item"><span>Tasks Done</span><b id="tasks-count">0</b></div>
-                <div class="stat-item"><span>Total Balance</span><b id="total-earning">0</b></div>
+                <div class="stat-item"><span>Total Balance</span><b id="total-earning">₹0</b></div>
             </div>
-            <button id="withdraw-btn" onclick="sendWhatsAppAlert()"><i class="fa-brands fa-whatsapp"></i> Withdraw 10,000 Now</button>
+            <button id="withdraw-btn" onclick="sendWhatsAppAlert()"><i class="fa-brands fa-whatsapp"></i> Withdraw ₹10,000 Now</button>
         </div>
 
         <div class="glass-panel">
@@ -114,7 +117,6 @@
                 currentUserSession = session.user;
                 document.getElementById('user-email-header').innerText = currentUserSession.email;
                 
-                // Sequence Fix: 1. Balance Calculation -> 2. Profile Sync
                 await fetchUserProgress();
                 await loadProfile();
                 await fetchTaskLinks();
@@ -151,7 +153,7 @@
 
             const { error } = await _supabase.from('profiles').upsert(payload, { onConflict: 'email' });
             if (!error) {
-                alert("Details Saved & Locked! ");
+                alert("Details Saved & Locked! ✅");
                 lockInputs();
             } else { alert("Sync Error: " + error.message); }
             
@@ -177,7 +179,7 @@
             if(data) {
                 document.getElementById('tasks-count').innerText = data.length;
                 currentBalance = data.reduce((sum, item) => sum + (item.amount || 0), 0);
-                document.getElementById('total-earning').innerText = "" + currentBalance;
+                document.getElementById('total-earning').innerText = "₹" + currentBalance;
 
                 if(currentBalance >= 10000) {
                     document.getElementById('withdraw-btn').style.display = 'block';
@@ -198,21 +200,26 @@
         }
 
         function sendWhatsAppAlert() {
-            const msg = ` *Withdrawal Request*%0A User: ${currentUserSession.email}%0A Balance: ${currentBalance}%0A UPI: ${document.getElementById('upi_id').value}`;
+            const msg = `🚨 *Withdrawal Request*%0A👤 User: ${currentUserSession.email}%0A💰 Balance: ₹${currentBalance}%0A📱 UPI: ${document.getElementById('upi_id').value}`;
             window.open(`https://wa.me/918769531125?text=${msg}`, '_blank');
         }
 
+        /* --- Updated Scratch Logic --- */
         function showScratchCard() {
-            // Last task reward display logic
-            document.getElementById('scratched-reward-text').innerText = "" + (currentBalance > 0 ? "Reward Added" : "Processing");
-            
             const overlay = document.getElementById('scratch-overlay');
             const canvas = document.getElementById('scratch-canvas');
             const ctx = canvas.getContext('2d');
             overlay.style.display = 'flex';
 
-            ctx.fillStyle = '#C0C0C0';
+            // Orange Scratch Layer
+            ctx.fillStyle = '#ff9933';
             ctx.fillRect(0, 0, 280, 280);
+            
+            // Text on card
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "bold 24px Inter";
+            ctx.textAlign = "center";
+            ctx.fillText("SCRATCH ME", 140, 150);
             
             let isDrawing = false;
             let scratched = 0;
@@ -223,9 +230,9 @@
                 const x = (e.pageX || (e.touches ? e.touches[0].pageX : 0)) - rect.left;
                 const y = (e.pageY || (e.touches ? e.touches[0].pageY : 0)) - rect.top;
                 ctx.globalCompositeOperation = 'destination-out';
-                ctx.beginPath(); ctx.arc(x, y, 30, 0, Math.PI * 2); ctx.fill();
+                ctx.beginPath(); ctx.arc(x, y, 35, 0, Math.PI * 2); ctx.fill();
                 scratched++;
-                if (scratched > 80) document.getElementById('close-scratch').style.display = 'block';
+                if (scratched > 60) document.getElementById('close-scratch').style.display = 'block';
             };
 
             canvas.addEventListener('mousedown', () => isDrawing = true);

@@ -37,7 +37,6 @@
         th { background: #f8fafc; padding: 15px; text-align: left; font-size: 0.85rem; color: #64748b; text-transform: uppercase; }
         td { padding: 15px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; font-size: 0.9rem; }
 
-        .task-link { color: var(--accent); font-family: monospace; font-size: 0.75rem; word-break: break-all; background: #f1f5f9; padding: 5px; border-radius: 5px; }
         .btn-action { padding: 8px 12px; border-radius: 8px; border: none; cursor: pointer; color: white; transition: 0.2s; }
         .btn-edit { background: #4b5563; margin-right: 5px; }
         .btn-delete { background: var(--danger); }
@@ -80,7 +79,7 @@
         <div class="nav-tabs">
             <div class="tab active" onclick="openTab(event, 'post-blog')"><i class="fa fa-plus-circle"></i> Post Task</div>
             <div class="tab" onclick="openTab(event, 'manage-blogs')"><i class="fa fa-tasks"></i> Tasks</div>
-            <div class="tab" onclick="openTab(event, 'user-data')" id="user-tab"><i class="fa fa-users"></i> User Database</div>
+            <div class="tab" onclick="openTab(event, 'user-data')" id="user-tab"><i class="fa fa-users"></i> Users Data</div>
             <div class="tab" onclick="openTab(event, 'withdrawals')"><i class="fa fa-wallet"></i> ₹10k+ Ready</div>
         </div>
 
@@ -90,6 +89,7 @@
                 <input type="hidden" id="edit-id">
                 <input type="text" id="blog-keyword" placeholder="Target Keyword (e.g. Best Smartphones 2026)">
                 <textarea id="blog-content" rows="10" placeholder="Paste blog content..."></textarea>
+                <input type="text" id="blog-song-url" placeholder="Mashup Song Direct MP3 Link (e.g. https://site.com/mashup.mp3)">
                 <button id="publish-btn" onclick="publishBlog()" class="publish-btn">Publish & Go Live</button>
             </div>
         </div>
@@ -99,7 +99,7 @@
                 <h3 style="margin-top:0">📁 Active Tasks</h3>
                 <div style="overflow-x:auto;">
                     <table>
-                        <thead><tr><th>Keyword</th><th>Task Page Link</th><th>Actions</th></tr></thead>
+                        <thead><tr><th>Keyword</th><th>Song Attached</th><th>Actions</th></tr></thead>
                         <tbody id="blog-list"></tbody>
                     </table>
                 </div>
@@ -113,11 +113,11 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>User Email</th>
-                                <th>Wallet Balance</th>
-                                <th>Tasks Done</th>
+                                <th>Email</th>
+                                <th>Balance</th>
+                                <th>Tasks</th>
                                 <th>WhatsApp</th>
-                                <th>UPI ID</th>
+                                <th>UPI</th>
                             </tr>
                         </thead>
                         <tbody id="full-user-list"></tbody>
@@ -128,7 +128,7 @@
 
         <div id="withdrawals" class="tab-content">
             <div class="card">
-                <h3 style="margin-top:0">💰 Withdrawal Alert (₹10,000+)</h3>
+                <h3 style="margin-top:0">💰 Withdrawal Alerts</h3>
                 <div style="overflow-x:auto;">
                     <table>
                         <thead><tr><th>Email</th><th>UPI</th><th>WhatsApp</th><th>Balance</th></tr></thead>
@@ -168,15 +168,18 @@
     async function publishBlog() {
         const kw = document.getElementById('blog-keyword').value.trim();
         const ct = document.getElementById('blog-content').value.trim();
+        const song = document.getElementById('blog-song-url').value.trim();
         const editId = document.getElementById('edit-id').value;
 
         if(!kw || !ct) return alert("Fill all fields!");
 
         try {
+            const payload = { keyword: kw, content: ct, song_url: song };
+
             if(editId) {
-                await _supabase.from('admin_blogs').update({ keyword: kw, content: ct }).eq('id', editId);
+                await _supabase.from('admin_blogs').update(payload).eq('id', editId);
             } else {
-                await _supabase.from('admin_blogs').insert([{ keyword: kw, content: ct }]);
+                await _supabase.from('admin_blogs').insert([payload]);
             }
             alert("Success!");
             location.reload();
@@ -188,38 +191,42 @@
         if(!data) return;
         document.getElementById('stat-total-tasks').innerText = data.length;
         const list = document.getElementById('blog-list');
-        list.innerHTML = data.map(blog => {
-            const taskUrl = `https://arhaminsightses.netlify.app/taskspage.html?id=${blog.id}`;
-            return `<tr><td><b>${blog.keyword}</b></td><td><span class="task-link">${taskUrl}</span></td>
-            <td><button onclick="prepareEdit('${blog.id}', \`${blog.keyword}\`, \`${blog.content}\`)" class="btn-action btn-edit"><i class="fa fa-edit"></i></button>
-            <button onclick="deleteBlog(${blog.id})" class="btn-action btn-delete"><i class="fa fa-trash"></i></button></td></tr>`;
-        }).join('');
+        list.innerHTML = data.map(blog => `
+            <tr>
+                <td><b>${blog.keyword}</b></td>
+                <td>${blog.song_url ? '<i class="fa fa-music" color="green"></i> Yes' : 'No'}</td>
+                <td>
+                    <button onclick="prepareEdit('${blog.id}', \`${blog.keyword}\`, \`${blog.content}\`, '${blog.song_url || ''}')" class="btn-action btn-edit"><i class="fa fa-edit"></i></button>
+                    <button onclick="deleteBlog(${blog.id})" class="btn-action btn-delete"><i class="fa fa-trash"></i></button>
+                </td>
+            </tr>`).join('');
+    }
+
+    function prepareEdit(id, kw, ct, song) {
+        document.getElementById('edit-id').value = id;
+        document.getElementById('blog-keyword').value = kw;
+        document.getElementById('blog-content').value = ct;
+        document.getElementById('blog-song-url').value = song;
+        document.getElementById('publish-btn').innerText = "Update Task Now";
+        openTab(null, 'post-blog');
     }
 
     async function fetchUserData() {
-        // Fetch profiles and task completions count
         const { data: profiles } = await _supabase.from('profiles').select('*').order('created_at', {ascending: false});
         const { data: workData } = await _supabase.from('user_work').select('username');
-
         if(!profiles) return;
         document.getElementById('stat-total-users').innerText = profiles.length;
-
-        // Count tasks for each user
         const taskCounts = {};
-        workData.forEach(row => {
-            taskCounts[row.username] = (taskCounts[row.username] || 0) + 1;
-        });
-
+        workData.forEach(row => { taskCounts[row.username] = (taskCounts[row.username] || 0) + 1; });
         const list = document.getElementById('full-user-list');
         list.innerHTML = profiles.map(user => `
             <tr>
                 <td><b>${user.email}</b></td>
                 <td style="color:var(--success); font-weight:800">₹${user.wallet_balance || 0}</td>
-                <td><span class="badge" style="background:#e0e7ff; color:#4338ca">${taskCounts[user.email] || 0} Tasks</span></td>
+                <td>${taskCounts[user.email] || 0}</td>
                 <td>${user.whatsapp || '---'}</td>
                 <td>${user.upi_id || '---'}</td>
-            </tr>
-        `).join('');
+            </tr>`).join('');
     }
 
     async function fetchWithdrawals() {
@@ -236,14 +243,6 @@
         document.getElementById(tabName).classList.add("active");
         if(evt) evt.currentTarget.classList.add("active");
         else document.querySelector(`[onclick*="${tabName}"]`).classList.add("active");
-    }
-
-    function prepareEdit(id, kw, ct) {
-        document.getElementById('edit-id').value = id;
-        document.getElementById('blog-keyword').value = kw;
-        document.getElementById('blog-content').value = ct;
-        document.getElementById('publish-btn').innerText = "Update Task Now";
-        openTab(null, 'post-blog');
     }
 
     async function deleteBlog(id) {
