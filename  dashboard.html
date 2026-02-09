@@ -24,7 +24,12 @@
         .section-title { font-weight: 800; font-size: 1.2rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
         .section-title i { color: var(--primary); }
 
-        /* Note Style */
+        /* Search Bar Style */
+        .search-container { position: relative; margin-bottom: 20px; }
+        .search-container input { width: 100%; padding: 15px 20px 15px 45px; border-radius: 15px; border: 2px solid #f1f5f9; background: white; font-size: 1rem; outline: none; transition: 0.3s; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .search-container input:focus { border-color: var(--primary); box-shadow: 0 10px 15px -3px rgba(255,153,51,0.2); }
+        .search-container i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 1.1rem; }
+
         .info-note { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 12px; margin-bottom: 20px; border-radius: 8px; display: flex; align-items: center; gap: 10px; }
         .info-note p { font-size: 0.85rem; color: #92400e; font-weight: 600; margin: 0; }
 
@@ -43,7 +48,7 @@
         .btn-edit { background: white; color: var(--dark); border: 2px solid var(--dark); width: 100%; padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 10px; display: none; }
 
         .task-grid { display: grid; gap: 15px; }
-        .task-item { background: white; padding: 20px; border-radius: 20px; border: 1px solid #f1f5f9; display: flex; flex-direction: column; gap: 10px; }
+        .task-item { background: white; padding: 20px; border-radius: 20px; border: 1px solid #f1f5f9; display: flex; flex-direction: column; gap: 10px; transition: 0.3s; }
         .do-btn { flex: 1; background: var(--primary); color: white; padding: 12px; border-radius: 10px; text-decoration: none; font-size: 0.9rem; font-weight: 700; text-align: center; }
 
         #scratch-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 5000; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
@@ -57,11 +62,11 @@
 <body>
 
     <div id="scratch-overlay">
-        <h2 style="color:var(--primary); margin-bottom: 20px;">Task Complete! 🚀</h2>
+        <h2 style="color:var(--primary); margin-bottom: 20px;">Task Complete! </h2>
         <div class="scratch-container">
             <div class="reward-content">
                 <i class="fa-solid fa-gift" style="font-size: 3.5rem; color: #ffd700; margin-bottom: 10px;"></i>
-                <h2 style="color:var(--dark); font-size: 2.2rem; margin: 0;">₹5.00</h2>
+                <h2 style="color:var(--dark); font-size: 2.2rem; margin: 0;">5.00</h2>
                 <p style="color:#64748b; font-weight:700;">Reward Credited</p>
             </div>
             <canvas id="scratch-canvas" width="280" height="280"></canvas>
@@ -81,7 +86,7 @@
             <p id="user-email-header" style="opacity: 0.7; font-size: 0.9rem; margin: 5px 0 0 0;">Loading profile...</p>
             <div class="stats-row">
                 <div class="stat-item"><span>Tasks Done</span><b id="tasks-count">0</b></div>
-                <div class="stat-item"><span>Total Earning</span><b id="total-earning">₹0</b></div>
+                <div class="stat-item"><span>Total Earning</span><b id="total-earning">0</b></div>
             </div>
             <button id="withdraw-btn" onclick="sendWhatsAppAlert()"></button>
         </div>
@@ -90,14 +95,14 @@
             <div class="section-title"><i class="fa-solid fa-file-invoice-dollar"></i> Payout Summary</div>
             <div class="charge-box">
                 <div class="charge-info">
-                    <span style="font-size: 0.8rem; color: #64748b; display: block;">Maintenance Fee (Deducted from your payment will shown here )</span>
-                    <b style="color: var(--secondary);">₹ 0 </b>
+                    <span style="font-size: 0.8rem; color: #64748b; display: block;">Maintenance Fee (Deducted from your payment)</span>
+                    <b style="color: var(--secondary);"> 0 </b>
                 </div>
                 <i class="fa-solid fa-shield-halved" style="color: var(--secondary); font-size: 1.5rem;"></i>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: center; padding: 5px;">
                 <span style="font-weight: 700;">Net Payable Amount:</span>
-                <b id="net-payable" style="color: var(--success); font-size: 1.2rem;">₹0.00</b>
+                <b id="net-payable" style="color: var(--success); font-size: 1.2rem;">0.00</b>
             </div>
         </div>
 
@@ -110,12 +115,10 @@
 
         <div class="glass-panel">
             <div class="section-title"><i class="fa-solid fa-user-shield"></i> Profile & Payment Info</div>
-            
             <div class="info-note">
                 <i class="fa-solid fa-circle-exclamation" style="color: #f59e0b;"></i>
                 <p>Fill all your details correctly for smooth verification.</p>
             </div>
-
             <form id="profile-form" onsubmit="saveProfile(event)">
                 <div class="input-group">
                     <label>Personal Email Address</label>
@@ -136,6 +139,12 @@
 
         <div class="glass-panel">
             <div class="section-title"><i class="fa-solid fa-fire"></i> Available Tasks</div>
+            
+            <div class="search-container">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="taskSearch" placeholder="Search tasks by keyword..." onkeyup="filterTasks()">
+            </div>
+
             <div class="task-grid" id="live-links-list">Loading live tasks...</div>
         </div>
     </div>
@@ -159,20 +168,35 @@
             } else { window.location.href = "login.html"; }
         }
 
+        // Search Functionality
+        function filterTasks() {
+            const input = document.getElementById('taskSearch').value.toLowerCase();
+            const taskItems = document.getElementsByClassName('task-item');
+            
+            for (let i = 0; i < taskItems.length; i++) {
+                const keyword = taskItems[i].getElementsByTagName('b')[0].innerText.toLowerCase();
+                if (keyword.includes(input)) {
+                    taskItems[i].style.display = "flex";
+                } else {
+                    taskItems[i].style.display = "none";
+                }
+            }
+        }
+
         async function fetchUserProgress() {
             const { data } = await _supabase.from('user_work').select('amount').eq('username', currentUserSession.email);
             if(data) {
                 document.getElementById('tasks-count').innerText = data.length;
                 currentBalance = data.reduce((sum, item) => sum + (item.amount || 0), 0);
-                document.getElementById('total-earning').innerText = "₹" + currentBalance;
+                document.getElementById('total-earning').innerText = "" + currentBalance;
 
                 let netPayable = Math.max(0, currentBalance - MAINTENANCE_FEE);
-                document.getElementById('net-payable').innerText = "₹" + netPayable.toFixed(2);
+                document.getElementById('net-payable').innerText = "" + netPayable.toFixed(2);
 
                 if(currentBalance >= 10000) {
                     const wBtn = document.getElementById('withdraw-btn');
                     wBtn.style.display = 'block';
-                    wBtn.innerHTML = `<i class="fa-brands fa-whatsapp"></i> Withdraw Net: ₹${netPayable}`;
+                    wBtn.innerHTML = `<i class="fa-brands fa-whatsapp"></i> Withdraw Net: ${netPayable}`;
                 }
             }
         }
@@ -184,7 +208,7 @@
                 list.innerHTML = data.map(item => `
                     <div class="history-item">
                         <div>
-                            <b style="font-size:0.95rem;">₹${item.amount}</b>
+                            <b style="font-size:0.95rem;">${item.amount}</b>
                             <span style="display:block; font-size:0.7rem; color:#94a3b8;">${new Date(item.paid_at).toLocaleDateString()}</span>
                         </div>
                         <div class="status-badge"><i class="fa-solid fa-circle-check"></i> ${item.status}</div>
@@ -214,7 +238,7 @@
                 wallet_balance: currentBalance
             };
             const { error } = await _supabase.from('profiles').upsert(payload, { onConflict: 'email' });
-            if (!error) { alert("Details Saved! 🚀"); lockInputs(); }
+            if (!error) { alert("Details Saved! "); lockInputs(); }
         }
 
         function lockInputs() {
@@ -243,7 +267,7 @@
 
         function sendWhatsAppAlert() {
             let netPayable = currentBalance - MAINTENANCE_FEE;
-            const msg = `🚀 *Withdrawal Request*%0A👤 User: ${currentUserSession.email}%0A💰 Total Balance: ₹${currentBalance}%0A🛠 Fee: ₹${MAINTENANCE_FEE}%0A💵 Net Payable: ₹${netPayable}%0A💳 UPI: ${document.getElementById('upi_id').value}`;
+            const msg = ` *Withdrawal Request*%0A User: ${currentUserSession.email}%0A Total Balance: ${currentBalance}%0A Fee: ${MAINTENANCE_FEE}%0A Net Payable: ${netPayable}%0A UPI: ${document.getElementById('upi_id').value}`;
             window.open(`https://wa.me/918769531125?text=${msg}`, '_blank');
         }
 
