@@ -13,7 +13,8 @@
         #timer-container{position:fixed;top:10px;left:50%;transform:translateX(-50%);background:var(--primary);color:#000;padding:12px 26px;font-weight:800;border-radius:50px;z-index:99999;box-shadow: 0 5px 15px rgba(255,153,51,0.4);}
         #music-container{background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; margin-bottom: 25px; border: 1px solid var(--primary);}
         #task-audio{width: 100%; height: 35px; filter: sepia(100%) saturate(300%) hue-rotate(10deg);}
-        .ad-slot{margin:30px auto; width: 100%; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.02); border-radius:12px; border: 1px dashed rgba(255,153,51,0.1); min-height: 100px; color: #64748b; font-size: 0.8rem; text-align: center;}
+        .ad-slot{margin:30px auto; width: 100%; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.02); border-radius:12px; border: 1px dashed rgba(255,153,51,0.2); min-height: 100px; color: #64748b; font-size: 0.8rem; text-align: center;}
+        .hp-slot{min-height: 250px;}
         #status-overlay{display:none;position:fixed;inset:0; background:rgba(7,11,20,.97); z-index:200000; align-items:center; justify-content:center; flex-direction:column}
         .loader-spin{width:45px;height:45px;border:5px solid var(--card-bg); border-top:5px solid var(--primary); border-radius:50%; animation:spin 1s linear infinite}
         @keyframes spin{100%{transform:rotate(360deg)}}
@@ -29,7 +30,8 @@
 </div>
 
 <main>
-    <div class="ad-slot lb-slot" id="perm-lb">Premium Ads Syncing...</div>
+    <div class="ad-slot lb-slot" id="ad-top">Ads Loading...</div>
+
     <div class="premium-quote" style="background: linear-gradient(135deg, rgba(255,153,51,0.15), rgba(255,255,255,0.05)); border-radius: 15px; padding: 20px; margin: 20px 0; border-left: 5px solid var(--primary); font-style: italic; font-weight: 600; color: #ffd699;">"Aaj ka hardwork, kal ki success ki chabi hai." 🚀</div>
 
     <div id="music-container">
@@ -38,8 +40,10 @@
     </div>
 
     <h2 id="task-title" style="color:var(--primary); font-weight: 800; text-align: center;">Premium Learning</h2>
+    
     <div id="task-content"></div>
-    <div class="ad-slot hp-slot" id="perm-hp">High-Value Ads Syncing...</div>
+
+    <div class="ad-slot hp-slot" id="ad-bottom">Ads Loading...</div>
 </main>
 
 <script>
@@ -48,7 +52,23 @@ let taskId=new URLSearchParams(location.search).get('id')||1;
 let currentUser=null;
 let timeLeft = 300; 
 
-// --- TASK CONTENT LOAD ---
+// --- AD CODES ---
+const TOP_AD = `<script type="text/javascript"> atOptions = { 'key' : 'ac3a34c448d39282025c11644797e3a1', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} }; <\/script> <script type="text/javascript" src="//www.highperformanceformat.com/ac3a34c448d39282025c11644797e3a1/invoke.js"><\/script>`;
+
+const MID_AD = `<script async="async" data-cfasync="false" src="//www.highperformanceformat.com/b104bb133c0e3abf10d65c6dca934730/invoke.js"><\/script> <div id="container-b104bb133c0e3abf10d65c6dca934730"></div>`;
+
+const BOTTOM_AD = `<ins class="e300x250" data-revive-zoneid="65572"></ins><script async src="//network.eonads.com/adserver/www/delivery/asyncjs.php"><\/script>`;
+
+// --- POWER INJECTOR (Ads ko live load karne ke liye) ---
+function injectAd(elementId, adCode) {
+    const slot = document.getElementById(elementId);
+    if (!slot) return;
+    slot.innerHTML = ""; // Clear placeholder
+    const range = document.createRange();
+    const fragment = range.createContextualFragment(adCode);
+    slot.appendChild(fragment);
+}
+
 async function loadContent(){
     let {data}=await sb.from('admin_blogs').select('*').eq('id',taskId).maybeSingle();
     if(data) {
@@ -56,14 +76,23 @@ async function loadContent(){
         const box=document.getElementById("task-content");
         const paras=data.content.split('\n').filter(x=>x.trim());
         box.innerHTML="";
+        
         paras.forEach((t,i)=>{
             const p=document.createElement("p"); p.innerText=t; box.appendChild(p);
-            if((i+1)%2 === 0 && i < 10){
+            // Har 2nd paragraph ke baad ek Ad inject karo
+            if((i+1)%2 === 0 && i < 6){
+                const midId = `mid-ad-${i}`;
                 const midDiv = document.createElement("div");
-                midDiv.className = "ad-slot mid-slot"; midDiv.innerText = "Syncing Ad...";
+                midDiv.className = "ad-slot"; midDiv.id = midId;
                 box.appendChild(midDiv);
+                setTimeout(() => injectAd(midId, MID_AD), 500);
             }
         });
+
+        // Load Top & Bottom Ads
+        injectAd('ad-top', TOP_AD);
+        injectAd('ad-bottom', BOTTOM_AD);
+
         if(data.song_url) setupMusic(data.song_url);
     }
 }
@@ -76,7 +105,7 @@ function setupMusic(url) {
         if (fileId) finalUrl = `https://docs.google.com/uc?export=open&id=${fileId}`;
     }
     audio.src = finalUrl;
-    audio.play().catch(() => console.log("Music Needs User Click"));
+    audio.play().catch(() => console.log("User click needed for audio"));
 }
 
 function startTimer(){
@@ -93,28 +122,16 @@ function startTimer(){
     },1000);
 }
 
-// --- CRITICAL REWARD SUBMISSION ---
 async function submitTask(){
     document.getElementById("status-overlay").style.display="flex";
-    
-    // Yahan hum strictly amount 5 insert kar rahe hain database mein
-    const { error } = await sb.from('user_work').insert([
-        {
-            username: currentUser.email, 
-            task_id: taskId.toString(), 
-            status: 'Success', 
-            amount: 5.00, // <--- Fixed to 5
-            keyword: document.getElementById("task-title").innerText
-        }
-    ]);
-
-    if(error) {
-        alert("Reward error! Please contact support.");
-        console.error(error);
-    } else {
-        // Dashboard par bhej rahe hain jahan status=success se scratch card khulega
-        location.href="dashboard.html?status=success";
-    }
+    await sb.from('user_work').insert([{
+        username: currentUser.email, 
+        task_id: taskId.toString(), 
+        status: 'Success', 
+        amount: 5.00,
+        keyword: document.getElementById("task-title").innerText
+    }]);
+    location.href="dashboard.html?status=success";
 }
 
 async function init(){
