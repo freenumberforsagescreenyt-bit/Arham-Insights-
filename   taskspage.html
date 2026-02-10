@@ -13,11 +13,15 @@
         #timer-container{position:fixed;top:10px;left:50%;transform:translateX(-50%);background:var(--primary);color:#000;padding:12px 26px;font-weight:800;border-radius:50px;z-index:99999;box-shadow: 0 5px 15px rgba(255,153,51,0.4);}
         #music-container{background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; margin-bottom: 25px; border: 1px solid var(--primary);}
         #task-audio{width: 100%; height: 35px; filter: sepia(100%) saturate(300%) hue-rotate(10deg);}
-        .ad-slot{margin:30px auto; width: 100%; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.02); border-radius:12px; border: 1px dashed rgba(255,153,51,0.2); min-height: 100px; color: #64748b; font-size: 0.8rem; text-align: center;}
-        .hp-slot{min-height: 250px;}
+        
+        .ad-slot{margin:30px auto; width: 100%; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.02); border-radius:12px; border: 1px dashed rgba(255,153,51,0.2); min-height: 250px; overflow: hidden; clear: both;}
+        .lb-slot { height: 90px; min-height: 90px; }
+        
         #status-overlay{display:none;position:fixed;inset:0; background:rgba(7,11,20,.97); z-index:200000; align-items:center; justify-content:center; flex-direction:column}
         .loader-spin{width:45px;height:45px;border:5px solid var(--card-bg); border-top:5px solid var(--primary); border-radius:50%; animation:spin 1s linear infinite}
         @keyframes spin{100%{transform:rotate(360deg)}}
+        iframe { border: none !important; width: 300px; height: 250px; }
+        .lb-slot iframe { width: 320px; height: 50px; }
     </style>
 </head>
 <body>
@@ -30,7 +34,7 @@
 </div>
 
 <main>
-    <div class="ad-slot lb-slot" id="ad-top">Ads Loading...</div>
+    <div class="ad-slot lb-slot" id="ad-top"></div>
 
     <div class="premium-quote" style="background: linear-gradient(135deg, rgba(255,153,51,0.15), rgba(255,255,255,0.05)); border-radius: 15px; padding: 20px; margin: 20px 0; border-left: 5px solid var(--primary); font-style: italic; font-weight: 600; color: #ffd699;">"Aaj ka hardwork, kal ki success ki chabi hai." 🚀</div>
 
@@ -42,8 +46,8 @@
     <h2 id="task-title" style="color:var(--primary); font-weight: 800; text-align: center;">Premium Learning</h2>
     
     <div id="task-content"></div>
-
-    <div class="ad-slot hp-slot" id="ad-bottom">Ads Loading...</div>
+    
+    <div id="final-anchor-ad" class="ad-slot"></div>
 </main>
 
 <script>
@@ -52,21 +56,35 @@ let taskId=new URLSearchParams(location.search).get('id')||1;
 let currentUser=null;
 let timeLeft = 300; 
 
-// --- AD CODES ---
-const TOP_AD = `<script type="text/javascript"> atOptions = { 'key' : 'ac3a34c448d39282025c11644797e3a1', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} }; <\/script> <script type="text/javascript" src="//www.highperformanceformat.com/ac3a34c448d39282025c11644797e3a1/invoke.js"><\/script>`;
+// --- NEW AD CODES ---
+const NEW_MID_CODE = `
+    <script type="text/javascript">
+        atOptions = { 'key' : 'b885d21cc49004931f6c2a78a423c968', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };
+    <\/script>
+    <script type="text/javascript" src="https://www.highperformanceformat.com/b885d21cc49004931f6c2a78a423c968/invoke.js"><\/script>
+`;
 
-const MID_AD = `<script async="async" data-cfasync="false" src="//www.highperformanceformat.com/b104bb133c0e3abf10d65c6dca934730/invoke.js"><\/script> <div id="container-b104bb133c0e3abf10d65c6dca934730"></div>`;
+const TOP_BANNER_CODE = `
+    <script type="text/javascript">
+        atOptions = { 'key' : 'ac3a34c448d39282025c11644797e3a1', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
+    <\/script>
+    <script type="text/javascript" src="https://www.highperformanceformat.com/ac3a34c448d39282025c11644797e3a1/invoke.js"><\/script>
+`;
 
-const BOTTOM_AD = `<ins class="e300x250" data-revive-zoneid="65572"></ins><script async src="//network.eonads.com/adserver/www/delivery/asyncjs.php"><\/script>`;
-
-// --- POWER INJECTOR (Ads ko live load karne ke liye) ---
-function injectAd(elementId, adCode) {
-    const slot = document.getElementById(elementId);
-    if (!slot) return;
-    slot.innerHTML = ""; // Clear placeholder
-    const range = document.createRange();
-    const fragment = range.createContextualFragment(adCode);
-    slot.appendChild(fragment);
+// --- POWER INJECTOR ---
+function injectAd(containerId, htmlCode) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    
+    container.innerHTML = "";
+    const iframe = document.createElement('iframe');
+    iframe.scrolling = "no";
+    container.appendChild(iframe);
+    
+    const doc = iframe.contentWindow.document;
+    doc.open();
+    doc.write(`<!DOCTYPE html><html><body style="margin:0;display:flex;justify-content:center;align-items:center;background:transparent;">${htmlCode}</body></html>`);
+    doc.close();
 }
 
 async function loadContent(){
@@ -79,35 +97,36 @@ async function loadContent(){
         
         paras.forEach((t,i)=>{
             const p=document.createElement("p"); p.innerText=t; box.appendChild(p);
-            // Har 2nd paragraph ke baad ek Ad inject karo
-            if((i+1)%2 === 0 && i < 6){
+            
+            // Har 2nd paragraph ke baad aapka NAYA ad code
+            if((i+1)%2 === 0 && i < 14){
                 const midId = `mid-ad-${i}`;
                 const midDiv = document.createElement("div");
-                midDiv.className = "ad-slot"; midDiv.id = midId;
+                midDiv.className = "ad-slot mid-ad-unit"; 
+                midDiv.id = midId;
                 box.appendChild(midDiv);
-                setTimeout(() => injectAd(midId, MID_AD), 500);
+                
+                setTimeout(() => injectAd(midId, NEW_MID_CODE), 400 * i);
             }
         });
 
-        // Load Top & Bottom Ads
-        injectAd('ad-top', TOP_AD);
-        injectAd('ad-bottom', BOTTOM_AD);
+        // Top Banner
+        injectAd('ad-top', TOP_BANNER_CODE);
+        // Final Bottom Ad with your new code
+        injectAd('final-anchor-ad', NEW_MID_CODE);
+
+        // Refresh logic: Har 40s mein Middle Ads badlengi (Using New Code)
+        setInterval(() => {
+            document.querySelectorAll('.mid-ad-unit').forEach(div => {
+                injectAd(div.id, NEW_MID_CODE);
+            });
+        }, 40000);
 
         if(data.song_url) setupMusic(data.song_url);
     }
 }
 
-function setupMusic(url) {
-    const audio = document.getElementById('task-audio');
-    let finalUrl = url;
-    if (url.includes('drive.google.com')) {
-        let fileId = url.split('/file/d/')[1]?.split('/')[0] || url.split('id=')[1]?.split('&')[0];
-        if (fileId) finalUrl = `https://docs.google.com/uc?export=open&id=${fileId}`;
-    }
-    audio.src = finalUrl;
-    audio.play().catch(() => console.log("User click needed for audio"));
-}
-
+// Timer & Submit stay the same (Strict ₹5 reward logic)
 function startTimer(){
     const el=document.getElementById("timer");
     const iv = setInterval(()=>{ 
@@ -115,10 +134,7 @@ function startTimer(){
             timeLeft--;
             let m=Math.floor(timeLeft/60), s=timeLeft%60;
             el.textContent=`${m}:${s.toString().padStart(2,'0')}`; 
-        } else { 
-            clearInterval(iv); 
-            submitTask(); 
-        }
+        } else { clearInterval(iv); submitTask(); }
     },1000);
 }
 
@@ -134,6 +150,17 @@ async function submitTask(){
     location.href="dashboard.html?status=success";
 }
 
+function setupMusic(url) {
+    const audio = document.getElementById('task-audio');
+    let finalUrl = url;
+    if (url.includes('drive.google.com')) {
+        let fileId = url.split('/file/d/')[1]?.split('/')[0] || url.split('id=')[1]?.split('&')[0];
+        if (fileId) finalUrl = `https://docs.google.com/uc?export=open&id=${fileId}`;
+    }
+    audio.src = finalUrl;
+    audio.play().catch(() => console.log("User click needed"));
+}
+
 async function init(){
     const {data:{session}}=await sb.auth.getSession();
     if(!session){location.href="login.html";return;}
@@ -141,7 +168,8 @@ async function init(){
     loadContent(); 
     startTimer();
 }
-window.onload=init;
+
+window.onload = init;
 </script>
 </body>
 </html>
