@@ -24,69 +24,74 @@
         .section-title { font-weight: 800; font-size: 1.2rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
         .section-title i { color: var(--primary); }
 
-        /* Search Bar Style */
+        /* Search Bar */
         .search-container { position: relative; margin-bottom: 20px; }
-        .search-container input { width: 100%; padding: 15px 20px 15px 45px; border-radius: 15px; border: 2px solid #f1f5f9; background: white; font-size: 1rem; outline: none; transition: 0.3s; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-        .search-container input:focus { border-color: var(--primary); box-shadow: 0 10px 15px -3px rgba(255,153,51,0.2); }
-        .search-container i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 1.1rem; }
+        .search-container input { width: 100%; padding: 15px 20px 15px 45px; border-radius: 15px; border: 2px solid #f1f5f9; background: white; font-size: 1rem; outline: none; transition: 0.3s; }
+        .search-container i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
+
+        /* Scratch Card Overlay */
+        #scratch-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 5000; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .scratch-container { position: relative; width: 280px; height: 280px; background: #fff; border-radius: 20px; overflow: hidden; border: 4px solid var(--primary); }
+        #scratch-canvas { position: absolute; top: 0; left: 0; cursor: crosshair; z-index: 2; }
+        
+        .reward-content { 
+            position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1; 
+            background: radial-gradient(circle, #fff 0%, #fff5e6 100%); 
+        }
+        .watermark-logo {
+            position: absolute; width: 150px; opacity: 0.1; pointer-events: none; z-index: 0;
+        }
 
         .info-note { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 12px; margin-bottom: 20px; border-radius: 8px; display: flex; align-items: center; gap: 10px; }
         .info-note p { font-size: 0.85rem; color: #92400e; font-weight: 600; margin: 0; }
-
         .charge-box { background: #fff1f2; border: 1.5px dashed var(--secondary); padding: 15px; border-radius: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
-        
         .history-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 5px; border-bottom: 1px solid #f1f5f9; }
-        .history-item:last-child { border-bottom: none; }
-        .status-badge { background: #dcfce7; color: #166534; font-size: 0.75rem; padding: 4px 12px; border-radius: 50px; font-weight: 700; display: flex; align-items: center; gap: 5px; }
+        .status-badge { background: #dcfce7; color: #166534; font-size: 0.75rem; padding: 4px 12px; border-radius: 50px; font-weight: 700; }
 
         .input-group { margin-bottom: 15px; }
         .input-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; color: #64748b; }
-        .input-group input { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #f1f5f9; background: #f8fafc; font-size: 1rem; transition: 0.3s; }
-        .input-group input:read-only { background: #e2e8f0; color: #475569; border-color: #cbd5e0; cursor: not-allowed; }
+        .input-group input { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #f1f5f9; background: #f8fafc; font-size: 1rem; }
+        .input-group input:read-only { background: #e2e8f0; color: #475569; cursor: not-allowed; }
 
-        .btn-save { background: var(--primary); color: white; border: none; width: 100%; padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; }
-        .btn-edit { background: white; color: var(--dark); border: 2px solid var(--dark); width: 100%; padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 10px; display: none; }
+        .btn-save { background: var(--primary); color: white; border: none; width: 100%; padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer; }
+        .btn-edit { background: white; color: var(--dark); border: 2px solid var(--dark); width: 100%; padding: 12px; border-radius: 12px; font-weight: 700; display: none; }
 
         .task-grid { display: grid; gap: 15px; }
-        .task-item { background: white; padding: 20px; border-radius: 20px; border: 1px solid #f1f5f9; display: flex; flex-direction: column; gap: 10px; transition: 0.3s; }
-        .do-btn { flex: 1; background: var(--primary); color: white; padding: 12px; border-radius: 10px; text-decoration: none; font-size: 0.9rem; font-weight: 700; text-align: center; }
-
-        #scratch-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 5000; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .scratch-container { position: relative; width: 280px; height: 280px; background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 0 40px rgba(255, 153, 51, 0.5); border: 4px solid var(--primary); }
-        #scratch-canvas { position: absolute; top: 0; left: 0; cursor: crosshair; z-index: 2; }
-        .reward-content { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1; background: radial-gradient(circle, #fff 0%, #fff5e6 100%); }
+        .task-item { background: white; padding: 20px; border-radius: 20px; border: 1px solid #f1f5f9; display: flex; flex-direction: column; gap: 10px; }
+        .do-btn { background: var(--primary); color: white; padding: 12px; border-radius: 10px; text-decoration: none; font-weight: 700; text-align: center; }
         
-        #withdraw-btn { display: none; background: #25d366; color: white; border: none; width: 100%; padding: 15px; border-radius: 12px; font-weight: 800; margin-top: 15px; cursor: pointer; }
+        #withdraw-btn { display: none; background: #25d366; color: white; border: none; width: 100%; padding: 15px; border-radius: 12px; font-weight: 800; margin-top: 15px; }
     </style>
 </head>
 <body>
 
     <div id="scratch-overlay">
-        <h2 style="color:var(--primary); margin-bottom: 20px;">Task Complete! </h2>
+        <h2 style="color:var(--primary); margin-bottom: 20px;">Task Complete! 🚀</h2>
         <div class="scratch-container">
             <div class="reward-content">
-                <i class="fa-solid fa-gift" style="font-size: 3.5rem; color: #ffd700; margin-bottom: 10px;"></i>
-                <h2 style="color:var(--dark); font-size: 2.2rem; margin: 0;">5.00</h2>
-                <p style="color:#64748b; font-weight:700;">Reward Credited</p>
+                <img src="https://i.ibb.co/LzfNq9p/1000050980.jpg" class="watermark-logo" alt="logo">
+                <i class="fa-solid fa-gift" style="font-size: 3.5rem; color: #ffd700; z-index: 1;"></i>
+                <h2 style="color:var(--dark); font-size: 2.2rem; margin: 10px 0; z-index: 1;">₹5.00</h2>
+                <p style="color:#64748b; font-weight:700; z-index: 1;">Reward Credited</p>
             </div>
             <canvas id="scratch-canvas" width="280" height="280"></canvas>
         </div>
-        <div class="scratch-hint" style="margin-top: 15px; color: #fff; font-weight: 600;">Scratch the card to see reward</div>
-        <button id="close-scratch" class="btn-save" style="width:220px; margin-top:25px; display:none;" onclick="closeScratch()">Collect & Continue</button>
+        <div style="margin-top: 15px; color: #fff; font-weight: 600;">Scratch to reveal your reward</div>
+        <button id="close-scratch" class="btn-save" style="width:220px; margin-top:25px; display:none;" onclick="addRewardAndClose()">Collect & Continue</button>
     </div>
 
     <nav class="navbar">
         <div style="font-weight: 900; letter-spacing: -0.5px;">ARHAM <span style="color:var(--primary)">INSIGHTS</span></div>
-        <button onclick="logout()" style="background:rgba(255,255,255,0.1); border:none; color:white; padding:6px 15px; border-radius:8px; font-size:0.8rem;">Logout</button>
+        <button onclick="logout()" style="background:rgba(255,255,255,0.1); border:none; color:white; padding:6px 15px; border-radius:8px;">Logout</button>
     </nav>
 
     <div class="container">
         <div class="welcome-card">
             <h2 style="margin:0">Namaste!</h2>
-            <p id="user-email-header" style="opacity: 0.7; font-size: 0.9rem; margin: 5px 0 0 0;">Loading profile...</p>
+            <p id="user-email-header" style="opacity: 0.7; font-size: 0.9rem;">Loading profile...</p>
             <div class="stats-row">
                 <div class="stat-item"><span>Tasks Done</span><b id="tasks-count">0</b></div>
-                <div class="stat-item"><span>Total Earning</span><b id="total-earning">0</b></div>
+                <div class="stat-item"><span>Total Earning</span><b id="total-earning">₹0</b></div>
             </div>
             <button id="withdraw-btn" onclick="sendWhatsAppAlert()"></button>
         </div>
@@ -95,57 +100,39 @@
             <div class="section-title"><i class="fa-solid fa-file-invoice-dollar"></i> Payout Summary</div>
             <div class="charge-box">
                 <div class="charge-info">
-                    <span style="font-size: 0.8rem; color: #64748b; display: block;">Maintenance Fee (Deducted from your payment)</span>
-                    <b style="color: var(--secondary);"> 0 </b>
+                    <span style="font-size: 0.8rem; color: #64748b;">Maintenance Fee (Deducted on Withdrawal)</span>
+                    <b style="color: var(--secondary);">₹ 0 </b>
                 </div>
                 <i class="fa-solid fa-shield-halved" style="color: var(--secondary); font-size: 1.5rem;"></i>
             </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 5px;">
-                <span style="font-weight: 700;">Net Payable Amount:</span>
-                <b id="net-payable" style="color: var(--success); font-size: 1.2rem;">0.00</b>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: 700;">Net Payable:</span>
+                <b id="net-payable" style="color: var(--success); font-size: 1.2rem;">₹0.00</b>
             </div>
         </div>
 
         <div class="glass-panel">
             <div class="section-title"><i class="fa-solid fa-clock-rotate-left"></i> Payout History</div>
-            <div id="payout-history-list">
-                <p style="text-align:center; font-size:0.85rem; color:#94a3b8;">Loading history...</p>
-            </div>
+            <div id="payout-history-list"></div>
         </div>
 
         <div class="glass-panel">
-            <div class="section-title"><i class="fa-solid fa-user-shield"></i> Profile & Payment Info</div>
-            <div class="info-note">
-                <i class="fa-solid fa-circle-exclamation" style="color: #f59e0b;"></i>
-                <p>Fill all your details correctly for smooth verification.</p>
-            </div>
+            <div class="section-title"><i class="fa-solid fa-user-shield"></i> Payment Info</div>
             <form id="profile-form" onsubmit="saveProfile(event)">
-                <div class="input-group">
-                    <label>Personal Email Address</label>
-                    <input type="email" id="contact_email" placeholder="Email address daalein" required>
-                </div>
-                <div class="input-group">
-                    <label>WhatsApp Number</label>
-                    <input type="tel" id="whatsapp_no" placeholder="WhatsApp no. daalein" required>
-                </div>
-                <div class="input-group">
-                    <label>UPI ID (For Payments)</label>
-                    <input type="text" id="upi_id" placeholder="UPI ID daalein" required>
-                </div>
-                <button type="submit" id="save-btn" class="btn-save">Save & Lock Details</button>
+                <div class="input-group"><label>WhatsApp Number</label><input type="tel" id="whatsapp_no" required></div>
+                <div class="input-group"><label>UPI ID (For Payments)</label><input type="text" id="upi_id" required></div>
+                <button type="submit" id="save-btn" class="btn-save">Save Details</button>
                 <button type="button" id="edit-btn" onclick="enableEditing()" class="btn-edit">Edit Details</button>
             </form>
         </div>
 
         <div class="glass-panel">
-            <div class="section-title"><i class="fa-solid fa-fire"></i> Available Tasks</div>
-            
+            <div class="section-title"><i class="fa-solid fa-fire"></i> Tasks</div>
             <div class="search-container">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="taskSearch" placeholder="Search tasks by keyword..." onkeyup="filterTasks()">
+                <input type="text" id="taskSearch" placeholder="Search tasks..." onkeyup="filterTasks()">
             </div>
-
-            <div class="task-grid" id="live-links-list">Loading live tasks...</div>
+            <div class="task-grid" id="live-links-list"></div>
         </div>
     </div>
 
@@ -168,60 +155,31 @@
             } else { window.location.href = "login.html"; }
         }
 
-        // Search Functionality
-        function filterTasks() {
-            const input = document.getElementById('taskSearch').value.toLowerCase();
-            const taskItems = document.getElementsByClassName('task-item');
-            
-            for (let i = 0; i < taskItems.length; i++) {
-                const keyword = taskItems[i].getElementsByTagName('b')[0].innerText.toLowerCase();
-                if (keyword.includes(input)) {
-                    taskItems[i].style.display = "flex";
-                } else {
-                    taskItems[i].style.display = "none";
-                }
-            }
-        }
-
         async function fetchUserProgress() {
             const { data } = await _supabase.from('user_work').select('amount').eq('username', currentUserSession.email);
             if(data) {
                 document.getElementById('tasks-count').innerText = data.length;
                 currentBalance = data.reduce((sum, item) => sum + (item.amount || 0), 0);
-                document.getElementById('total-earning').innerText = "" + currentBalance;
-
-                let netPayable = Math.max(0, currentBalance - MAINTENANCE_FEE);
-                document.getElementById('net-payable').innerText = "" + netPayable.toFixed(2);
-
+                document.getElementById('total-earning').innerText = "₹" + currentBalance.toFixed(2);
+                let net = Math.max(0, currentBalance - MAINTENANCE_FEE);
+                document.getElementById('net-payable').innerText = "₹" + net.toFixed(2);
                 if(currentBalance >= 10000) {
-                    const wBtn = document.getElementById('withdraw-btn');
-                    wBtn.style.display = 'block';
-                    wBtn.innerHTML = `<i class="fa-brands fa-whatsapp"></i> Withdraw Net: ${netPayable}`;
+                    const btn = document.getElementById('withdraw-btn');
+                    btn.style.display = 'block';
+                    btn.innerHTML = `<i class="fa-brands fa-whatsapp"></i> Withdraw Net: ₹${net.toFixed(2)}`;
                 }
             }
         }
 
-        async function fetchPayoutHistory() {
-            const list = document.getElementById('payout-history-list');
-            const { data, error } = await _supabase.from('payout_history').select('*').eq('user_email', currentUserSession.email).order('paid_at', { ascending: false });
-            if (data && data.length > 0) {
-                list.innerHTML = data.map(item => `
-                    <div class="history-item">
-                        <div>
-                            <b style="font-size:0.95rem;">${item.amount}</b>
-                            <span style="display:block; font-size:0.7rem; color:#94a3b8;">${new Date(item.paid_at).toLocaleDateString()}</span>
-                        </div>
-                        <div class="status-badge"><i class="fa-solid fa-circle-check"></i> ${item.status}</div>
-                    </div>`).join('');
-            } else {
-                list.innerHTML = `<p style="text-align:center; font-size:0.8rem; color:#94a3b8;">Abhi tak koi payout nahi hua hai.</p>`;
-            }
+        function filterTasks() {
+            let input = document.getElementById('taskSearch').value.toLowerCase();
+            let items = document.getElementsByClassName('task-item');
+            for (let i of items) { i.style.display = i.innerText.toLowerCase().includes(input) ? "flex" : "none"; }
         }
 
         async function loadProfile() {
             const { data } = await _supabase.from('profiles').select('*').eq('email', currentUserSession.email).maybeSingle();
             if(data) {
-                document.getElementById('contact_email').value = data.contact_email || '';
                 document.getElementById('upi_id').value = data.upi_id || '';
                 document.getElementById('whatsapp_no').value = data.whatsapp || '';
                 if(data.upi_id) lockInputs();
@@ -230,15 +188,9 @@
 
         async function saveProfile(e) {
             e.preventDefault();
-            const payload = {
-                email: currentUserSession.email,
-                contact_email: document.getElementById('contact_email').value,
-                upi_id: document.getElementById('upi_id').value,
-                whatsapp: document.getElementById('whatsapp_no').value,
-                wallet_balance: currentBalance
-            };
+            const payload = { email: currentUserSession.email, upi_id: document.getElementById('upi_id').value, whatsapp: document.getElementById('whatsapp_no').value };
             const { error } = await _supabase.from('profiles').upsert(payload, { onConflict: 'email' });
-            if (!error) { alert("Details Saved! "); lockInputs(); }
+            if (!error) { alert("Saved! 🚀"); lockInputs(); }
         }
 
         function lockInputs() {
@@ -256,21 +208,23 @@
         async function fetchTaskLinks() {
             const { data } = await _supabase.from('admin_blogs').select('*').order('created_at', {ascending: false});
             const list = document.getElementById('live-links-list');
-            if(data) {
-                list.innerHTML = data.map(task => `
-                    <div class="task-item">
-                        <b>${task.keyword}</b>
-                        <a href="taskspage.html?id=${task.id}" class="do-btn">Start Task (Reward Earn Karein)</a>
-                    </div>`).join('');
-            }
+            if(data) { list.innerHTML = data.map(t => `<div class="task-item"><b>${t.keyword}</b><a href="taskspage.html?id=${t.id}" class="do-btn">Start Task</a></div>`).join(''); }
+        }
+
+        async function fetchPayoutHistory() {
+            const list = document.getElementById('payout-history-list');
+            const { data } = await _supabase.from('payout_history').select('*').eq('user_email', currentUserSession.email).order('paid_at', { ascending: false });
+            if (data && data.length > 0) {
+                list.innerHTML = data.map(item => `<div class="history-item"><div><b>₹${item.amount}</b><br><small>${new Date(item.paid_at).toLocaleDateString()}</small></div><div class="status-badge">${item.status}</div></div>`).join('');
+            } else { list.innerHTML = "<p style='text-align:center; font-size:0.8rem;'>No history yet.</p>"; }
         }
 
         function sendWhatsAppAlert() {
-            let netPayable = currentBalance - MAINTENANCE_FEE;
-            const msg = ` *Withdrawal Request*%0A User: ${currentUserSession.email}%0A Total Balance: ${currentBalance}%0A Fee: ${MAINTENANCE_FEE}%0A Net Payable: ${netPayable}%0A UPI: ${document.getElementById('upi_id').value}`;
-            window.open(`https://wa.me/918769531125?text=${msg}`, '_blank');
+            let msg = `🚀 Withdrawal: ${currentUserSession.email}\n💰 Total: ₹${currentBalance}\n💵 Net: ₹${currentBalance-MAINTENANCE_FEE}\n💳 UPI: ${document.getElementById('upi_id').value}`;
+            window.open(`https://wa.me/918769531125?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
+        // --- SCRATCH CARD LOGIC ---
         function showScratchCard() {
             const overlay = document.getElementById('scratch-overlay');
             const canvas = document.getElementById('scratch-canvas');
@@ -278,24 +232,31 @@
             overlay.style.display = 'flex';
             ctx.fillStyle = '#ff9933'; ctx.fillRect(0, 0, 280, 280);
             ctx.fillStyle = "#ffffff"; ctx.font = "bold 24px Inter"; ctx.textAlign = "center"; ctx.fillText("SCRATCH ME", 140, 150);
-            let isDrawing = false; let scratched = 0;
-            const scratch = (e) => {
-                if (!isDrawing) return;
-                const rect = canvas.getBoundingClientRect();
-                const x = (e.pageX || (e.touches ? e.touches[0].pageX : 0)) - rect.left;
-                const y = (e.pageY || (e.touches ? e.touches[0].pageY : 0)) - rect.top;
-                ctx.globalCompositeOperation = 'destination-out'; ctx.beginPath(); ctx.arc(x, y, 35, 0, Math.PI * 2); ctx.fill();
-                scratched++; if (scratched > 60) document.getElementById('close-scratch').style.display = 'block';
+            let drawing = false; let count = 0;
+            const draw = (e) => {
+                if(!drawing) return;
+                const r = canvas.getBoundingClientRect();
+                const x = (e.pageX || e.touches[0].pageX) - r.left;
+                const y = (e.pageY || e.touches[0].pageY) - r.top;
+                ctx.globalCompositeOperation = 'destination-out'; ctx.beginPath(); ctx.arc(x,y,35,0,Math.PI*2); ctx.fill();
+                count++; if(count > 60) document.getElementById('close-scratch').style.display = 'block';
             };
-            canvas.addEventListener('mousedown', () => isDrawing = true);
-            canvas.addEventListener('touchstart', (e) => { isDrawing = true; e.preventDefault(); });
-            window.addEventListener('mouseup', () => isDrawing = false);
-            window.addEventListener('touchend', () => isDrawing = false);
-            canvas.addEventListener('mousemove', scratch);
-            canvas.addEventListener('touchmove', (e) => { scratch(e); e.preventDefault(); });
+            canvas.addEventListener('mousedown', () => drawing = true);
+            canvas.addEventListener('touchstart', (e) => { drawing = true; e.preventDefault(); });
+            window.addEventListener('mouseup', () => drawing = false);
+            window.addEventListener('touchend', () => drawing = false);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('touchmove', (e) => { draw(e); e.preventDefault(); });
         }
 
-        function closeScratch() { window.history.replaceState({}, '', window.location.pathname); location.reload(); }
+        async function addRewardAndClose() {
+            const btn = document.getElementById('close-scratch');
+            btn.innerText = "Saving Reward..."; btn.disabled = true;
+            const { error } = await _supabase.from('user_work').insert([{ username: currentUserSession.email, amount: 5.00, keyword: 'Daily Scratch Reward' }]);
+            if (error) { alert("Failed to add reward."); btn.disabled = false; btn.innerText = "Try Again"; }
+            else { window.history.replaceState({}, '', window.location.pathname); location.reload(); }
+        }
+
         async function logout() { await _supabase.auth.signOut(); window.location.href = "login.html"; }
         window.onload = init;
     </script>
