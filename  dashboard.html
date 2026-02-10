@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+m<!DOCTYPE html>
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
@@ -24,26 +24,18 @@
         .section-title { font-weight: 800; font-size: 1.2rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
         .section-title i { color: var(--primary); }
 
-        /* Search Bar */
         .search-container { position: relative; margin-bottom: 20px; }
         .search-container input { width: 100%; padding: 15px 20px 15px 45px; border-radius: 15px; border: 2px solid #f1f5f9; background: white; font-size: 1rem; outline: none; transition: 0.3s; }
         .search-container i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
 
-        /* Scratch Card Overlay */
         #scratch-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 5000; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
         .scratch-container { position: relative; width: 280px; height: 280px; background: #fff; border-radius: 20px; overflow: hidden; border: 4px solid var(--primary); }
         #scratch-canvas { position: absolute; top: 0; left: 0; cursor: crosshair; z-index: 2; }
         
-        .reward-content { 
-            position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1; 
-            background: radial-gradient(circle, #fff 0%, #fff5e6 100%); 
-        }
-        .watermark-logo {
-            position: absolute; width: 150px; opacity: 0.1; pointer-events: none; z-index: 0;
-        }
+        .reward-content { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1; background: radial-gradient(circle, #fff 0%, #fff5e6 100%); }
+        .watermark-logo { position: absolute; width: 150px; opacity: 0.1; pointer-events: none; z-index: 0; }
 
         .info-note { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 12px; margin-bottom: 20px; border-radius: 8px; display: flex; align-items: center; gap: 10px; }
-        .info-note p { font-size: 0.85rem; color: #92400e; font-weight: 600; margin: 0; }
         .charge-box { background: #fff1f2; border: 1.5px dashed var(--secondary); padding: 15px; border-radius: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
         .history-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 5px; border-bottom: 1px solid #f1f5f9; }
         .status-badge { background: #dcfce7; color: #166534; font-size: 0.75rem; padding: 4px 12px; border-radius: 50px; font-weight: 700; }
@@ -66,12 +58,12 @@
 <body>
 
     <div id="scratch-overlay">
-        <h2 style="color:var(--primary); margin-bottom: 20px;">Task Complete! 🚀</h2>
+        <h2 style="color:var(--primary); margin-bottom: 20px;">Task Complete! </h2>
         <div class="scratch-container">
             <div class="reward-content">
                 <img src="https://i.ibb.co/LzfNq9p/1000050980.jpg" class="watermark-logo" alt="logo">
                 <i class="fa-solid fa-gift" style="font-size: 3.5rem; color: #ffd700; z-index: 1;"></i>
-                <h2 style="color:var(--dark); font-size: 2.2rem; margin: 10px 0; z-index: 1;">₹5.00</h2>
+                <h2 style="color:var(--dark); font-size: 2.2rem; margin: 10px 0; z-index: 1;">5.00</h2>
                 <p style="color:#64748b; font-weight:700; z-index: 1;">Reward Credited</p>
             </div>
             <canvas id="scratch-canvas" width="280" height="280"></canvas>
@@ -91,7 +83,7 @@
             <p id="user-email-header" style="opacity: 0.7; font-size: 0.9rem;">Loading profile...</p>
             <div class="stats-row">
                 <div class="stat-item"><span>Tasks Done</span><b id="tasks-count">0</b></div>
-                <div class="stat-item"><span>Total Earning</span><b id="total-earning">₹0</b></div>
+                <div class="stat-item"><span>Total Earning</span><b id="total-earning">0.00</b></div>
             </div>
             <button id="withdraw-btn" onclick="sendWhatsAppAlert()"></button>
         </div>
@@ -101,13 +93,13 @@
             <div class="charge-box">
                 <div class="charge-info">
                     <span style="font-size: 0.8rem; color: #64748b;">Maintenance Fee (Deducted on Withdrawal)</span>
-                    <b style="color: var(--secondary);">₹ 0 </b>
+                    <b style="color: var(--secondary);"> 0 </b>
                 </div>
                 <i class="fa-solid fa-shield-halved" style="color: var(--secondary); font-size: 1.5rem;"></i>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <span style="font-weight: 700;">Net Payable:</span>
-                <b id="net-payable" style="color: var(--success); font-size: 1.2rem;">₹0.00</b>
+                <b id="net-payable" style="color: var(--success); font-size: 1.2rem;">0.00</b>
             </div>
         </div>
 
@@ -159,14 +151,14 @@
             const { data } = await _supabase.from('user_work').select('amount').eq('username', currentUserSession.email);
             if(data) {
                 document.getElementById('tasks-count').innerText = data.length;
-                currentBalance = data.reduce((sum, item) => sum + (item.amount || 0), 0);
-                document.getElementById('total-earning').innerText = "₹" + currentBalance.toFixed(2);
+                currentBalance = data.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
+                document.getElementById('total-earning').innerText = "" + currentBalance.toFixed(2);
                 let net = Math.max(0, currentBalance - MAINTENANCE_FEE);
-                document.getElementById('net-payable').innerText = "₹" + net.toFixed(2);
+                document.getElementById('net-payable').innerText = "" + net.toFixed(2);
                 if(currentBalance >= 10000) {
                     const btn = document.getElementById('withdraw-btn');
                     btn.style.display = 'block';
-                    btn.innerHTML = `<i class="fa-brands fa-whatsapp"></i> Withdraw Net: ₹${net.toFixed(2)}`;
+                    btn.innerHTML = `<i class="fa-brands fa-whatsapp"></i> Withdraw Net: ${net.toFixed(2)}`;
                 }
             }
         }
@@ -190,7 +182,7 @@
             e.preventDefault();
             const payload = { email: currentUserSession.email, upi_id: document.getElementById('upi_id').value, whatsapp: document.getElementById('whatsapp_no').value };
             const { error } = await _supabase.from('profiles').upsert(payload, { onConflict: 'email' });
-            if (!error) { alert("Saved! 🚀"); lockInputs(); }
+            if (!error) { alert("Saved! "); lockInputs(); }
         }
 
         function lockInputs() {
@@ -215,16 +207,15 @@
             const list = document.getElementById('payout-history-list');
             const { data } = await _supabase.from('payout_history').select('*').eq('user_email', currentUserSession.email).order('paid_at', { ascending: false });
             if (data && data.length > 0) {
-                list.innerHTML = data.map(item => `<div class="history-item"><div><b>₹${item.amount}</b><br><small>${new Date(item.paid_at).toLocaleDateString()}</small></div><div class="status-badge">${item.status}</div></div>`).join('');
+                list.innerHTML = data.map(item => `<div class="history-item"><div><b>${item.amount}</b><br><small>${new Date(item.paid_at).toLocaleDateString()}</small></div><div class="status-badge">${item.status}</div></div>`).join('');
             } else { list.innerHTML = "<p style='text-align:center; font-size:0.8rem;'>No history yet.</p>"; }
         }
 
         function sendWhatsAppAlert() {
-            let msg = `🚀 Withdrawal: ${currentUserSession.email}\n💰 Total: ₹${currentBalance}\n💵 Net: ₹${currentBalance-MAINTENANCE_FEE}\n💳 UPI: ${document.getElementById('upi_id').value}`;
+            let msg = ` Withdrawal: ${currentUserSession.email}\n Total: ${currentBalance}\n Net: ${currentBalance-MAINTENANCE_FEE}\n UPI: ${document.getElementById('upi_id').value}`;
             window.open(`https://wa.me/918769531125?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        // --- SCRATCH CARD LOGIC ---
         function showScratchCard() {
             const overlay = document.getElementById('scratch-overlay');
             const canvas = document.getElementById('scratch-canvas');
@@ -236,8 +227,8 @@
             const draw = (e) => {
                 if(!drawing) return;
                 const r = canvas.getBoundingClientRect();
-                const x = (e.pageX || e.touches[0].pageX) - r.left;
-                const y = (e.pageY || e.touches[0].pageY) - r.top;
+                const x = (e.pageX || (e.touches ? e.touches[0].pageX : 0)) - r.left;
+                const y = (e.pageY || (e.touches ? e.touches[0].pageY : 0)) - r.top;
                 ctx.globalCompositeOperation = 'destination-out'; ctx.beginPath(); ctx.arc(x,y,35,0,Math.PI*2); ctx.fill();
                 count++; if(count > 60) document.getElementById('close-scratch').style.display = 'block';
             };
@@ -251,10 +242,25 @@
 
         async function addRewardAndClose() {
             const btn = document.getElementById('close-scratch');
-            btn.innerText = "Saving Reward..."; btn.disabled = true;
-            const { error } = await _supabase.from('user_work').insert([{ username: currentUserSession.email, amount: 5.00, keyword: 'Daily Scratch Reward' }]);
-            if (error) { alert("Failed to add reward."); btn.disabled = false; btn.innerText = "Try Again"; }
-            else { window.history.replaceState({}, '', window.location.pathname); location.reload(); }
+            btn.innerText = "Adding 5.00..."; btn.disabled = true;
+            
+            // Strictly 5.00 entry to Database
+            const { error } = await _supabase.from('user_work').insert([
+                { 
+                    username: currentUserSession.email, 
+                    amount: 5.00, 
+                    keyword: 'Daily Scratch Reward' 
+                }
+            ]);
+
+            if (error) { 
+                alert("Failed to add reward: " + error.message); 
+                btn.disabled = false; btn.innerText = "Try Again"; 
+            }
+            else { 
+                window.history.replaceState({}, '', window.location.pathname); 
+                location.reload(); 
+            }
         }
 
         async function logout() { await _supabase.auth.signOut(); window.location.href = "login.html"; }
