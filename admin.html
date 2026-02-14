@@ -37,15 +37,20 @@
         .btn-wa { background: var(--success); color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: bold; }
         .tab-content { display: none; } .tab-content.active { display: block; }
         
-        .badge-unpaid { background: #fee2e2; color: #ef4444; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; }
-
-        /* Invoice Section CSS */
-        #invoice-preview { width: 350px; background: white; padding: 20px; border: 2px solid #eee; position: fixed; left: -1000px; top: 0; font-family: 'Inter', sans-serif; color: #000; }
-        .invoice-header { text-align: center; border-bottom: 2px solid var(--numbgen); padding-bottom: 10px; }
-        .invoice-logo { width: 100px; margin-bottom: 10px; }
-        .invoice-details { margin: 15px 0; font-size: 13px; }
-        .invoice-table { width: 100%; margin: 10px 0; }
-        .invoice-total { text-align: right; font-weight: 800; border-top: 2px solid #eee; padding-top: 5px; color: var(--numbgen); }
+        /* Invoice Styling for Printing */
+        #invoice-preview { width: 450px; background: white; padding: 30px; position: fixed; left: -2000px; top: 0; box-sizing: border-box; color: #333; }
+        .inv-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--numbgen); padding-bottom: 15px; margin-bottom: 20px; }
+        .inv-logo-area img { width: 120px; }
+        .inv-title { text-align: right; }
+        .inv-title h1 { margin: 0; color: var(--numbgen); font-size: 24px; }
+        .inv-info { display: grid; grid-template-columns: 1fr 1fr; margin-bottom: 20px; font-size: 13px; line-height: 1.6; text-align: left; }
+        .inv-table { width: 100%; margin-bottom: 20px; border-bottom: 2px solid #eee; }
+        .inv-table th { background: #f4f4f4; padding: 10px; border: 1px solid #ddd; }
+        .inv-table td { padding: 10px; border: 1px solid #ddd; text-align: center; }
+        .inv-summary { margin-left: auto; width: 220px; font-size: 14px; }
+        .inv-summary div { display: flex; justify-content: space-between; padding: 5px 0; }
+        .inv-grand { border-top: 2px solid var(--numbgen); font-weight: 900; color: var(--numbgen); font-size: 16px; margin-top: 5px; padding-top: 10px; }
+        .inv-footer { margin-top: 30px; text-align: center; font-size: 11px; color: #777; border-top: 1px dashed #ccc; padding-top: 10px; }
     </style>
 </head>
 <body>
@@ -69,7 +74,7 @@
             <div class="stat-card"><h4>Users</h4><p id="s-users" style="font-size:1.5rem; margin:5px 0; font-weight:900;">0</p></div>
             <div class="stat-card"><h4>Tasks</h4><p id="s-tasks" style="font-size:1.5rem; margin:5px 0; font-weight:900;">0</p></div>
             <div class="stat-card" style="border-color: var(--numbgen);"><h4>Total Leads</h4><p id="s-leads" style="font-size:1.5rem; margin:5px 0; font-weight:900;">0</p></div>
-            <div class="stat-card"><h4>Maint. Fee</h4><p id="s-fee" style="font-size:1.5rem; margin:5px 0; font-weight:900; color:var(--danger);">₹0</p></div>
+            <div class="stat-card"><h4>Maint. Fee</h4><p id="s-fee" style="font-size:1.5rem; margin:5px 0; font-weight:900; color:var(--danger);">0</p></div>
         </div>
 
         <div class="nav-tabs">
@@ -82,53 +87,47 @@
             <div class="tab" onclick="switchTab(event, 't-settings')">Site Config</div>
         </div>
 
-        <div id="t-numbergen" class="tab-content">
+        <div id="t-billing" class="tab-content">
             <div class="card">
-                <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                    <h3>Arham Numbergen Leads</h3>
-                    <button onclick="fetchLeads()" class="btn-wa" style="padding: 10px 15px;">🔄 Refresh</button>
-                </div>
-                <div style="overflow-x:auto;">
-                    <table>
-                        <thead>
-                            <tr><th>Date</th><th>Name</th><th>WhatsApp</th><th>Numbers</th><th>Status</th><th>Action</th></tr>
-                        </thead>
-                        <tbody id="leadsBody"></tbody>
-                    </table>
+                <h3><i class="fa fa-file-invoice-dollar"></i> Professional Billing Engine</h3>
+                <div style="background: #f8fafc; padding: 25px; border-radius: 15px; border: 1px solid #e2e8f0;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div><label>Client Name</label><input type="text" id="bill-name" placeholder="Full Name"></div>
+                        <div><label>WhatsApp Number</label><input type="text" id="bill-wa" placeholder="Number"></div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 15px;">
+                        <div><label>Leads Qty</label><input type="number" id="bill-qty" value="0" oninput="calcBill()"></div>
+                        <div><label>Rate Per Lead ()</label><input type="number" id="bill-rate" value="0.10" step="0.01" oninput="calcBill()"></div>
+                        <div><label>Maintenance Fee ()</label><input type="number" id="bill-maint" value="0" oninput="calcBill()"></div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                        <div><label>Discount Amount ()</label><input type="number" id="bill-disc" value="0" oninput="calcBill()" style="border-color: var(--danger);"></div>
+                        <div style="background: var(--dark); color: white; border-radius: 10px; padding: 10px; text-align: center;">
+                            <label style="color: #ccc;">Grand Total</label>
+                            <div id="bill-total-view" style="font-size: 1.5rem; font-weight: 900; color: var(--primary);">0.00</div>
+                        </div>
+                    </div>
+
+                    <button onclick="generateProfessionalBill()" class="btn-p" style="background: var(--numbgen); margin-top: 25px;">
+                        <i class="fa fa-print"></i> Generate Professional Tax Invoice
+                    </button>
                 </div>
             </div>
         </div>
 
-        <div id="t-billing" class="tab-content">
+        <div id="t-numbergen" class="tab-content">
             <div class="card">
-                <h3><i class="fa fa-file-invoice-dollar"></i> Arham Numbergen Billing Center</h3>
-                <p style="color:#64748b; font-size:0.9rem;">Yahan se aap kisi bhi lead ka professional bill generate kar sakte hain.</p>
-                <div style="background: #f8fafc; padding: 20px; border-radius: 15px; border: 1px solid #e2e8f0;">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                        <div>
-                            <label>Client Name</label>
-                            <input type="text" id="bill-name" placeholder="Customer ka naam">
-                        </div>
-                        <div>
-                            <label>WhatsApp Number</label>
-                            <input type="text" id="bill-wa" placeholder="WhatsApp Number">
-                        </div>
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px;">
-                        <div>
-                            <label>Numbers Count (Qty)</label>
-                            <input type="number" id="bill-qty" placeholder="e.g. 500">
-                        </div>
-                        <div>
-                            <label>Maintenance Fee (₹)</label>
-                            <input type="number" id="bill-maint" placeholder="e.g. 1500" value="0">
-                        </div>
-                    </div>
-                    <div style="margin-top: 20px;">
-                        <button onclick="generateAndSaveBillManual()" class="btn-p" style="background: var(--numbgen);">
-                            <i class="fa fa-download"></i> Generate & Download Professional Bill
-                        </button>
-                    </div>
+                <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h3>Arham Numbergen Leads</h3>
+                    <button onclick="fetchLeads()" class="btn-wa"> Refresh</button>
+                </div>
+                <div style="overflow-x:auto;">
+                    <table>
+                        <thead><tr><th>Date</th><th>Name</th><th>WhatsApp</th><th>Numbers</th><th>Action</th></tr></thead>
+                        <tbody id="leadsBody"></tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -137,32 +136,29 @@
             <div class="card">
                 <h3>Post New Blog/Task</h3>
                 <input type="hidden" id="task-id">
-                <input type="text" id="task-keyword" placeholder="Target Keyword (e.g. UPI Safety 2026)">
+                <input type="text" id="task-keyword" placeholder="Target Keyword">
                 <textarea id="task-content" rows="8" placeholder="Blog Content..."></textarea>
-                <input type="text" id="task-song" placeholder="Direct MP3 Link (Music)">
+                <input type="text" id="task-song" placeholder="MP3 Link">
                 <button onclick="saveTask()" id="task-btn" class="btn-p">Publish Task</button>
             </div>
         </div>
 
         <div id="t-tasks" class="tab-content">
             <div class="card" style="overflow-x:auto;">
-                <table><thead><tr><th>Keyword</th><th>Music</th><th>Actions</th></tr></thead>
-                <tbody id="task-list"></tbody></table>
+                <table><thead><tr><th>Keyword</th><th>Music</th><th>Actions</th></tr></thead><tbody id="task-list"></tbody></table>
             </div>
         </div>
 
         <div id="t-users" class="tab-content">
             <div class="card" style="overflow-x:auto;">
-                <table><thead><tr><th>User Email</th><th>UPI / WhatsApp</th><th>Balance</th></tr></thead>
-                <tbody id="user-list"></tbody></table>
+                <table><thead><tr><th>User Email</th><th>UPI / WhatsApp</th><th>Balance</th></tr></thead><tbody id="user-list"></tbody></table>
             </div>
         </div>
 
         <div id="t-payout" class="tab-content">
             <div class="card">
-                <h3>Record New Payout (Paid History)</h3>
-                <input type="email" id="p-email" placeholder="User Email">
-                <input type="number" id="p-amount" placeholder="Amount Paid (e.g. 8500)">
+                <h3>Record New Payout</h3>
+                <input type="email" id="p-email" placeholder="User Email"><input type="number" id="p-amount" placeholder="Amount">
                 <button onclick="addPayout()" class="btn-p" style="background:var(--success)">Add Paid Entry</button>
             </div>
         </div>
@@ -170,41 +166,55 @@
         <div id="t-settings" class="tab-content">
             <div class="card">
                 <h3>Website Maintenance Charges</h3>
-                <input type="number" id="config-fee" placeholder="Maintenance Fee (e.g. 1500)">
-                <button onclick="updateSettings()" class="btn-p">Update Fee Live</button>
+                <input type="number" id="config-fee" placeholder="Fee"><button onclick="updateSettings()" class="btn-p">Update Fee Live</button>
             </div>
         </div>
     </div>
 </div>
 
 <div id="invoice-preview">
-    <div class="invoice-header">
-        <img src="logo.png" class="invoice-logo" alt="Arham Numbergen">
-        <h2 style="margin:0; font-size: 18px;">INVOICE</h2>
-        <p style="font-size: 10px;">Arham Numbergen - Lead Tools</p>
+    <div class="inv-header">
+        <div class="inv-logo-area">
+            <img src="logo.png" alt="Arham Numbergen">
+            <p style="font-size: 10px; margin: 5px 0;">Official Billing Statement</p>
+        </div>
+        <div class="inv-title">
+            <h1>TAX INVOICE</h1>
+            <p id="inv-num" style="font-size: 11px;">#INV-2026-X</p>
+        </div>
     </div>
-    <div class="invoice-details">
-        <p><strong>Customer:</strong> <span id="inv-name"></span></p>
-        <p><strong>Contact:</strong> <span id="inv-wa"></span></p>
-        <p><strong>Date:</strong> <span id="inv-date"></span></p>
+
+    <div class="inv-info">
+        <div><strong>BILL TO:</strong><br><span id="inv-name-view"></span><br><span id="inv-wa-view"></span></div>
+        <div style="text-align: right;"><strong>DATE:</strong> <span id="inv-date-view"></span><br><strong>STATUS:</strong> PAID</div>
     </div>
-    <table class="invoice-table" style="font-size: 12px; width: 100%; border-collapse: collapse;">
-        <tr style="background:#eee; text-align: left;"><th style="padding:5px;">Description</th><th>Qty</th><th>Total</th></tr>
-        <tr><td style="padding:5px;">Number Combinations</td><td id="inv-qty"></td><td id="inv-subtotal"></td></tr>
-        <tr><td style="padding:5px;">Maintenance Fee</td><td>1</td><td id="inv-maint"></td></tr>
+
+    <table class="inv-table">
+        <thead><tr><th>Item</th><th>Rate</th><th>Qty</th><th>Total</th></tr></thead>
+        <tbody>
+            <tr><td style="text-align:left;">Leads Generation</td><td id="inv-rate-view"></td><td id="inv-qty-view"></td><td id="inv-subtotal-view"></td></tr>
+            <tr><td style="text-align:left;">Maintenance Charges</td><td>1.00</td><td>1</td><td id="inv-maint-view"></td></tr>
+        </tbody>
     </table>
-    <div class="invoice-total">TOTAL: <span id="inv-grand"></span></div>
-    <p style="text-align:center; font-size: 9px; margin-top:20px;">Thank you for your business!<br>Powered by Arham Insights</p>
+
+    <div class="inv-summary">
+        <div><span>Subtotal:</span> <span id="inv-sub-raw"></span></div>
+        <div><span>Maint. Fee:</span> <span id="inv-maint-raw"></span></div>
+        <div style="color:red;"><span>Discount:</span> <span id="inv-disc-raw"></span></div>
+        <div class="inv-grand"><span>GRAND TOTAL:</span> <span id="inv-grand-view"></span></div>
+    </div>
+
+    <div class="inv-footer">
+        <p>This is a computer-generated invoice for digital lead generation services.</p>
+        <p>Thank you! | Powered by Arham Insights</p>
+    </div>
 </div>
 
 <script>
     const _supabase = supabase.createClient("https://mkzgmrxakattqgbjnwch.supabase.co", "sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL");
     const SECRET = "Jainam Jayati Shasnam";
 
-    function togglePass() {
-        const inp = document.getElementById('admin-pass');
-        inp.type = inp.type === "password" ? "text" : "password";
-    }
+    function togglePass() { const inp = document.getElementById('admin-pass'); inp.type = inp.type === "password" ? "text" : "password"; }
 
     function checkAuth() {
         if(document.getElementById('admin-pass').value === SECRET) {
@@ -214,8 +224,61 @@
         } else { alert("Wrong Key!"); }
     }
 
-    async function loadAll() {
-        fetchTasks(); fetchUsers(); fetchSettings(); fetchLeads();
+    async function loadAll() { fetchTasks(); fetchUsers(); fetchSettings(); fetchLeads(); }
+
+    function calcBill() {
+        const qty = parseInt(document.getElementById('bill-qty').value) || 0;
+        const rate = parseFloat(document.getElementById('bill-rate').value) || 0;
+        const maint = parseFloat(document.getElementById('bill-maint').value) || 0;
+        const disc = parseFloat(document.getElementById('bill-disc').value) || 0;
+        const total = (qty * rate) + maint - disc;
+        document.getElementById('bill-total-view').innerText = "" + total.toFixed(2);
+    }
+
+    async function generateProfessionalBill() {
+        const name = document.getElementById('bill-name').value;
+        const wa = document.getElementById('bill-wa').value;
+        const qty = document.getElementById('bill-qty').value;
+        const rate = document.getElementById('bill-rate').value;
+        const maint = document.getElementById('bill-maint').value;
+        const disc = document.getElementById('bill-disc').value;
+
+        if(!name || !wa) return alert("Details bharein!");
+
+        document.getElementById('inv-name-view').innerText = name;
+        document.getElementById('inv-wa-view').innerText = wa;
+        document.getElementById('inv-date-view').innerText = new Date().toLocaleDateString();
+        document.getElementById('inv-rate-view').innerText = "" + rate;
+        document.getElementById('inv-qty-view').innerText = qty;
+        
+        const sub = (qty * rate).toFixed(2);
+        document.getElementById('inv-subtotal-view').innerText = "" + sub;
+        document.getElementById('inv-sub-raw').innerText = "" + sub;
+        document.getElementById('inv-maint-view').innerText = "" + maint;
+        document.getElementById('inv-maint-raw').innerText = "" + maint;
+        document.getElementById('inv-disc-raw').innerText = "-" + disc;
+        
+        const grand = (parseFloat(sub) + parseFloat(maint) - parseFloat(disc)).toFixed(2);
+        document.getElementById('inv-grand-view').innerText = "" + grand;
+
+        const inv = document.getElementById('invoice-preview');
+        inv.style.left = "0";
+        html2canvas(inv, { scale: 2 }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `Bill_${name}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+            inv.style.left = "-2000px";
+            window.open(`https://wa.me/${wa}?text=Aapka Arham Numbergen bill ready hai. Total Amount: ${grand}`);
+        });
+    }
+
+    function quickFillBill(name, wa, qty) {
+        document.getElementById('bill-name').value = name;
+        document.getElementById('bill-wa').value = wa;
+        document.getElementById('bill-qty').value = qty;
+        calcBill();
+        switchTab(null, 't-billing');
     }
 
     async function fetchLeads() {
@@ -224,99 +287,19 @@
         document.getElementById('s-leads').innerText = data?.length || 0;
         document.getElementById('leadsBody').innerHTML = data.map(l => {
             const date = new Date(l.created_at).toLocaleDateString();
-            return `<tr>
-                <td>${date}</td><td><b>${l.name}</b></td><td>${l.whatsapp}</td><td>${l.count}</td>
-                <td><span class="badge-unpaid">Unpaid</span></td>
-                <td><button class="btn-wa" onclick="quickFillBill('${l.name}', '${l.whatsapp}', ${l.count})">Fill Bill</button></td>
-            </tr>`;
+            return `<tr><td>${date}</td><td><b>${l.name}</b></td><td>${l.whatsapp}</td><td>${l.count}</td>
+            <td><button class="btn-wa" onclick="quickFillBill('${l.name}', '${l.whatsapp}', ${l.count})">Bill Karein</button></td></tr>`;
         }).join('');
     }
 
-    function quickFillBill(name, wa, qty) {
-        document.getElementById('bill-name').value = name;
-        document.getElementById('bill-wa').value = wa;
-        document.getElementById('bill-qty').value = qty;
-        switchTab(null, 't-billing');
-    }
-
-    async function generateAndSaveBillManual() {
-        const name = document.getElementById('bill-name').value;
-        const wa = document.getElementById('bill-wa').value;
-        const count = parseInt(document.getElementById('bill-qty').value);
-        const maint = parseFloat(document.getElementById('bill-maint').value) || 0;
-        const rate = 0.10;
-        const subtotal = count * rate;
-        const total = (subtotal + maint).toFixed(2);
-
-        if(!name || !wa) return alert("Details bharein!");
-
-        document.getElementById('inv-name').innerText = name;
-        document.getElementById('inv-wa').innerText = wa;
-        document.getElementById('inv-date').innerText = new Date().toLocaleDateString();
-        document.getElementById('inv-qty').innerText = count;
-        document.getElementById('inv-subtotal').innerText = "₹" + subtotal.toFixed(2);
-        document.getElementById('inv-maint').innerText = "₹" + maint.toFixed(2);
-        document.getElementById('inv-grand').innerText = "₹" + total;
-
-        const inv = document.getElementById('invoice-preview');
-        inv.style.left = "0";
-        html2canvas(inv).then(canvas => {
-            const link = document.createElement('a');
-            link.download = `Invoice_${name}.png`;
-            link.href = canvas.toDataURL();
-            link.click();
-            inv.style.left = "-1000px";
-            window.open(`https://wa.me/${wa}?text=Aapka Arham Numbergen bill ready hai. Total: ₹${total}`);
-        });
-    }
-
-    // Existing Functions (No changes)
-    async function fetchSettings() {
-        const { data } = await _supabase.from('site_config').select('*').eq('id', 1).maybeSingle();
-        if(data) {
-            document.getElementById('s-fee').innerText = "₹" + data.maintenance_fee;
-            document.getElementById('config-fee').value = data.maintenance_fee;
-        }
-    }
-    async function updateSettings() {
-        const fee = document.getElementById('config-fee').value;
-        await _supabase.from('site_config').upsert({ id: 1, maintenance_fee: fee });
-        alert("Updated!"); fetchSettings();
-    }
-    async function fetchTasks() {
-        const { data } = await _supabase.from('admin_blogs').select('*').order('created_at', {ascending: false});
-        document.getElementById('s-tasks').innerText = data?.length || 0;
-        document.getElementById('task-list').innerHTML = data.map(t => `<tr><td><b>${t.keyword}</b></td><td>${t.song_url ? '🎵' : '❌'}</td><td><button onclick="editTask('${t.id}', \`${t.keyword}\`, \`${t.content}\`, '${t.song_url}')">Edit</button></td></tr>`).join('');
-    }
-    async function fetchUsers() {
-        const { data: profiles } = await _supabase.from('profiles').select('*');
-        document.getElementById('s-users').innerText = profiles?.length || 0;
-        document.getElementById('user-list').innerHTML = profiles?.map(u => `<tr><td>${u.email}</td><td>WA: ${u.whatsapp || 'N/A'}</td><td>₹0</td></tr>`).join('') || '';
-    }
-    async function saveTask() {
-        const kw = document.getElementById('task-keyword').value;
-        const ct = document.getElementById('task-content').value;
-        const song = document.getElementById('task-song').value;
-        const id = document.getElementById('task-id').value;
-        const obj = { keyword: kw, content: ct, song_url: song };
-        if(id) await _supabase.from('admin_blogs').update(obj).eq('id', id);
-        else await _supabase.from('admin_blogs').insert([obj]);
-        location.reload();
-    }
-    function editTask(id, kw, ct, song) {
-        document.getElementById('task-id').value = id;
-        document.getElementById('task-keyword').value = kw;
-        document.getElementById('task-content').value = ct;
-        document.getElementById('task-song').value = song;
-        switchTab(null, 't-post');
-    }
-    function switchTab(e, id) {
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        if(e) e.currentTarget.classList.add('active');
-        else { const t = document.querySelector(`[onclick*="${id}"]`); if(t) t.classList.add('active'); }
-    }
+    // Baki functions (fetchTasks, fetchUsers, fetchSettings, saveTask etc.) jaise the waise hi raheinge
+    async function fetchSettings() { const { data } = await _supabase.from('site_config').select('*').eq('id', 1).maybeSingle(); if(data) { document.getElementById('s-fee').innerText = "" + data.maintenance_fee; document.getElementById('config-fee').value = data.maintenance_fee; } }
+    async function updateSettings() { const fee = document.getElementById('config-fee').value; await _supabase.from('site_config').upsert({ id: 1, maintenance_fee: fee }); alert("Updated!"); fetchSettings(); }
+    async function fetchTasks() { const { data } = await _supabase.from('admin_blogs').select('*').order('created_at', {ascending: false}); document.getElementById('s-tasks').innerText = data?.length || 0; document.getElementById('task-list').innerHTML = data.map(t => `<tr><td><b>${t.keyword}</b></td><td>${t.song_url ? '' : ''}</td><td><button onclick="editTask('${t.id}', \`${t.keyword}\`, \`${t.content}\`, '${t.song_url}')">Edit</button></td></tr>`).join(''); }
+    async function fetchUsers() { const { data: profiles } = await _supabase.from('profiles').select('*'); document.getElementById('s-users').innerText = profiles?.length || 0; document.getElementById('user-list').innerHTML = profiles?.map(u => `<tr><td>${u.email}</td><td>WA: ${u.whatsapp || 'N/A'}</td><td>0</td></tr>`).join('') || ''; }
+    async function saveTask() { const kw = document.getElementById('task-keyword').value; const ct = document.getElementById('task-content').value; const song = document.getElementById('task-song').value; const id = document.getElementById('task-id').value; const obj = { keyword: kw, content: ct, song_url: song }; if(id) await _supabase.from('admin_blogs').update(obj).eq('id', id); else await _supabase.from('admin_blogs').insert([obj]); location.reload(); }
+    function editTask(id, kw, ct, song) { document.getElementById('task-id').value = id; document.getElementById('task-keyword').value = kw; document.getElementById('task-content').value = ct; document.getElementById('task-song').value = song; switchTab(null, 't-post'); }
+    function switchTab(e, id) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(id).classList.add('active'); if(e) e.currentTarget.classList.add('active'); else { const t = document.querySelector(`[onclick*="${id}"]`); if(t) t.classList.add('active'); } }
 </script>
 </body>
 </html>
