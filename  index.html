@@ -19,7 +19,7 @@
             --primary-glow: rgba(249, 115, 22, 0.4);
             --bg-base: #f8fafc;
             --indigo-text: #1e1b4b;
-            --card-bg: rgba(255, 255, 255, 0.6);
+            --card-bg: rgba(255, 255, 255, 0.7);
             --border: rgba(30, 27, 75, 0.1);
             --yt-color: #FF0000;
             --ig-color: #E4405F;
@@ -35,7 +35,7 @@
             outline: none !important;
         }
 
-        /* PREMIUM ANIMATED LIGHT BACKGROUND */
+        /* DYNAMIC MULTI-COLOR ANIMATED BACKGROUND */
         body { 
             background: var(--bg-base);
             background-image: 
@@ -45,14 +45,31 @@
                 radial-gradient(at 0% 100%, #fff7ed 0px, transparent 50%),
                 radial-gradient(at 50% 50%, #fdf2f8 0px, transparent 50%);
             background-attachment: fixed;
-            background-size: cover;
+            background-size: 200% 200%;
+            animation: bgAnimation 15s ease infinite;
             color: var(--indigo-text); 
             line-height: 1.6; 
             overflow-x: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
+        }
+
+        @keyframes bgAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* SCROLL REVEAL ANIMATION */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         header { 
@@ -75,76 +92,87 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            from { filter: drop-shadow(0 0 2px rgba(249, 115, 22, 0.2)); }
+            to { filter: drop-shadow(0 0 15px rgba(249, 115, 22, 0.5)); }
         }
 
         .power-quote {
             max-width: 800px;
             margin: 30px auto;
-            padding: 25px;
+            padding: 30px;
             border: 1px solid var(--border);
-            background: rgba(255, 255, 255, 0.4);
+            background: var(--card-bg);
             backdrop-filter: blur(20px);
-            border-radius: 24px;
+            border-radius: 30px;
             font-style: italic;
             font-size: 1.15rem;
             color: #4338ca;
-            text-align: left;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            border-left: 6px solid var(--primary);
+            text-align: center; /* Centered as requested */
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            border-bottom: 5px solid var(--primary);
         }
 
         .reality-box {
             max-width: 900px;
             width: 95%;
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.8);
             border: 1px solid var(--border);
-            border-radius: 35px;
+            border-radius: 40px;
             padding: 40px;
             margin: 40px auto;
             backdrop-filter: blur(25px);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .reality-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 25px;
+            width: 100%;
         }
 
         .reality-card {
             padding: 30px;
-            border-radius: 24px;
-            background: rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.5);
             border: 1px solid var(--border);
-            text-align: left;
-            transition: 0.3s ease;
+            text-align: center; /* Centered content */
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         
         .reality-card:hover { 
-            transform: translateY(-5px); 
-            background: rgba(255, 255, 255, 0.8);
+            transform: translateY(-10px) scale(1.02); 
+            background: white;
             border-color: var(--primary);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
         }
 
         .reality-card h4 {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             color: var(--primary);
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             margin-bottom: 12px;
         }
 
         .reality-card p { font-size: 1.1rem; font-weight: 600; color: var(--indigo-text); }
-        .highlight-red { color: #dc2626; }
-        .highlight-green { color: #16a34a; }
+        .highlight-red { color: #dc2626; text-decoration: underline; }
+        .highlight-green { color: #16a34a; font-size: 1.3rem; }
 
         .btn-wrapper { width: 100%; display: flex; justify-content: center; margin-top: 35px; }
 
         .btn-glow {
+            position: relative;
             background: linear-gradient(135deg, #f97316 0%, #db2777 100%);
             color: #fff;
-            padding: 20px 60px;
+            padding: 22px 70px;
             border-radius: 100px;
             text-decoration: none;
             font-weight: 800;
@@ -153,14 +181,15 @@
             box-shadow: 0 10px 30px var(--primary-glow);
             transition: 0.4s;
             display: inline-block;
+            overflow: hidden;
         }
         .btn-glow:hover { 
             transform: scale(1.05); 
-            box-shadow: 0 15px 40px rgba(249, 115, 22, 0.5); 
+            box-shadow: 0 15px 45px rgba(249, 115, 22, 0.6); 
         }
 
         .payout-verified {
-            margin-top: 40px;
+            margin: 40px auto 0;
             font-weight: 700;
             color: #16a34a;
             background: rgba(22, 163, 74, 0.1);
@@ -168,6 +197,7 @@
             border-radius: 50px;
             font-size: 0.85rem;
             border: 1px solid rgba(22, 163, 74, 0.2);
+            width: fit-content;
         }
 
         .section-container { 
@@ -175,7 +205,10 @@
             max-width: 1100px; 
             width: 100%;
             margin: 0 auto; 
-            text-align: center; 
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .feature-grid {
@@ -183,28 +216,45 @@
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
             margin-top: 60px;
+            width: 100%;
         }
 
         .feature-card {
             background: var(--card-bg);
             padding: 50px 30px;
-            border-radius: 35px;
+            border-radius: 40px;
             border: 1px solid var(--border);
             backdrop-filter: blur(15px);
             transition: 0.4s;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .feature-card:hover { 
             border-color: #3b82f6; 
-            background: rgba(255, 255, 255, 0.9); 
-            transform: translateY(-10px); 
+            background: rgba(255, 255, 255, 0.95); 
+            transform: translateY(-15px); 
+        }
+
+        .email-container {
+            margin: 40px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 35px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         footer {
             width: 100%;
             padding: 80px 24px;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(20px);
             border-top: 1px solid var(--border);
             text-align: center;
@@ -222,7 +272,7 @@
 
         .footer-socials a {
             font-size: 2rem;
-            transition: 0.4s;
+            transition: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             background: white;
             width: 75px;
             height: 75px;
@@ -232,7 +282,7 @@
             border-radius: 50%;
             border: 1px solid var(--border);
             text-decoration: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
         }
 
         .social-yt { color: var(--yt-color); }
@@ -240,8 +290,8 @@
         .social-tg { color: var(--tg-color); }
 
         .footer-socials a:hover {
-            transform: translateY(-8px) scale(1.1);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            transform: translateY(-15px) rotate(360deg);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
 
         .reg-btn {
@@ -252,29 +302,29 @@
             font-size: 1.1rem;
             text-decoration: none;
             background: linear-gradient(135deg, #4f46e5, #9333ea);
-            padding: 20px 50px;
+            padding: 22px 60px;
             border-radius: 100px;
             transition: 0.4s;
             display: inline-block;
-            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+            box-shadow: 0 10px 30px rgba(79, 70, 229, 0.4);
         }
-        .reg-btn:hover { transform: scale(1.05); box-shadow: 0 15px 35px rgba(79, 70, 229, 0.5); }
+        .reg-btn:hover { transform: scale(1.1); box-shadow: 0 20px 50px rgba(79, 70, 229, 0.6); }
 
     </style>
 </head>
 <body>
 
 <header>
-    <img src="https://i.ibb.co/N26BWZdY/Screenshot-20260130-221623.jpg" alt="Logo" style="width:125px; height:125px; border-radius:50%; margin-bottom:30px; border:4px solid white; box-shadow: 0 10px 30px rgba(0,0,0,0.15); object-fit: cover;">
+    <img class="reveal" src="https://i.ibb.co/N26BWZdY/Screenshot-20260130-221623.jpg" alt="Logo" style="width:130px; height:130px; border-radius:50%; margin-bottom:30px; border:5px solid white; box-shadow: 0 15px 40px rgba(0,0,0,0.15); object-fit: cover;">
     
-    <h1 class="main-title">Degree Bechkar<br>Hunar Khareedo</h1>
+    <h1 class="main-title reveal">Degree Bechkar<br>Hunar Khareedo</h1>
 
-    <div class="power-quote">
+    <div class="power-quote reveal">
         "School ne kaha tha 10th kar lo life set hai, 12th kar lo life set hai... <br>
         Aaj Degree hath mein hai, par pocket khali hai. Kyun? Kyunki duniya badal gayi, par tumhara syllabus nahi."
     </div>
 
-    <div class="reality-box">
+    <div class="reality-box reveal">
         <h3 style="margin-bottom: 30px; font-size: 1.8rem; color: var(--indigo-text); letter-spacing: -0.5px;">Waqt Aa Gaya Hai Aaina Dekhne Ka</h3>
         <div class="reality-grid">
             <div class="reality-card">
@@ -288,70 +338,88 @@
         </div>
     </div>
 
-    <p style="font-size: 1.25rem; max-width: 750px; font-weight: 600; color: #64748b; margin: 10px auto 30px;">
+    <p class="reveal" style="font-size: 1.25rem; max-width: 750px; font-weight: 600; color: #64748b; margin: 10px auto 30px; text-align: center;">
         "Jab tak padhai ka maksad sirf 'Naukri' hoga, tab tak samaj mein sirf 'Naukar' hi paida honge."
     </p>
 
-    <div class="btn-wrapper">
+    <div class="btn-wrapper reveal">
         <a href="login.html" class="btn-glow">Login from here</a>
     </div>
 
-    <div class="payout-verified">
+    <div class="payout-verified reveal">
         <i class="fa-solid fa-circle-check"></i> Verified Transparency | Sahi Disha, Sahi Pragati
     </div>
 </header>
 
 <main style="width: 100%;">
     <section class="section-container">
-        <h2 style="font-size: 3rem; margin-bottom: 15px; font-weight: 800; color: #1e1b4b;">Kyun Judein Humse?</h2>
-        <p style="color: #64748b; font-size: 1.15rem;">Hum rasta dikhate hain, chalna aapko hai.</p>
+        <h2 class="reveal" style="font-size: 3rem; margin-bottom: 15px; font-weight: 800; color: #1e1b4b;">Kyun Judein Humse?</h2>
+        <p class="reveal" style="color: #64748b; font-size: 1.15rem;">Hum rasta dikhate hain, chalna aapko hai.</p>
 
         <div class="feature-grid">
-            <div class="feature-card">
-                <i class="fa-solid fa-coins" style="font-size: 4rem; color: #f59e0b;"></i>
-                <h3 style="margin: 25px 0 15px; font-size: 1.6rem; color: #1e1b4b;">Asli Kamai</h3>
+            <div class="feature-card reveal">
+                <i class="fa-solid fa-coins" style="font-size: 4.5rem; color: #f59e0b; margin-bottom: 20px;"></i>
+                <h3 style="margin-bottom: 15px; font-size: 1.6rem; color: #1e1b4b;">Asli Kamai</h3>
                 <p style="color: #64748b;">Waqt barbad karna band karein. Seekhein ki kaise badi companiyaan hamare data se croredo kamati hain, aur apna hissa lein.</p>
             </div>
-            <div class="feature-card">
-                <i class="fa-solid fa-rocket" style="font-size: 4rem; color: #3b82f6;"></i>
-                <h3 style="margin: 25px 0 15px; font-size: 1.6rem; color: #1e1b4b;">Asli Shiksha</h3>
+            <div class="feature-card reveal">
+                <i class="fa-solid fa-rocket" style="font-size: 4.5rem; color: #3b82f6; margin-bottom: 20px;"></i>
+                <h3 style="margin-bottom: 15px; font-size: 1.6rem; color: #1e1b4b;">Asli Shiksha</h3>
                 <p style="color: #64748b;">Woh sikhein jo market mein bikta hai. Digital Asset banana aur use monetize karna hi aaj ki asli degree hai.</p>
             </div>
-            <div class="feature-card">
-                <i class="fa-solid fa-gem" style="font-size: 4rem; color: #9333ea;"></i>
-                <h3 style="margin: 25px 0 15px; font-size: 1.6rem; color: #1e1b4b;">Financial Freedom</h3>
+            <div class="feature-card reveal">
+                <i class="fa-solid fa-gem" style="font-size: 4.5rem; color: #9333ea; margin-bottom: 20px;"></i>
+                <h3 style="margin-bottom: 15px; font-size: 1.6rem; color: #1e1b4b;">Financial Freedom</h3>
                 <p style="color: #64748b;">Maintenance fee aur transparent payout model. Hum hide nahi karte, hum sath milkar grow karte hain.</p>
             </div>
         </div>
     </section>
 
     <section class="section-container" style="background: rgba(255,255,255,0.4); border-radius: 80px 80px 0 0; box-shadow: 0 -20px 40px rgba(0,0,0,0.02);">
-        <h2 style="color: var(--indigo-text); margin-bottom: 25px; font-size: 2.8rem; font-weight: 800;">Badlo Halat, Badlo Pehchan</h2>
-        <p style="max-width: 780px; margin: 0 auto 50px auto; font-size: 1.2rem; color: #64748b;">
+        <h2 class="reveal" style="color: var(--indigo-text); margin-bottom: 25px; font-size: 2.8rem; font-weight: 800;">Badlo Halat, Badlo Pehchan</h2>
+        <p class="reveal" style="max-width: 780px; margin: 0 auto 50px auto; font-size: 1.2rem; color: #64748b; text-align: center;">
             Arham Insights sirf ek platform nahi, un logon ke liye ek parivaar hai jo bheed se alag nikalne ka dum rakhte hain.
         </p>
         
-        <div style="margin: 40px auto; padding: 50px 30px; background: white; border-radius: 35px; box-shadow: 0 15px 35px rgba(0,0,0,0.05); display: inline-block; border: 1px solid var(--border);">
+        <div class="email-container reveal">
             <p style="margin-bottom: 20px; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 3px; color: var(--primary); font-weight: 800;">Official Helpdesk</p>
-            <a href="mailto:arhaminsightshelp@gmail.com" style="font-size: clamp(1.1rem, 5vw, 1.6rem); color: var(--indigo-text); text-decoration: none; border-bottom: 3px solid var(--primary); font-weight: 800; padding-bottom: 8px;">arhaminsightshelp@gmail.com</a>
+            <a href="mailto:arhaminsightshelp@gmail.com" style="font-size: clamp(1.1rem, 5vw, 1.6rem); color: var(--indigo-text); text-decoration: none; border-bottom: 3.5px solid var(--primary); font-weight: 800; padding-bottom: 8px;">arhaminsightshelp@gmail.com</a>
         </div>
         
-        <div style="margin-top: 70px; width: 100%; display: flex; flex-direction: column; align-items: center;">
-            <p style="margin-bottom: 30px; opacity: 0.8; font-weight: 600;">Taiyaar hain ek nayi shuruwat ke liye?</p>
+        <div class="reveal" style="margin-top: 70px; width: 100%; display: flex; flex-direction: column; align-items: center;">
+            <p style="margin-bottom: 30px; opacity: 0.8; font-weight: 600; text-align: center;">Taiyaar hain ek nayi shuruwat ke liye?</p>
             <a href="register.html" class="reg-btn">Register Now (Free)</a>
         </div>
     </section>
 </main>
 
 <footer>
-    <div class="footer-socials">
+    <div class="footer-socials reveal">
         <a href="https://youtube.com/@arhaminsights?si=pYjyR0ELSTfhLqgN" target="_blank" class="social-yt" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
         <a href="https://www.instagram.com/arhaminsights?igsh=MWdtbTV0eXYwa25kOQ==" target="_blank" class="social-ig" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
         <a href="https://t.me/+sO8t9qJiacE1Yjc1" target="_blank" class="social-tg" title="Telegram"><i class="fa-brands fa-telegram"></i></a>
     </div>
-    <p style="font-weight: 700; color: var(--indigo-text); text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">&copy; 2026 Arham Insights</p>
-    <p style="font-size: 0.8rem; margin-top: 15px; opacity: 0.6; max-width: 650px; line-height: 1.8; color: #64748b;">Sahi Disha, Sahi Pragati. Skill building requires patience and effort. Financial results depend on individual performance.</p>
+    <p class="reveal" style="font-weight: 700; color: var(--indigo-text); text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">&copy; 2026 Arham Insights</p>
+    <p class="reveal" style="font-size: 0.8rem; margin-top: 15px; opacity: 0.6; max-width: 650px; line-height: 1.8; color: #64748b; text-align: center;">Sahi Disha, Sahi Pragati. Skill building requires patience and effort. Financial results depend on individual performance.</p>
 </footer>
+
+<script>
+    // SCROLL REVEAL JAVASCRIPT
+    function reveal() {
+        var reveals = document.querySelectorAll(".reveal");
+        for (var i = 0; i < reveals.length; i++) {
+            var windowHeight = window.innerHeight;
+            var elementTop = reveals[i].getBoundingClientRect().top;
+            var elementVisible = 150;
+            if (elementTop < windowHeight - elementVisible) {
+                reveals[i].classList.add("active");
+            }
+        }
+    }
+    window.addEventListener("scroll", reveal);
+    // Trigger once on load
+    reveal();
+</script>
 
 </body>
 </html>
