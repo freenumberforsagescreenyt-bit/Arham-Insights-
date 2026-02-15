@@ -15,41 +15,54 @@
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
 
         :root { 
-            --primary: #ff9933; 
-            --primary-glow: rgba(255, 153, 51, 0.4);
-            --dark: #050810; 
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.1);
-            --text-main: #f8fafc;
-            --text-dim: #94a3b8;
+            --primary: #f97316; 
+            --primary-glow: rgba(249, 115, 22, 0.4);
+            --bg-base: #f8fafc;
+            --indigo-text: #1e1b4b;
+            --card-bg: rgba(255, 255, 255, 0.6);
+            --border: rgba(30, 27, 75, 0.1);
+            --yt-color: #FF0000;
+            --ig-color: #E4405F;
+            --tg-color: #26A5E4;
         }
         
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background: var(--dark); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
-
-        .social-strip {
-            background: rgba(255, 153, 51, 0.1);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border);
-            padding: 12px;
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            outline: none !important;
         }
-        .social-strip a { color: var(--text-main); font-size: 1.3rem; transition: 0.4s; }
-        .social-strip a:hover { color: var(--primary); transform: scale(1.2); }
+
+        /* PREMIUM ANIMATED LIGHT BACKGROUND */
+        body { 
+            background: var(--bg-base);
+            background-image: 
+                radial-gradient(at 0% 0%, #e0f2fe 0px, transparent 50%),
+                radial-gradient(at 100% 0%, #f5f3ff 0px, transparent 50%),
+                radial-gradient(at 100% 100%, #f0fdf4 0px, transparent 50%),
+                radial-gradient(at 0% 100%, #fff7ed 0px, transparent 50%),
+                radial-gradient(at 50% 50%, #fdf2f8 0px, transparent 50%);
+            background-attachment: fixed;
+            background-size: cover;
+            color: var(--indigo-text); 
+            line-height: 1.6; 
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
 
         header { 
+            width: 100%;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 60px 20px;
-            background: radial-gradient(circle at 50% 50%, #1e293b 0%, var(--dark) 100%);
             text-align: center;
         }
 
@@ -57,122 +70,202 @@
             font-size: clamp(2.5rem, 10vw, 4.5rem);
             font-weight: 800;
             line-height: 1.1;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, #ffffff 40%, var(--primary) 100%);
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, #1e1b4b 30%, var(--primary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
         }
 
-        /* Power Quote Section */
         .power-quote {
             max-width: 800px;
             margin: 30px auto;
-            padding: 20px;
-            border-left: 5px solid var(--primary);
-            background: rgba(255, 153, 51, 0.05);
+            padding: 25px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
             font-style: italic;
-            font-size: 1.2rem;
-            color: #ffd699;
+            font-size: 1.15rem;
+            color: #4338ca;
             text-align: left;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border-left: 6px solid var(--primary);
         }
 
         .reality-box {
             max-width: 900px;
-            width: 100%;
-            background: var(--card-bg);
+            width: 95%;
+            background: rgba(255, 255, 255, 0.5);
             border: 1px solid var(--border);
-            border-radius: 30px;
+            border-radius: 35px;
             padding: 40px;
-            margin: 40px 0;
-            backdrop-filter: blur(20px);
+            margin: 40px auto;
+            backdrop-filter: blur(25px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.05);
         }
 
         .reality-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 25px;
         }
 
         .reality-card {
-            padding: 25px;
-            border-radius: 20px;
-            background: rgba(255,255,255,0.02);
+            padding: 30px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.3);
             border: 1px solid var(--border);
             text-align: left;
+            transition: 0.3s ease;
+        }
+        
+        .reality-card:hover { 
+            transform: translateY(-5px); 
+            background: rgba(255, 255, 255, 0.8);
+            border-color: var(--primary);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
         }
 
         .reality-card h4 {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--primary);
             text-transform: uppercase;
             letter-spacing: 2px;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
-        .reality-card p {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #e2e8f0;
-        }
+        .reality-card p { font-size: 1.1rem; font-weight: 600; color: var(--indigo-text); }
+        .highlight-red { color: #dc2626; }
+        .highlight-green { color: #16a34a; }
 
-        .highlight-red { color: #ff4d4d; }
-        .highlight-green { color: #2ecc71; }
+        .btn-wrapper { width: 100%; display: flex; justify-content: center; margin-top: 35px; }
 
         .btn-glow {
-            background: var(--primary);
-            color: #000;
-            padding: 22px 60px;
+            background: linear-gradient(135deg, #f97316 0%, #db2777 100%);
+            color: #fff;
+            padding: 20px 60px;
             border-radius: 100px;
             text-decoration: none;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 10px 40px var(--primary-glow);
-            transition: 0.3s;
+            letter-spacing: 2px;
+            box-shadow: 0 10px 30px var(--primary-glow);
+            transition: 0.4s;
             display: inline-block;
-            margin-top: 30px;
+        }
+        .btn-glow:hover { 
+            transform: scale(1.05); 
+            box-shadow: 0 15px 40px rgba(249, 115, 22, 0.5); 
         }
 
         .payout-verified {
             margin-top: 40px;
             font-weight: 700;
-            color: #22c55e;
-            background: rgba(34, 197, 94, 0.1);
-            padding: 10px 25px;
+            color: #16a34a;
+            background: rgba(22, 163, 74, 0.1);
+            padding: 14px 35px;
             border-radius: 50px;
             font-size: 0.85rem;
+            border: 1px solid rgba(22, 163, 74, 0.2);
         }
 
-        .section-container { padding: 80px 20px; max-width: 1100px; margin: 0 auto; text-align: center; }
+        .section-container { 
+            padding: 100px 24px; 
+            max-width: 1100px; 
+            width: 100%;
+            margin: 0 auto; 
+            text-align: center; 
+        }
 
         .feature-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
-            margin-top: 50px;
+            margin-top: 60px;
         }
 
         .feature-card {
             background: var(--card-bg);
-            padding: 40px;
-            border-radius: 30px;
+            padding: 50px 30px;
+            border-radius: 35px;
             border: 1px solid var(--border);
-            transition: 0.3s;
+            backdrop-filter: blur(15px);
+            transition: 0.4s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
         }
 
-        .feature-card:hover { transform: translateY(-10px); border-color: var(--primary); }
+        .feature-card:hover { 
+            border-color: #3b82f6; 
+            background: rgba(255, 255, 255, 0.9); 
+            transform: translateY(-10px); 
+        }
+
+        footer {
+            width: 100%;
+            padding: 80px 24px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .footer-socials {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .footer-socials a {
+            font-size: 2rem;
+            transition: 0.4s;
+            background: white;
+            width: 75px;
+            height: 75px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .social-yt { color: var(--yt-color); }
+        .social-ig { color: var(--ig-color); }
+        .social-tg { color: var(--tg-color); }
+
+        .footer-socials a:hover {
+            transform: translateY(-8px) scale(1.1);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .reg-btn {
+            color: #fff;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 1.1rem;
+            text-decoration: none;
+            background: linear-gradient(135deg, #4f46e5, #9333ea);
+            padding: 20px 50px;
+            border-radius: 100px;
+            transition: 0.4s;
+            display: inline-block;
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+        }
+        .reg-btn:hover { transform: scale(1.05); box-shadow: 0 15px 35px rgba(79, 70, 229, 0.5); }
+
     </style>
 </head>
 <body>
 
-<div class="social-strip">
-    <a href="https://youtube.com/@arhaminsights?si=pYjyR0ELSTfhLqgN" target="_blank"><i class="fa-brands fa-youtube"></i></a>
-    <a href="https://www.instagram.com/arhaminsights?igsh=MWdtbTV0eXYwa25kOQ==" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-    <a href="https://t.me/+sO8t9qJiacE1Yjc1" target="_blank"><i class="fa-brands fa-telegram"></i></a>
-</div>
-
 <header>
-    <img src="https://i.ibb.co/N26BWZdY/Screenshot-20260130-221623.jpg" alt="Logo" style="width:100px; border-radius:50%; margin-bottom:20px; border:2px solid var(--primary);">
+    <img src="https://i.ibb.co/N26BWZdY/Screenshot-20260130-221623.jpg" alt="Logo" style="width:125px; height:125px; border-radius:50%; margin-bottom:30px; border:4px solid white; box-shadow: 0 10px 30px rgba(0,0,0,0.15); object-fit: cover;">
     
     <h1 class="main-title">Degree Bechkar<br>Hunar Khareedo</h1>
 
@@ -182,7 +275,7 @@
     </div>
 
     <div class="reality-box">
-        <h3 style="margin-bottom: 25px; font-size: 1.6rem;">Waqt Aa Gaya Hai Aaina Dekhne Ka</h3>
+        <h3 style="margin-bottom: 30px; font-size: 1.8rem; color: var(--indigo-text); letter-spacing: -0.5px;">Waqt Aa Gaya Hai Aaina Dekhne Ka</h3>
         <div class="reality-grid">
             <div class="reality-card">
                 <h4>Sarkari/Private College</h4>
@@ -195,59 +288,69 @@
         </div>
     </div>
 
-    <p style="font-size: 1.2rem; max-width: 700px; font-weight: 600; color: var(--text-dim);">
+    <p style="font-size: 1.25rem; max-width: 750px; font-weight: 600; color: #64748b; margin: 10px auto 30px;">
         "Jab tak padhai ka maksad sirf 'Naukri' hoga, tab tak samaj mein sirf 'Naukar' hi paida honge."
     </p>
 
-    <a href="login.html" class="btn-glow">Apni Pehchan Badlo</a>
+    <div class="btn-wrapper">
+        <a href="login.html" class="btn-glow">Login from here</a>
+    </div>
 
     <div class="payout-verified">
-        <i class="fa-solid fa-check-double"></i> 100% Transparency | No Fake Promises
+        <i class="fa-solid fa-circle-check"></i> Verified Transparency | Sahi Disha, Sahi Pragati
     </div>
 </header>
 
-<main>
+<main style="width: 100%;">
     <section class="section-container">
-        <h2 style="font-size: 2.5rem; margin-bottom: 15px;">Kyun Judein Humse?</h2>
-        <p style="color: var(--text-dim);">Hum rasta dikhate hain, chalna aapko hai.</p>
+        <h2 style="font-size: 3rem; margin-bottom: 15px; font-weight: 800; color: #1e1b4b;">Kyun Judein Humse?</h2>
+        <p style="color: #64748b; font-size: 1.15rem;">Hum rasta dikhate hain, chalna aapko hai.</p>
 
         <div class="feature-grid">
             <div class="feature-card">
-                <i class="fa-solid fa-hand-holding-dollar" style="font-size: 3rem; color: var(--primary);"></i>
-                <h3 style="margin-top:20px;">Asli Kamai</h3>
-                <p>Waqt barbad karna band karein. Seekhein ki kaise badi companiyaan hamare data se croredo kamati hain, aur apna hissa lein.</p>
+                <i class="fa-solid fa-coins" style="font-size: 4rem; color: #f59e0b;"></i>
+                <h3 style="margin: 25px 0 15px; font-size: 1.6rem; color: #1e1b4b;">Asli Kamai</h3>
+                <p style="color: #64748b;">Waqt barbad karna band karein. Seekhein ki kaise badi companiyaan hamare data se croredo kamati hain, aur apna hissa lein.</p>
             </div>
             <div class="feature-card">
-                <i class="fa-solid fa-graduation-cap" style="font-size: 3rem; color: var(--primary);"></i>
-                <h3 style="margin-top:20px;">Asli Shiksha</h3>
-                <p>Woh sikhein jo market mein bikta hai. Digital Asset banana aur use monetize karna hi aaj ki asli degree hai.</p>
+                <i class="fa-solid fa-rocket" style="font-size: 4rem; color: #3b82f6;"></i>
+                <h3 style="margin: 25px 0 15px; font-size: 1.6rem; color: #1e1b4b;">Asli Shiksha</h3>
+                <p style="color: #64748b;">Woh sikhein jo market mein bikta hai. Digital Asset banana aur use monetize karna hi aaj ki asli degree hai.</p>
             </div>
             <div class="feature-card">
-                <i class="fa-solid fa-indian-rupee-sign" style="font-size: 3rem; color: var(--primary);"></i>
-                <h3 style="margin-top:20px;">Financial Freedom</h3>
-                <p>Maintenance fee aur transparent payout model. Hum hide nahi karte, hum sath milkar grow karte hain.</p>
+                <i class="fa-solid fa-gem" style="font-size: 4rem; color: #9333ea;"></i>
+                <h3 style="margin: 25px 0 15px; font-size: 1.6rem; color: #1e1b4b;">Financial Freedom</h3>
+                <p style="color: #64748b;">Maintenance fee aur transparent payout model. Hum hide nahi karte, hum sath milkar grow karte hain.</p>
             </div>
         </div>
     </section>
 
-    <section class="section-container" style="background: linear-gradient(to bottom, transparent, rgba(255,153,51,0.05));">
-        <h2 style="color: var(--primary); margin-bottom: 20px;">Badlo Halat, Badlo Pehchan</h2>
-        <p style="max-width: 750px; margin: 0 auto 40px auto; font-size: 1.1rem; color: var(--text-dim);">
+    <section class="section-container" style="background: rgba(255,255,255,0.4); border-radius: 80px 80px 0 0; box-shadow: 0 -20px 40px rgba(0,0,0,0.02);">
+        <h2 style="color: var(--indigo-text); margin-bottom: 25px; font-size: 2.8rem; font-weight: 800;">Badlo Halat, Badlo Pehchan</h2>
+        <p style="max-width: 780px; margin: 0 auto 50px auto; font-size: 1.2rem; color: #64748b;">
             Arham Insights sirf ek platform nahi, un logon ke liye ek parivaar hai jo bheed se alag nikalne ka dum rakhte hain.
         </p>
         
-        <a href="mailto:arhaminsightshelp@gmail.com" style="font-size: 1.4rem; color: #fff; text-decoration: none; border-bottom: 2px solid var(--primary); font-weight: 800;">arhaminsightshelp@gmail.com</a>
+        <div style="margin: 40px auto; padding: 50px 30px; background: white; border-radius: 35px; box-shadow: 0 15px 35px rgba(0,0,0,0.05); display: inline-block; border: 1px solid var(--border);">
+            <p style="margin-bottom: 20px; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 3px; color: var(--primary); font-weight: 800;">Official Helpdesk</p>
+            <a href="mailto:arhaminsightshelp@gmail.com" style="font-size: clamp(1.1rem, 5vw, 1.6rem); color: var(--indigo-text); text-decoration: none; border-bottom: 3px solid var(--primary); font-weight: 800; padding-bottom: 8px;">arhaminsightshelp@gmail.com</a>
+        </div>
         
-        <div style="margin-top: 50px;">
-            <p style="margin-bottom: 15px;">Aaj hi badlav ki shuruwat karein:</p>
-            <a href="register.html" style="color: var(--primary); font-weight: 800; text-transform: uppercase; letter-spacing: 2px;">Register Now (Free)</a>
+        <div style="margin-top: 70px; width: 100%; display: flex; flex-direction: column; align-items: center;">
+            <p style="margin-bottom: 30px; opacity: 0.8; font-weight: 600;">Taiyaar hain ek nayi shuruwat ke liye?</p>
+            <a href="register.html" class="reg-btn">Register Now (Free)</a>
         </div>
     </section>
 </main>
 
 <footer>
-    <p>&copy; 2026 Arham Insights. Proudly Made in India </p>
-    <p style="font-size: 0.7rem; margin-top: 10px; opacity: 0.5;">Disclaimer: Skill building requires patience and effort. Results vary per user.</p>
+    <div class="footer-socials">
+        <a href="https://youtube.com/@arhaminsights?si=pYjyR0ELSTfhLqgN" target="_blank" class="social-yt" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+        <a href="https://www.instagram.com/arhaminsights?igsh=MWdtbTV0eXYwa25kOQ==" target="_blank" class="social-ig" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://t.me/+sO8t9qJiacE1Yjc1" target="_blank" class="social-tg" title="Telegram"><i class="fa-brands fa-telegram"></i></a>
+    </div>
+    <p style="font-weight: 700; color: var(--indigo-text); text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">&copy; 2026 Arham Insights</p>
+    <p style="font-size: 0.8rem; margin-top: 15px; opacity: 0.6; max-width: 650px; line-height: 1.8; color: #64748b;">Sahi Disha, Sahi Pragati. Skill building requires patience and effort. Financial results depend on individual performance.</p>
 </footer>
 
 </body>
