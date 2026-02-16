@@ -7,43 +7,128 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root{--primary:#ff9933;--dark:#070b14;--card-bg:rgba(255,153,51,0.05)}
-        body{margin:0;background:var(--dark);color:#fff;font-family:Poppins,sans-serif;padding-top:90px;padding-bottom:80px; overflow-x: hidden;}
-        main{max-width:850px;margin:auto;padding:0 15px}
-        #timer-container{position:fixed;top:10px;left:50%;transform:translateX(-50%);background:var(--primary);color:#000;padding:12px 26px;font-weight:800;border-radius:50px;z-index:99999;box-shadow: 0 5px 15px rgba(255,153,51,0.4);}
-        #music-container{background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; margin-bottom: 25px; border: 1px solid var(--primary);}
-        #task-audio{width: 100%; height: 35px; filter: sepia(100%) saturate(300%) hue-rotate(10deg);}
-        
-        .ad-slot{margin:30px auto; width: 100%; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.02); border-radius:12px; border: 1px dashed rgba(255,153,51,0.2); min-height: 250px; overflow: hidden; clear: both;}
-        .lb-slot { height: 90px; min-height: 90px; }
-        
-        #status-overlay{display:none;position:fixed;inset:0; background:rgba(7,11,20,.97); z-index:200000; align-items:center; justify-content:center; flex-direction:column}
-        .loader-spin{width:45px;height:45px;border:5px solid var(--card-bg); border-top:5px solid var(--primary); border-radius:50%; animation:spin 1s linear infinite}
-        @keyframes spin{100%{transform:rotate(360deg)}}
-        iframe { border: none !important; width: 300px; height: 250px; }
-        .lb-slot iframe { width: 320px; height: 50px; }
+        :root {
+            --primary: #ff9933;
+            --glass: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 255, 255, 0.15);
+        }
+
+        /* LIGHT-WEIGHT PREMIUM GRADIENT BACKGROUND (REPAIR FOR FAST LOAD) */
+        body {
+            margin: 0;
+            padding-top: 90px;
+            padding-bottom: 70px;
+            overflow-x: hidden;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: #ffffff;
+            /* Static Colorful Background (Safe for all browsers) */
+            background: #0f172a;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(255, 153, 51, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(124, 58, 237, 0.15) 0px, transparent 50%),
+                radial-gradient(at 50% 50%, rgba(30, 41, 59, 0.5) 0px, transparent 80%);
+            background-attachment: fixed;
+        }
+
+        main { max-width: 800px; margin: auto; padding: 0 15px; position: relative; z-index: 1; }
+
+        /* Timer Sticky */
+        #timer-container {
+            position: fixed;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: #000;
+            padding: 10px 30px;
+            font-weight: 800;
+            border-radius: 50px;
+            z-index: 10000;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            font-size: 1rem;
+        }
+
+        /* Ad Slots Design */
+        .ad-slot {
+            margin: 30px auto;
+            width: 100%;
+            min-height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--glass);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+        }
+        .lb-slot { min-height: 90px; }
+
+        /* Content Styling */
+        #task-content p {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            line-height: 1.7;
+            border-left: 4px solid var(--primary);
+        }
+
+        #music-container {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+        }
+
+        #task-audio { width: 100%; height: 35px; opacity: 0.8; }
+
+        #status-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(7, 11, 20, 0.98);
+            z-index: 200000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .loader-spin {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255,255,255,0.1);
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-<div id="timer-container">⏳ Time Bacha Hai: <span id="timer">05:00</span></div>
+<div id="timer-container">⏳ Time Left: <span id="timer">05:00</span></div>
 
 <div id="status-overlay">
     <div class="loader-spin"></div>
-    <div style="margin-top:20px;color:var(--primary);font-weight:bold">Aapka Reward Check Ho Raha Hai...</div>
+    <p style="margin-top:20px;color:var(--primary);font-weight:bold;">Reward Verifying...</p>
 </div>
 
 <main>
     <div class="ad-slot lb-slot" id="ad-top"></div>
 
-    <div class="premium-quote" style="background: linear-gradient(135deg, rgba(255,153,51,0.15), rgba(255,255,255,0.05)); border-radius: 15px; padding: 20px; margin: 20px 0; border-left: 5px solid var(--primary); font-style: italic; font-weight: 600; color: #ffd699;">"Aaj ka hardwork, kal ki success ki chabi hai." 🚀</div>
+    <div class="premium-quote" style="background: rgba(255,153,51,0.1); border-radius: 15px; padding: 20px; margin: 25px 0; border-left: 5px solid var(--primary); font-style: italic;">
+        "Seekhne ki koi umar nahi hoti, aur kamane ka koi bura waqt nahi hota." ✨
+    </div>
 
     <div id="music-container">
-        <p style="margin:0 0 10px 0; font-size: 0.8rem; font-weight: 700; color: var(--primary);"><i class="fa-solid fa-music"></i> Non-stop Task Mashup</p>
+        <p style="margin:0 0 10px 0; font-size: 0.8rem; font-weight: 700; color: var(--primary);"><i class="fa-solid fa-music"></i> Task Beats</p>
         <audio id="task-audio" controls loop><source id="audio-source" src="" type="audio/mpeg"></audio>
     </div>
 
-    <h2 id="task-title" style="color:var(--primary); font-weight: 800; text-align: center;">Premium Learning</h2>
+    <h1 id="task-title" style="color:var(--primary); font-weight: 800; text-align: center; font-size: 1.8rem; margin-bottom: 30px;"></h1>
     
     <div id="task-content"></div>
     
@@ -51,95 +136,67 @@
 </main>
 
 <script>
-const sb=supabase.createClient("https://mkzgmrxakattqgbjnwch.supabase.co","sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL");
-let taskId=new URLSearchParams(location.search).get('id')||1;
-let currentUser=null;
+const sb = supabase.createClient("https://mkzgmrxakattqgbjnwch.supabase.co","sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL");
+let taskId = new URLSearchParams(location.search).get('id') || 1;
+let currentUser = null;
 let timeLeft = 300; 
 
-// --- NEW AD CODES ---
-const NEW_MID_CODE = `
-    <script type="text/javascript">
-        atOptions = { 'key' : 'b885d21cc49004931f6c2a78a423c968', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };
-    <\/script>
-    <script type="text/javascript" src="https://www.highperformanceformat.com/b885d21cc49004931f6c2a78a423c968/invoke.js"><\/script>
-`;
-
-const TOP_BANNER_CODE = `
-    <script type="text/javascript">
-        atOptions = { 'key' : 'ac3a34c448d39282025c11644797e3a1', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
-    <\/script>
-    <script type="text/javascript" src="https://www.highperformanceformat.com/ac3a34c448d39282025c11644797e3a1/invoke.js"><\/script>
-`;
-
-// --- POWER INJECTOR ---
-function injectAd(containerId, htmlCode) {
+function forceLoadAd(containerId) {
     const container = document.getElementById(containerId);
-    if (!container) return;
-    
-    container.innerHTML = "";
+    if(!container) return;
+    const adCodes = [
+        `<script type="text/javascript">atOptions={'key':'b885d21cc49004931f6c2a78a423c968','format':'iframe','height':250,'width':300,'params':{}};\x3C/script><script type="text/javascript" src="//www.highperformanceformat.com/b885d21cc49004931f6c2a78a423c968/invoke.js">\x3C/script>`,
+        `<script type="text/javascript">atOptions={'key':'ac3a34c448d39282025c11644797e3a1','format':'iframe','height':50,'width':320,'params':{}};\x3C/script><script type="text/javascript" src="//www.highperformanceformat.com/ac3a34c448d39282025c11644797e3a1/invoke.js">\x3C/script>`
+    ];
+    container.innerHTML = ""; 
     const iframe = document.createElement('iframe');
-    iframe.scrolling = "no";
+    iframe.style.border = "none"; iframe.style.width = "100%"; iframe.style.height = "100%";
     container.appendChild(iframe);
-    
     const doc = iframe.contentWindow.document;
     doc.open();
-    doc.write(`<!DOCTYPE html><html><body style="margin:0;display:flex;justify-content:center;align-items:center;background:transparent;">${htmlCode}</body></html>`);
+    const chosenAd = container.classList.contains('lb-slot') ? adCodes[1] : adCodes[0];
+    doc.write(`<html><body style="margin:0;display:flex;justify-content:center;align-items:center;">${chosenAd}</body></html>`);
     doc.close();
 }
 
 async function loadContent(){
-    let {data}=await sb.from('admin_blogs').select('*').eq('id',taskId).maybeSingle();
+    let {data} = await sb.from('admin_blogs').select('*').eq('id', taskId).maybeSingle();
     if(data) {
-        document.getElementById("task-title").innerText=data.keyword;
-        const box=document.getElementById("task-content");
-        const paras=data.content.split('\n').filter(x=>x.trim());
-        box.innerHTML="";
-        
-        paras.forEach((t,i)=>{
-            const p=document.createElement("p"); p.innerText=t; box.appendChild(p);
-            
-            // Har 2nd paragraph ke baad aapka NAYA ad code
-            if((i+1)%2 === 0 && i < 14){
+        document.getElementById("task-title").innerText = data.keyword;
+        const box = document.getElementById("task-content");
+        const paras = data.content.split('\n').filter(x => x.trim());
+        box.innerHTML = "";
+        paras.forEach((t, i) => {
+            const p = document.createElement("p"); p.innerText = t; box.appendChild(p);
+            if((i + 1) % 2 === 0 && i < 14){
                 const midId = `mid-ad-${i}`;
                 const midDiv = document.createElement("div");
                 midDiv.className = "ad-slot mid-ad-unit"; 
-                midDiv.id = midId;
-                box.appendChild(midDiv);
-                
-                setTimeout(() => injectAd(midId, NEW_MID_CODE), 400 * i);
+                midDiv.id = midId; box.appendChild(midDiv);
+                forceLoadAd(midId);
             }
         });
-
-        // Top Banner
-        injectAd('ad-top', TOP_BANNER_CODE);
-        // Final Bottom Ad with your new code
-        injectAd('final-anchor-ad', NEW_MID_CODE);
-
-        // Refresh logic: Har 40s mein Middle Ads badlengi (Using New Code)
+        forceLoadAd('ad-top'); forceLoadAd('final-anchor-ad');
         setInterval(() => {
-            document.querySelectorAll('.mid-ad-unit').forEach(div => {
-                injectAd(div.id, NEW_MID_CODE);
-            });
+            document.querySelectorAll('.ad-slot').forEach(slot => { forceLoadAd(slot.id); });
         }, 40000);
-
         if(data.song_url) setupMusic(data.song_url);
     }
 }
 
-// Timer & Submit stay the same (Strict ₹5 reward logic)
 function startTimer(){
-    const el=document.getElementById("timer");
-    const iv = setInterval(()=>{ 
+    const el = document.getElementById("timer");
+    const iv = setInterval(() => { 
         if(timeLeft > 0) {
             timeLeft--;
-            let m=Math.floor(timeLeft/60), s=timeLeft%60;
-            el.textContent=`${m}:${s.toString().padStart(2,'0')}`; 
+            let m = Math.floor(timeLeft/60), s = timeLeft%60;
+            el.textContent = `${m}:${s.toString().padStart(2,'0')}`; 
         } else { clearInterval(iv); submitTask(); }
-    },1000);
+    }, 1000);
 }
 
 async function submitTask(){
-    document.getElementById("status-overlay").style.display="flex";
+    document.getElementById("status-overlay").style.display = "flex";
     await sb.from('user_work').insert([{
         username: currentUser.email, 
         task_id: taskId.toString(), 
@@ -147,7 +204,7 @@ async function submitTask(){
         amount: 5.00,
         keyword: document.getElementById("task-title").innerText
     }]);
-    location.href="dashboard.html?status=success";
+    location.href = "dashboard.html?status=success";
 }
 
 function setupMusic(url) {
@@ -158,17 +215,15 @@ function setupMusic(url) {
         if (fileId) finalUrl = `https://docs.google.com/uc?export=open&id=${fileId}`;
     }
     audio.src = finalUrl;
-    audio.play().catch(() => console.log("User click needed"));
+    audio.play().catch(() => console.log("Interaction needed"));
 }
 
 async function init(){
-    const {data:{session}}=await sb.auth.getSession();
-    if(!session){location.href="login.html";return;}
-    currentUser=session.user;
-    loadContent(); 
-    startTimer();
+    const {data:{session}} = await sb.auth.getSession();
+    if(!session){ location.href = "login.html"; return; }
+    currentUser = session.user;
+    loadContent(); startTimer();
 }
-
 window.onload = init;
 </script>
 </body>
