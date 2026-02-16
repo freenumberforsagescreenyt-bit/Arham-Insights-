@@ -8,88 +8,75 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #ff9933;
-            --glass: rgba(255, 255, 255, 0.08);
-            --border: rgba(255, 255, 255, 0.15);
+            --primary: #f97316;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
         }
 
-        /* LIGHT-WEIGHT PREMIUM GRADIENT BACKGROUND (REPAIR FOR FAST LOAD) */
+        /* PREMIUM REFRESHING BACKGROUND */
         body {
             margin: 0;
-            padding-top: 90px;
-            padding-bottom: 70px;
+            padding-top: 100px;
+            padding-bottom: 80px;
             overflow-x: hidden;
             min-height: 100vh;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             color: #ffffff;
-            /* Static Colorful Background (Safe for all browsers) */
             background: #0f172a;
             background-image: 
-                radial-gradient(at 0% 0%, rgba(255, 153, 51, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(124, 58, 237, 0.15) 0px, transparent 50%),
-                radial-gradient(at 50% 50%, rgba(30, 41, 59, 0.5) 0px, transparent 80%);
+                radial-gradient(at 0% 0%, rgba(249, 115, 22, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(124, 58, 237, 0.15) 0px, transparent 50%);
             background-attachment: fixed;
         }
 
-        main { max-width: 800px; margin: auto; padding: 0 15px; position: relative; z-index: 1; }
+        main { max-width: 800px; margin: auto; padding: 0 20px; text-align: center; }
 
         /* Timer Sticky */
         #timer-container {
             position: fixed;
-            top: 15px;
+            top: 20px;
             left: 50%;
             transform: translateX(-50%);
             background: var(--primary);
             color: #000;
-            padding: 10px 30px;
+            padding: 12px 35px;
             font-weight: 800;
             border-radius: 50px;
             z-index: 10000;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-            font-size: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
-        /* Ad Slots Design */
+        /* Anti-Redirect Ad Slot */
         .ad-slot {
-            margin: 30px auto;
+            margin: 40px auto;
             width: 100%;
             min-height: 250px;
             display: flex;
             align-items: center;
             justify-content: center;
             background: var(--glass);
-            border-radius: 20px;
+            border-radius: 30px;
             border: 1px solid var(--border);
             backdrop-filter: blur(10px);
             overflow: hidden;
         }
         .lb-slot { min-height: 90px; }
 
-        /* Content Styling */
         #task-content p {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            line-height: 1.7;
-            border-left: 4px solid var(--primary);
-        }
-
-        #music-container {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 25px;
             border-radius: 20px;
-            margin-bottom: 25px;
-            border: 1px solid var(--border);
+            margin-bottom: 20px;
+            line-height: 1.8;
+            border-left: 5px solid var(--primary);
+            text-align: left;
         }
-
-        #task-audio { width: 100%; height: 35px; opacity: 0.8; }
 
         #status-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(7, 11, 20, 0.98);
+            background: rgba(10, 15, 29, 0.98);
             z-index: 200000;
             align-items: center;
             justify-content: center;
@@ -97,10 +84,10 @@
         }
 
         .loader-spin {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255,255,255,0.1);
-            border-top: 5px solid var(--primary);
+            width: 60px;
+            height: 60px;
+            border: 6px solid rgba(255,255,255,0.1);
+            border-top: 6px solid var(--primary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -113,22 +100,18 @@
 
 <div id="status-overlay">
     <div class="loader-spin"></div>
-    <p style="margin-top:20px;color:var(--primary);font-weight:bold;">Reward Verifying...</p>
+    <p style="margin-top:20px;color:var(--primary);font-weight:bold;">Verifying Reward...</p>
 </div>
 
 <main>
     <div class="ad-slot lb-slot" id="ad-top"></div>
 
-    <div class="premium-quote" style="background: rgba(255,153,51,0.1); border-radius: 15px; padding: 20px; margin: 25px 0; border-left: 5px solid var(--primary); font-style: italic;">
-        "Seekhne ki koi umar nahi hoti, aur kamane ka koi bura waqt nahi hota." ✨
+    <div id="music-container" style="background:rgba(0,0,0,0.3); padding:20px; border-radius:20px; margin:20px 0; border:1px solid var(--border);">
+        <p style="color:var(--primary); font-weight:700; margin-bottom:10px;"><i class="fa-solid fa-music"></i> Focus Beats</p>
+        <audio id="task-audio" controls loop style="width:100%;"><source id="audio-source" src="" type="audio/mpeg"></audio>
     </div>
 
-    <div id="music-container">
-        <p style="margin:0 0 10px 0; font-size: 0.8rem; font-weight: 700; color: var(--primary);"><i class="fa-solid fa-music"></i> Task Beats</p>
-        <audio id="task-audio" controls loop><source id="audio-source" src="" type="audio/mpeg"></audio>
-    </div>
-
-    <h1 id="task-title" style="color:var(--primary); font-weight: 800; text-align: center; font-size: 1.8rem; margin-bottom: 30px;"></h1>
+    <h1 id="task-title" style="color:var(--primary); font-weight:800; margin-bottom:30px;"></h1>
     
     <div id="task-content"></div>
     
@@ -141,17 +124,26 @@ let taskId = new URLSearchParams(location.search).get('id') || 1;
 let currentUser = null;
 let timeLeft = 300; 
 
+// --- ANTI-REDIRECT AD ENGINE ---
 function forceLoadAd(containerId) {
     const container = document.getElementById(containerId);
     if(!container) return;
+    
     const adCodes = [
         `<script type="text/javascript">atOptions={'key':'b885d21cc49004931f6c2a78a423c968','format':'iframe','height':250,'width':300,'params':{}};\x3C/script><script type="text/javascript" src="//www.highperformanceformat.com/b885d21cc49004931f6c2a78a423c968/invoke.js">\x3C/script>`,
         `<script type="text/javascript">atOptions={'key':'ac3a34c448d39282025c11644797e3a1','format':'iframe','height':50,'width':320,'params':{}};\x3C/script><script type="text/javascript" src="//www.highperformanceformat.com/ac3a34c448d39282025c11644797e3a1/invoke.js">\x3C/script>`
     ];
+
     container.innerHTML = ""; 
     const iframe = document.createElement('iframe');
-    iframe.style.border = "none"; iframe.style.width = "100%"; iframe.style.height = "100%";
+    
+    // SANDBOX ADDED: Isse ad load hogi par page redirect nahi kar payegi
+    iframe.sandbox = "allow-scripts allow-forms allow-same-origin"; 
+    iframe.style.border = "none"; 
+    iframe.style.width = "100%"; 
+    iframe.style.height = "100%";
     container.appendChild(iframe);
+
     const doc = iframe.contentWindow.document;
     doc.open();
     const chosenAd = container.classList.contains('lb-slot') ? adCodes[1] : adCodes[0];
@@ -177,9 +169,12 @@ async function loadContent(){
             }
         });
         forceLoadAd('ad-top'); forceLoadAd('final-anchor-ad');
+        
+        // Refresh ads every 40s to increase impressions
         setInterval(() => {
             document.querySelectorAll('.ad-slot').forEach(slot => { forceLoadAd(slot.id); });
         }, 40000);
+
         if(data.song_url) setupMusic(data.song_url);
     }
 }
@@ -215,7 +210,7 @@ function setupMusic(url) {
         if (fileId) finalUrl = `https://docs.google.com/uc?export=open&id=${fileId}`;
     }
     audio.src = finalUrl;
-    audio.play().catch(() => console.log("Interaction needed"));
+    audio.play().catch(() => console.log("Click to play music"));
 }
 
 async function init(){
@@ -228,3 +223,5 @@ window.onload = init;
 </script>
 </body>
 </html>
+
+
