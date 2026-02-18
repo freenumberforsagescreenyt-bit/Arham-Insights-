@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3412654378038738"
-     crossorigin="anonymous"></script>
-
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3412654378038738" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Arham Insights | Badlo Halat, Badlo Pehchan</title>
@@ -16,410 +14,149 @@
 
         :root { 
             --primary: #f97316; 
-            --primary-glow: rgba(249, 115, 22, 0.4);
-            --bg-base: #f8fafc;
-            --indigo-text: #1e1b4b;
-            --card-bg: rgba(255, 255, 255, 0.7);
-            --border: rgba(30, 27, 75, 0.1);
-            --yt-color: #FF0000;
-            --ig-color: #E4405F;
-            --tg-color: #26A5E4;
+            --dark-indigo: #1e1b4b;
+            --success-green: #16a34a;
+            --bg-base: #ffffff;
+            --tg-blue: #0088cc;
         }
         
-        * { 
-            box-sizing: border-box; 
-            margin: 0; 
-            padding: 0; 
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-            outline: none !important;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; text-align: center; }
 
-        /* DYNAMIC MULTI-COLOR ANIMATED BACKGROUND */
         body { 
             background: var(--bg-base);
-            background-image: 
-                radial-gradient(at 0% 0%, #e0f2fe 0px, transparent 50%),
-                radial-gradient(at 100% 0%, #f5f3ff 0px, transparent 50%),
-                radial-gradient(at 100% 100%, #f0fdf4 0px, transparent 50%),
-                radial-gradient(at 0% 100%, #fff7ed 0px, transparent 50%),
-                radial-gradient(at 50% 50%, #fdf2f8 0px, transparent 50%);
-            background-attachment: fixed;
-            background-size: 200% 200%;
-            animation: bgAnimation 15s ease infinite;
-            color: var(--indigo-text); 
-            line-height: 1.6; 
+            color: var(--dark-indigo);
             overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            display: flex; flex-direction: column; align-items: center;
         }
 
-        @keyframes bgAnimation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* SCROLL REVEAL ANIMATION */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease-out;
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        header { 
+        /* Hero Section Background */
+        .hero-bg {
             width: 100%;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 60px 20px;
-            text-align: center;
+            background: radial-gradient(circle at 50% 50%, #fff7ed 0%, #ffffff 100%);
+            padding: 80px 20px;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        .reveal { opacity: 0; transform: translateY(30px); transition: 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        .logo-img {
+            width: 150px; height: 150px; border-radius: 50%;
+            border: 8px solid white; box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            object-fit: cover; margin-bottom: 30px;
         }
 
         .main-title {
-            font-size: clamp(2.5rem, 10vw, 4.5rem);
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 25px;
-            background: linear-gradient(135deg, #1e1b4b 30%, var(--primary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
-            animation: titleGlow 3s ease-in-out infinite alternate;
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 800; line-height: 1.1; margin-bottom: 20px;
+            background: linear-gradient(135deg, #1e1b4b 20%, #f97316 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        @keyframes titleGlow {
-            from { filter: drop-shadow(0 0 2px rgba(249, 115, 22, 0.2)); }
-            to { filter: drop-shadow(0 0 15px rgba(249, 115, 22, 0.5)); }
+        .harsh-truth-box {
+            max-width: 850px; background: #fff1f2; border: 2px dashed #e11d48;
+            padding: 40px; border-radius: 40px; margin: 50px auto;
         }
 
-        .power-quote {
-            max-width: 800px;
-            margin: 30px auto;
-            padding: 30px;
-            border: 1px solid var(--border);
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            border-radius: 30px;
-            font-style: italic;
-            font-size: 1.15rem;
-            color: #4338ca;
-            text-align: center; /* Centered as requested */
-            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
-            border-bottom: 5px solid var(--primary);
-        }
-
-        .reality-box {
-            max-width: 900px;
-            width: 95%;
-            background: rgba(255, 255, 255, 0.8);
-            border: 1px solid var(--border);
-            border-radius: 40px;
-            padding: 40px;
-            margin: 40px auto;
-            backdrop-filter: blur(25px);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.05);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .reality-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            width: 100%;
-        }
-
-        .reality-card {
-            padding: 30px;
-            border-radius: 25px;
-            background: rgba(255, 255, 255, 0.5);
-            border: 1px solid var(--border);
-            text-align: center; /* Centered content */
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        
-        .reality-card:hover { 
-            transform: translateY(-10px) scale(1.02); 
-            background: white;
-            border-color: var(--primary);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-        }
-
-        .reality-card h4 {
-            font-size: 0.8rem;
-            color: var(--primary);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 12px;
-        }
-
-        .reality-card p { font-size: 1.1rem; font-weight: 600; color: var(--indigo-text); }
-        .highlight-red { color: #dc2626; text-decoration: underline; }
-        .highlight-green { color: #16a34a; font-size: 1.3rem; }
-
-        .btn-wrapper { width: 100%; display: flex; justify-content: center; margin-top: 35px; }
-
-        .btn-glow {
-            position: relative;
-            background: linear-gradient(135deg, #f97316 0%, #db2777 100%);
-            color: #fff;
-            padding: 22px 70px;
-            border-radius: 100px;
-            text-decoration: none;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            box-shadow: 0 10px 30px var(--primary-glow);
-            transition: 0.4s;
-            display: inline-block;
-            overflow: hidden;
-        }
-        .btn-glow:hover { 
-            transform: scale(1.05); 
-            box-shadow: 0 15px 45px rgba(249, 115, 22, 0.6); 
-        }
-
-        .payout-verified {
-            margin: 40px auto 0;
-            font-weight: 700;
-            color: #16a34a;
-            background: rgba(22, 163, 74, 0.1);
-            padding: 14px 35px;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            border: 1px solid rgba(22, 163, 74, 0.2);
-            width: fit-content;
-        }
-
-        .section-container { 
-            padding: 100px 24px; 
-            max-width: 1100px; 
-            width: 100%;
-            margin: 0 auto; 
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 60px;
-            width: 100%;
-        }
-
-        .feature-card {
-            background: var(--card-bg);
-            padding: 50px 30px;
-            border-radius: 40px;
-            border: 1px solid var(--border);
-            backdrop-filter: blur(15px);
-            transition: 0.4s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .feature-card:hover { 
-            border-color: #3b82f6; 
-            background: rgba(255, 255, 255, 0.95); 
-            transform: translateY(-15px); 
-        }
-
-        .email-container {
-            margin: 40px auto;
-            padding: 40px;
-            background: white;
-            border-radius: 35px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
-            width: 100%;
-            max-width: 600px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        footer {
-            width: 100%;
-            padding: 80px 24px;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid var(--border);
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .footer-socials {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            margin-bottom: 40px;
-        }
-
-        .footer-socials a {
-            font-size: 2rem;
-            transition: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            background: white;
-            width: 75px;
-            height: 75px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            border: 1px solid var(--border);
-            text-decoration: none;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-        }
-
-        .social-yt { color: var(--yt-color); }
-        .social-ig { color: var(--ig-color); }
-        .social-tg { color: var(--tg-color); }
-
-        .footer-socials a:hover {
-            transform: translateY(-15px) rotate(360deg);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-
-        .reg-btn {
-            color: #fff;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            font-size: 1.1rem;
-            text-decoration: none;
-            background: linear-gradient(135deg, #4f46e5, #9333ea);
-            padding: 22px 60px;
-            border-radius: 100px;
-            transition: 0.4s;
-            display: inline-block;
-            box-shadow: 0 10px 30px rgba(79, 70, 229, 0.4);
-        }
-        .reg-btn:hover { transform: scale(1.1); box-shadow: 0 20px 50px rgba(79, 70, 229, 0.6); }
-
+        .harsh-truth-box h3 { color: #e11d48; font-size: 1.8rem; margin-bottom: 15px; font-weight: 800; }
+        .harsh-truth-box p { font-size: 1.2rem; font-weight: 600; color: #881337; line-height: 1.6; }
     </style>
 </head>
 <body>
 
-<header>
-    <img class="reveal" src="https://i.ibb.co/N26BWZdY/Screenshot-20260130-221623.jpg" alt="Logo" style="width:130px; height:130px; border-radius:50%; margin-bottom:30px; border:5px solid white; box-shadow: 0 15px 40px rgba(0,0,0,0.15); object-fit: cover;">
+<section class="hero-bg">
+    <img class="logo-img reveal" src="https://i.ibb.co/N26BWZdY/Screenshot-20260130-221623.jpg" alt="Logo">
     
-    <h1 class="main-title reveal">Degree Bechkar<br>Hunar Khareedo</h1>
-
-    <div class="power-quote reveal">
-        "School ne kaha tha 10th kar lo life set hai, 12th kar lo life set hai... <br>
-        Aaj Degree hath mein hai, par pocket khali hai. Kyun? Kyunki duniya badal gayi, par tumhara syllabus nahi."
-    </div>
-
-    <div class="reality-box reveal">
-        <h3 style="margin-bottom: 30px; font-size: 1.8rem; color: var(--indigo-text); letter-spacing: -0.5px;">Waqt Aa Gaya Hai Aaina Dekhne Ka</h3>
-        <div class="reality-grid">
-            <div class="reality-card">
-                <h4>Sarkari/Private College</h4>
-                <p>Tumhe <span class="highlight-red">Gulam</span> banana sikhate hain, taaki tum kisi aur ke sapne poore kar sako.</p>
-            </div>
-            <div class="reality-card">
-                <h4>Arham Insights</h4>
-                <p>Hum tumhe <span class="highlight-green">Malik</span> banana sikhate hain, taaki tum internet ki taqat se apna rajya khada karo.</p>
-            </div>
-        </div>
-    </div>
-
-    <p class="reveal" style="font-size: 1.25rem; max-width: 750px; font-weight: 600; color: #64748b; margin: 10px auto 30px; text-align: center;">
-        "Jab tak padhai ka maksad sirf 'Naukri' hoga, tab tak samaj mein sirf 'Naukar' hi paida honge."
+    <h1 class="main-title reveal">Degree Hath Mein,<br>Pocket Khali Hai?</h1>
+    
+    <p class="reveal" style="font-size: 1.4rem; color: #475569; max-width: 800px; margin: 0 auto; font-weight: 600;">
+        College ne tumhe "Naukar" banna sikhaya, hum tumhe "Hunar" aur "Paisa" dono denge.
     </p>
 
-    <div class="btn-wrapper reveal">
-        <a href="login.html" class="btn-glow">Login from here</a>
-    </div>
-
-    <div class="payout-verified reveal">
-        <i class="fa-solid fa-circle-check"></i> Verified Transparency | Sahi Disha, Sahi Pragati
-    </div>
-</header>
-
-<main style="width: 100%;">
-    <section class="section-container">
-        <h2 class="reveal" style="font-size: 3rem; margin-bottom: 15px; font-weight: 800; color: #1e1b4b;">Kyun Judein Humse?</h2>
-        <p class="reveal" style="color: #64748b; font-size: 1.15rem;">Hum rasta dikhate hain, chalna aapko hai.</p>
-
-        <div class="feature-grid">
-            <div class="feature-card reveal">
-                <i class="fa-solid fa-coins" style="font-size: 4.5rem; color: #f59e0b; margin-bottom: 20px;"></i>
-                <h3 style="margin-bottom: 15px; font-size: 1.6rem; color: #1e1b4b;">Asli Kamai</h3>
-                <p style="color: #64748b;">Waqt barbad karna band karein. Seekhein ki kaise badi companiyaan hamare data se croredo kamati hain, aur apna hissa lein.</p>
-            </div>
-            <div class="feature-card reveal">
-                <i class="fa-solid fa-rocket" style="font-size: 4.5rem; color: #3b82f6; margin-bottom: 20px;"></i>
-                <h3 style="margin-bottom: 15px; font-size: 1.6rem; color: #1e1b4b;">Asli Shiksha</h3>
-                <p style="color: #64748b;">Woh sikhein jo market mein bikta hai. Digital Asset banana aur use monetize karna hi aaj ki asli degree hai.</p>
-            </div>
-            <div class="feature-card reveal">
-                <i class="fa-solid fa-gem" style="font-size: 4.5rem; color: #9333ea; margin-bottom: 20px;"></i>
-                <h3 style="margin-bottom: 15px; font-size: 1.6rem; color: #1e1b4b;">Financial Freedom</h3>
-                <p style="color: #64748b;">Maintenance fee aur transparent payout model. Hum hide nahi karte, hum sath milkar grow karte hain.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="section-container" style="background: rgba(255,255,255,0.4); border-radius: 80px 80px 0 0; box-shadow: 0 -20px 40px rgba(0,0,0,0.02);">
-        <h2 class="reveal" style="color: var(--indigo-text); margin-bottom: 25px; font-size: 2.8rem; font-weight: 800;">Badlo Halat, Badlo Pehchan</h2>
-        <p class="reveal" style="max-width: 780px; margin: 0 auto 50px auto; font-size: 1.2rem; color: #64748b; text-align: center;">
-            Arham Insights sirf ek platform nahi, un logon ke liye ek parivaar hai jo bheed se alag nikalne ka dum rakhte hain.
+    <div class="harsh-truth-box reveal">
+        <h3>Reality Check ⚠️</h3>
+        <p>
+            "Tumhare Professor tumhe woh sikhate hain jo 20 saal purana hai. 
+            Aaj ke daur mein Degree sirf ek 'Paper' hai, asli 'Power' digital skills mein hai. 
+            Jab tak tum dusron ke sapne poore karoge, tumhara apna bank balance zero rahega."
         </p>
-        
-        <div class="email-container reveal">
-            <p style="margin-bottom: 20px; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 3px; color: var(--primary); font-weight: 800;">Official Helpdesk</p>
-            <a href="mailto:arhaminsightshelp@gmail.com" style="font-size: clamp(1.1rem, 5vw, 1.6rem); color: var(--indigo-text); text-decoration: none; border-bottom: 3.5px solid var(--primary); font-weight: 800; padding-bottom: 8px;">arhaminsightshelp@gmail.com</a>
-        </div>
-        
-        <div class="reveal" style="margin-top: 70px; width: 100%; display: flex; flex-direction: column; align-items: center;">
-            <p style="margin-bottom: 30px; opacity: 0.8; font-weight: 600; text-align: center;">Taiyaar hain ek nayi shuruwat ke liye?</p>
-            <a href="register.html" class="reg-btn">Register Now (Free)</a>
+    </div>
+
+    <div class="reveal" style="margin-top: 20px;">
+        <a href="login.html"  style="background: var(--dark-indigo); color: white; padding: 22px 60px; border-radius: 100px; text-decoration: none; font-weight: 800; font-size: 1.2rem; display: inline-block; box-shadow: 0 15px 35px rgba(30, 27, 75, 0.3);">Dashboard Login</a>
+    </div>
+    
+    <br>
+    <a href="https://t.me/theemailmart" target="_blank" style="background: #0088cc; color: white; padding: 20px 40px; border-radius: 100px; text-decoration: none; display: inline-flex; align-items: center; gap: 15px; font-weight: 800; margin-top: 10px; box-shadow: 0 10px 25px rgba(0, 136, 204, 0.3);">
+        <i class="fab fa-telegram-plane"></i> Join Telegram For Daily Updates
+    </a>
+</section>
+
+<main style="width: 100%; max-width: 1100px; padding: 60px 20px; display: flex; flex-direction: column; align-items: center;">
+    
+    <section class="reveal" style="margin-bottom: 80px; width: 100%;">
+        <h2 style="font-size: 2.5rem; margin-bottom: 40px; font-weight: 800;">School vs Arham Insights</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+            <div style="padding: 40px; border-radius: 30px; background: #f8fafc; border: 1px solid #e2e8f0;">
+                <h4 style="color: #ef4444; margin-bottom: 15px; font-weight: 800;">KITAABI GYAAN</h4>
+                <p style="font-weight: 600; color: #475569;">Wahi purane syllabus ko ratta maaro aur end mein ₹10k-₹15k ki naukri ke liye gidgidao.</p>
+            </div>
+            <div style="padding: 40px; border-radius: 30px; background: #f0f9ff; border: 2px solid #0ea5e9;">
+                <h4 style="color: #0ea5e9; margin-bottom: 15px; font-weight: 800;">ASLI SKILLS</h4>
+                <p style="font-weight: 600; color: #475569;">Internet ki taqat use karo. Rozana naye Premium Tasks karo aur apna payout khud decide karo.</p>
+            </div>
         </div>
     </section>
+
+    <section class="reveal" style="background: #1e1b4b; color: white; padding: 60px 30px; border-radius: 50px; margin-bottom: 80px; width: 100%;">
+        <h2 style="font-size: 2.2rem; margin-bottom: 25px; font-weight: 800;">Hamari Payment Policy 🏦</h2>
+        <p style="font-size: 1.1rem; opacity: 0.9; line-height: 1.8; max-width: 800px; margin: 0 auto; font-weight: 400;">
+            Hum kisi bhi "Quick Money" scam ka hissa nahi hain. Hamari policy ekdum clear hai:<br><br>
+            ✅ **Weekly Payouts:** Jab hamari partner companies humein pay karti hain, hum turant har user ka balance clear karte hain.<br>
+            ✅ **Minimum Payout:** ₹100 hote hi aap apna withdraw request Telegram par bhej sakte hain.<br>
+            ✅ **Transparency:** Har payment ka proof Telegram channel par live dikhaya jata hai.
+        </p>
+    </section>
+        <section class="reveal" style="padding: 60px 0; width: 100%;">
+        <p style="text-transform: uppercase; letter-spacing: 5px; color: var(--primary); font-weight: 800; margin-bottom: 15px;">Help & Support</p>
+        <h2 style="font-size: 2rem; margin-bottom: 20px; font-weight: 800;">Sahi Disha, Sahi Pragati</h2>
+        <a href="mailto:arhainsightshelp@gmail.com" style="font-size: 1.5rem; color: var(--dark-indigo); font-weight: 800; text-decoration: underline;">arhainsightshelp@gmail.com</a>
+        
+        <div style="margin-top: 50px;">
+            <a href="T&C.html" style="background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; padding: 22px 65px; border-radius: 100px; text-decoration: none; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; display: inline-block; box-shadow: 0 15px 35px rgba(79, 70, 229, 0.4);">Register Now (Free)</a>
+        </div>
+    </section>
+
 </main>
 
-<footer>
-    <div class="footer-socials reveal">
-        <a href="https://youtube.com/@arhaminsights?si=pYjyR0ELSTfhLqgN" target="_blank" class="social-yt" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
-        <a href="https://www.instagram.com/arhaminsights?igsh=MWdtbTV0eXYwa25kOQ==" target="_blank" class="social-ig" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
-        <a href="https://t.me/+sO8t9qJiacE1Yjc1" target="_blank" class="social-tg" title="Telegram"><i class="fa-brands fa-telegram"></i></a>
+<footer style="width: 100%; padding: 80px 24px; background: rgba(255, 255, 255, 0.9); border-top: 1px solid rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center;">
+    <div style="display: flex; justify-content: center; gap: 30px; margin-bottom: 40px;">
+        <a href="https://youtube.com/@arhaminsights" target="_blank" style="color:#FF0000; font-size: 2.2rem; transition: 0.3s;"><i class="fa-brands fa-youtube"></i></a>
+        <a href="https://instagram.com/arhaminsights" target="_blank" style="color:#E4405F; font-size: 2.2rem; transition: 0.3s;"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://t.me/theemailmart" target="_blank" style="color:#26A5E4; font-size: 2.2rem; transition: 0.3s;"><i class="fa-brands fa-telegram"></i></a>
     </div>
-    <p class="reveal" style="font-weight: 700; color: var(--indigo-text); text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">&copy; 2026 Arham Insights</p>
-    <p class="reveal" style="font-size: 0.8rem; margin-top: 15px; opacity: 0.6; max-width: 650px; line-height: 1.8; color: #64748b; text-align: center;">Sahi Disha, Sahi Pragati. Skill building requires patience and effort. Financial results depend on individual performance.</p>
+    <p style="font-weight: 800; opacity: 0.6; color: var(--dark-indigo); text-transform: uppercase; letter-spacing: 2px;">&copy; 2026 Arham Insights | Degree Bechkar Hunar Khareedo</p>
+    <p style="font-size: 0.85rem; margin-top: 15px; opacity: 0.5; max-width: 600px; line-height: 1.6;">Financial results depend on individual performance and company settlement cycles. We do not guarantee fixed income without work.</p>
 </footer>
 
 <script>
-    // SCROLL REVEAL JAVASCRIPT
+    // SCROLL REVEAL LOGIC
     function reveal() {
         var reveals = document.querySelectorAll(".reveal");
         for (var i = 0; i < reveals.length; i++) {
             var windowHeight = window.innerHeight;
             var elementTop = reveals[i].getBoundingClientRect().top;
-            var elementVisible = 150;
+            var elementVisible = 100;
             if (elementTop < windowHeight - elementVisible) {
                 reveals[i].classList.add("active");
             }
         }
     }
     window.addEventListener("scroll", reveal);
-    // Trigger once on load
-    reveal();
+    reveal(); // Initial check
 </script>
 
 </body>
 </html>
+
+    

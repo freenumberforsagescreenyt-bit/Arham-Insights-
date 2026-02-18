@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard - Arham Insights</title>
+    <title>User Dashboard - Arham Insights Elite</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
@@ -12,209 +12,153 @@
         
         :root { 
             --primary: #f97316; 
-            --dark: #1e293b; 
-            --bg-light: #f0f9ff; 
+            --tg-blue: #0088cc;
+            --dark: #0f172a; 
+            --bg-light: #f8fafc; 
             --success: #10b981; 
-            --secondary: #ef4444; 
-            --card-glass: rgba(255, 255, 255, 0.85);
+            --card-glass: rgba(255, 255, 255, 0.9);
         }
 
-        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; outline: none; }
 
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background: var(--bg-light);
-            /* MULTI-COLOR LIGHT GRADIENT BACKGROUND */
-            background-image: 
-                radial-gradient(at 0% 0%, #e0f2fe 0px, transparent 50%),
-                radial-gradient(at 100% 0%, #f5f3ff 0px, transparent 50%),
-                radial-gradient(at 100% 100%, #f0fdf4 0px, transparent 50%),
-                radial-gradient(at 0% 100%, #fff7ed 0px, transparent 50%),
-                radial-gradient(at 50% 50%, #fdf2f8 0px, transparent 50%);
+            background-image: radial-gradient(at 0% 0%, #fef3c7 0px, transparent 50%), radial-gradient(at 100% 100%, #e0f2fe 0px, transparent 50%);
             background-attachment: fixed;
-            color: #1e293b; 
-            margin: 0; 
-            padding-bottom: 50px; 
+            color: #1e293b; margin: 0; padding-bottom: 80px; 
         }
         
         .navbar { 
-            background: rgba(255, 255, 255, 0.8); 
-            backdrop-filter: blur(10px);
-            color: var(--dark); 
-            padding: 15px 25px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            position: sticky; 
-            top: 0; 
-            z-index: 1000; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
-            border-bottom: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.85); 
+            backdrop-filter: blur(15px);
+            padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; 
+            position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.05);
         }
 
-        .container { max-width: 700px; margin: 20px auto; padding: 0 15px; }
+        .container { max-width: 600px; margin: 0 auto; padding: 15px; }
 
+        /* Welcome & Telegram Banner */
         .welcome-card { 
-            background: linear-gradient(135deg, #f97316 0%, #db2777 100%); 
-            color: white; 
-            padding: 30px; 
-            border-radius: 30px; 
-            margin-bottom: 25px; 
-            position: relative; 
-            overflow: hidden;
-            box-shadow: 0 15px 30px rgba(249, 115, 22, 0.2);
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%); 
+            color: white; padding: 25px; border-radius: 24px; margin-bottom: 20px;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.2);
         }
-
-        .stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .stat-item { 
-            background: rgba(255,255,255,0.2); 
-            backdrop-filter: blur(5px);
-            padding: 15px; 
-            border-radius: 20px; 
-            text-align: center; 
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-        .stat-item b { font-size: 1.5rem; color: #fff; display: block; }
-        .stat-item span { font-size: 0.85rem; opacity: 0.9; font-weight: 600; }
-
-        .glass-panel { 
-            background: var(--card-glass); 
-            padding: 25px; 
-            border-radius: 28px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.03); 
-            border: 1px solid rgba(255,255,255,0.6); 
-            margin-bottom: 25px; 
-            backdrop-filter: blur(10px);
-        }
-
-        .section-title { font-weight: 800; font-size: 1.25rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; color: var(--dark); }
-        .section-title i { 
-            background: linear-gradient(135deg, var(--primary), #fb923c);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .search-container { position: relative; margin-bottom: 20px; }
-        .search-container input { width: 100%; padding: 15px 20px 15px 45px; border-radius: 18px; border: 1.5px solid #e2e8f0; background: white; font-size: 1rem; outline: none; transition: 0.3s; }
-        .search-container input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.1); }
-        .search-container i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
-
-        .task-grid { display: grid; gap: 15px; }
-        .task-item { 
-            background: white; 
-            padding: 20px; 
-            border-radius: 22px; 
-            border: 1px solid #f1f5f9; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            transition: 0.3s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-        }
-        .task-item:hover { transform: scale(1.02); border-color: var(--primary); }
         
-        .task-info { display: flex; align-items: center; gap: 15px; }
-        .task-number { 
-            background: #f8fafc; 
-            color: var(--primary); 
-            width: 35px; height: 35px; 
-            display: flex; align-items: center; justify-content: center; 
-            border-radius: 10px; font-weight: 800; font-size: 0.9rem;
-            border: 1px solid #e2e8f0;
+        .tg-banner {
+            background: linear-gradient(90deg, #0088cc, #00a2ed);
+            color: white; padding: 15px; border-radius: 20px; margin-bottom: 20px;
+            display: flex; align-items: center; justify-content: space-between;
+            text-decoration: none; box-shadow: 0 8px 20px rgba(0, 136, 204, 0.2);
         }
+
+        .stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
+        .stat-item { background: rgba(255,255,255,0.1); padding: 12px; border-radius: 18px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
+        .stat-item b { font-size: 1.3rem; display: block; }
+
+        /* Glass Panels */
+        .glass-panel { 
+            background: var(--card-glass); padding: 20px; border-radius: 24px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid #fff; 
+            margin-bottom: 20px; backdrop-filter: blur(10px);
+        }
+
+        .section-title { font-weight: 800; font-size: 1.1rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .section-title i { color: var(--primary); }
+
+        /* Task Items */
+        .task-grid { display: grid; gap: 12px; }
+        .task-item { 
+            background: white; padding: 18px; border-radius: 20px; border: 1px solid #f1f5f9; 
+            display: flex; justify-content: space-between; align-items: center; transition: 0.3s;
+        }
+        
+        /* Grey Market Specific Styling */
+        .grey-item { border-left: 5px solid var(--tg-blue) !important; background: #f0f9ff; }
 
         .do-btn { 
-            background: linear-gradient(135deg, var(--primary), #f97316); 
-            color: white; 
-            padding: 10px 20px; 
-            border-radius: 12px; 
-            text-decoration: none; 
-            font-weight: 700; 
-            font-size: 0.9rem;
-            box-shadow: 0 4px 10px rgba(249, 115, 22, 0.3);
+            background: var(--primary); color: white; padding: 8px 18px; border-radius: 12px; 
+            text-decoration: none; font-weight: 700; font-size: 0.85rem; box-shadow: 0 4px 10px rgba(249, 115, 22, 0.2);
         }
-        
-        .charge-box { background: #fff1f2; border: 1.5px dashed var(--secondary); padding: 15px; border-radius: 18px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .btn-save { background: var(--dark); color: white; border: none; width: 100%; padding: 16px; border-radius: 15px; font-weight: 800; cursor: pointer; transition: 0.3s; }
-        .btn-save:hover { opacity: 0.9; transform: translateY(-2px); }
 
-        #withdraw-btn { display: none; background: #25d366; color: white; border: none; width: 100%; padding: 16px; border-radius: 15px; font-weight: 800; margin-top: 15px; box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3); cursor: pointer; }
+        .tg-btn { background: var(--tg-blue) !important; box-shadow: 0 4px 10px rgba(0, 136, 204, 0.2) !important; }
 
-        /* Scratch Card Pop-up Styling */
-        #scratch-overlay { display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.9); z-index: 5000; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
-        .scratch-container { position: relative; width: 280px; height: 280px; background: #fff; border-radius: 30px; overflow: hidden; border: 6px solid var(--primary); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-        #scratch-canvas { position: absolute; top: 0; left: 0; cursor: crosshair; z-index: 2; }
+        #withdraw-btn { display: none; background: #22c55e; color: white; border: none; width: 100%; padding: 16px; border-radius: 15px; font-weight: 800; margin-top: 15px; cursor: pointer; }
+
+        /* Scratch Card Pop-up */
+        #scratch-overlay { display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.95); z-index: 5000; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(15px); }
+        .scratch-container { position: relative; width: 280px; height: 280px; background: #fff; border-radius: 30px; overflow: hidden; border: 4px solid var(--primary); }
     </style>
 </head>
 <body>
-
     <div id="scratch-overlay">
-        <h2 style="color:var(--dark); margin-bottom: 20px; font-weight: 800;">Badhai Ho! </h2>
+        <h2 style="color:var(--dark); margin-bottom: 20px;">Shabash! 🎁</h2>
         <div class="scratch-container">
-            <div class="reward-content" style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1; background: radial-gradient(circle, #fff 0%, #fff5e6 100%);">
-                <img src="https://i.ibb.co/LzfNq9p/1000050980.jpg" style="position: absolute; width: 150px; opacity: 0.1;" alt="logo">
-                <i class="fa-solid fa-gift" style="font-size: 3.5rem; color: #ffd700; z-index: 1;"></i>
-                <h2 style="color:var(--dark); font-size: 2.2rem; margin: 10px 0; z-index: 1;">5.00</h2>
-                <p style="color:#64748b; font-weight:700; z-index: 1;">Wallet mein add hua</p>
+            <div class="reward-content" style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1;">
+                <i class="fa-solid fa-gift" style="font-size: 3rem; color: var(--primary);"></i>
+                <h2 style="font-size: 2rem; margin: 10px 0;">₹5.00</h2>
+                <p>Wallet mein add ho raha hai...</p>
             </div>
-            <canvas id="scratch-canvas" width="280" height="280"></canvas>
+            <canvas id="scratch-canvas" width="280" height="280" style="position:absolute; z-index:2; cursor:crosshair;"></canvas>
         </div>
-        <button id="close-scratch" class="btn-save" style="width:220px; margin-top:25px; display:none; background: var(--primary);" onclick="addRewardAndClose()">Claim Now</button>
+        <button id="close-scratch" class="do-btn" style="margin-top:20px; padding:15px 40px; display:none;" onclick="addRewardAndClose()">Claim Now</button>
     </div>
 
     <nav class="navbar">
-        <div style="font-weight: 900; letter-spacing: -0.5px; font-size: 1.2rem;">ARHAM <span style="color:var(--primary)">INSIGHTS</span></div>
-        <button onclick="logout()" style="background:rgba(0,0,0,0.05); border:1px solid #e2e8f0; color:var(--dark); padding:8px 18px; border-radius:12px; font-weight: 700;">Logout</button>
+        <div style="font-weight: 900; font-size: 1.2rem;">ARHAM <span style="color:var(--primary)">INSIGHTS</span></div>
+        <button onclick="logout()" style="background:none; border:none; font-weight:700; color:var(--secondary);"><i class="fa fa-power-off"></i></button>
     </nav>
 
     <div class="container">
+        <a href="https://t.me/theemailmart" target="_blank" class="tg-banner">
+            <div style="display:flex; align-items:center; gap:12px;">
+                <i class="fab fa-telegram-plane" style="font-size:1.5rem;"></i>
+                <div>
+                    <b style="display:block; font-size:0.9rem;">Join Updates Channel</b>
+                    <small style="opacity:0.8;">@theemailmart</small>
+                </div>
+            </div>
+            <i class="fa fa-chevron-right"></i>
+        </a>
+
         <div class="welcome-card">
-            <h2 style="margin:0">Namaste! </h2>
-            <p id="user-email-header" style="opacity: 0.9; font-size: 0.9rem; font-weight: 600;">Loading profile...</p>
+            <p id="user-email-header" style="margin:0; opacity:0.8; font-size:0.8rem;">Profile loading...</p>
+            <h2 style="margin:5px 0;">Namaste, Member! 👋</h2>
             <div class="stats-row">
-                <div class="stat-item"><span>Tasks Completed</span><b id="tasks-count">0</b></div>
-                <div class="stat-item"><span>Total Earnings</span><b id="total-earning">0.00</b></div>
+                <div class="stat-item"><span>Tasks</span><b id="tasks-count">0</b></div>
+                <div class="stat-item"><span>Earnings</span><b id="total-earning">₹0.00</b></div>
             </div>
             <button id="withdraw-btn" onclick="sendWhatsAppAlert()"></button>
         </div>
 
-        <div class="glass-panel">
-            <div class="section-title"><i class="fa-solid fa-wallet"></i> Payout Summary</div>
-            <div class="charge-box">
-                <div class="charge-info">
-                    <span style="font-size: 0.8rem; color: #b91c1c; font-weight: 700;"> Maintenance Fee</span>
-                    <b style="color: var(--secondary);"> 0</b>
-                </div>
-                <i class="fa-solid fa-circle-exclamation" style="color: var(--secondary); font-size: 1.3rem;"></i>
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 5px;">
-                <span style="font-weight: 800; color: var(--dark);">Net Balance:</span>
-                <b id="net-payable" style="color: var(--success); font-size: 1.4rem; font-weight: 900;">0.00</b>
+        <div class="glass-panel" style="background:#f0f9ff; border: 1.5px solid #bae6fd;">
+            <div class="section-title" style="color:var(--tg-blue);"><i class="fa-solid fa-rocket"></i> Premium Recurring Work</div>
+            <div id="additional-work-container" class="task-grid">
+                <p style="text-align:center; font-size:0.8rem; color:#64748b;">Naye tasks load ho rahe hain...</p>
             </div>
         </div>
 
         <div class="glass-panel">
-            <div class="section-title"><i class="fa-solid fa-tasks"></i> Available Tasks</div>
-            <div class="search-container">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="taskSearch" placeholder="Find tasks..." onkeyup="filterTasks()">
-            </div>
-            <div class="task-grid" id="live-links-list"></div>
+            <div class="section-title"><i class="fa-solid fa-list-check"></i> Standard Tasks</div>
+            <div id="live-links-list" class="task-grid"></div>
         </div>
 
         <div class="glass-panel">
-            <div class="section-title"><i class="fa-solid fa-user-gear"></i> Payment Settings</div>
+            <div class="section-title"><i class="fa-solid fa-wallet"></i> Wallet Summary</div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-weight:700;">Net Balance:</span>
+                <b id="net-payable" style="color:var(--success); font-size:1.2rem;">₹0.00</b>
+            </div>
+        </div>
+
+        <div class="glass-panel">
+            <div class="section-title"><i class="fa-solid fa-id-card"></i> Payout Details</div>
             <form id="profile-form" onsubmit="saveProfile(event)">
-                <div class="input-group"><label>WhatsApp Number</label><input type="tel" id="whatsapp_no" required placeholder="Ex: 9876543210"></div>
-                <div class="input-group" style="margin-top:10px;"><label>UPI ID (To Receive Payment)</label><input type="text" id="upi_id" required placeholder="Ex: name@upi"></div>
-                <button type="submit" id="save-btn" class="btn-save" style="margin-top:20px;">Save Details</button>
-                <button type="button" id="edit-btn" onclick="enableEditing()" class="btn-edit" style="display:none; width:100%; margin-top:20px; padding:15px; border-radius:15px; font-weight:800;">Edit Details</button>
+                <input type="tel" id="whatsapp_no" required placeholder="WhatsApp Number" style="width:100%; padding:12px; border-radius:10px; border:1px solid #ddd; margin-bottom:10px;">
+                <input type="text" id="upi_id" required placeholder="UPI ID (e.g. name@upi)" style="width:100%; padding:12px; border-radius:10px; border:1px solid #ddd;">
+                <button type="submit" id="save-btn" class="do-btn" style="width:100%; margin-top:15px; padding:12px;">Save Details</button>
+                <button type="button" id="edit-btn" onclick="enableEditing()" class="do-btn" style="display:none; width:100%; margin-top:15px; background:#64748b;">Edit Settings</button>
             </form>
-        </div>
-        
-        <div class="glass-panel">
-            <div class="section-title"><i class="fa-solid fa-history"></i> Payout History</div>
-            <div id="payout-history-list"></div>
         </div>
     </div>
 
@@ -222,7 +166,7 @@
         const _supabase = supabase.createClient("https://mkzgmrxakattqgbjnwch.supabase.co", "sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL");
         let currentUserSession = null;
         let currentBalance = 0;
-        const MAINTENANCE_FEE = 1500;
+        const MAINTENANCE_FEE = 0; // Set to 0 as per your previous discussion
 
         async function init() {
             const { data: { session } } = await _supabase.auth.getSession();
@@ -232,9 +176,30 @@
                 await fetchUserProgress();
                 await loadProfile();
                 await fetchTaskLinks();
-                await fetchPayoutHistory();
+                await loadAdditionalWork(); // NEW: Grey Market tasks
                 if (new URLSearchParams(window.location.search).get('status') === 'success') showScratchCard();
             } else { window.location.href = "login.html"; }
+        }
+
+        // LOAD GREY MARKET TASKS FROM NEW TABLE
+        async function loadAdditionalWork() {
+            const { data: greyTasks, error } = await _supabase.from('grey_tasks').select('*').order('created_at', {ascending: false});
+            const container = document.getElementById('additional-work-container');
+            
+            if (greyTasks && greyTasks.length > 0) {
+                container.innerHTML = greyTasks.map(task => `
+                    <div class="task-item grey-item">
+                        <div style="max-width:70%;">
+                            <b style="font-size:0.9rem; display:block;">${task.title}</b>
+                            <small style="color:#64748b; font-size:0.7rem;">${task.instruction}</small>
+                            <div style="margin-top:5px; color:var(--success); font-weight:800; font-size:0.8rem;">Reward: ₹${task.reward_amount}</div>
+                        </div>
+                        <a href="https://t.me/Namonamah03" target="_blank" class="do-btn tg-btn">Submit</a>
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = "<p style='text-align:center; font-size:0.8rem; color:#94a3b8;'>Naye tasks jald aa rahe hain...</p>";
+            }
         }
 
         async function fetchUserProgress() {
@@ -242,39 +207,27 @@
             if(data) {
                 document.getElementById('tasks-count').innerText = data.length;
                 currentBalance = data.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
-                document.getElementById('total-earning').innerText = "" + currentBalance.toFixed(2);
-                let net = Math.max(0, currentBalance - MAINTENANCE_FEE);
-                document.getElementById('net-payable').innerText = "" + net.toFixed(2);
-                if(currentBalance >= 10000) {
+                document.getElementById('total-earning').innerText = "₹" + currentBalance.toFixed(2);
+                document.getElementById('net-payable').innerText = "₹" + currentBalance.toFixed(2);
+                if(currentBalance >= 100) { // Withdraw button shows at ₹100
                     const btn = document.getElementById('withdraw-btn');
                     btn.style.display = 'block';
-                    btn.innerHTML = `<i class="fa-brands fa-whatsapp"></i> Withdraw Request (${net.toFixed(2)})`;
+                    btn.innerHTML = `<i class="fa-brands fa-whatsapp"></i> Withdraw Now (₹${currentBalance.toFixed(2)})`;
                 }
             }
         }
 
         async function fetchTaskLinks() {
-            const { data } = await _supabase.from('admin_blogs').select('*').order('created_at', {ascending: true});
+            const { data } = await _supabase.from('admin_blogs').select('*').order('id', {ascending: false});
             const list = document.getElementById('live-links-list');
             if(data) {
-                // Down to Up numbering logic
-                let totalTasks = data.length;
-                list.innerHTML = data.reverse().map((t, index) => `
+                list.innerHTML = data.map((t) => `
                     <div class="task-item">
-                        <div class="task-info">
-                            <div class="task-number">${totalTasks - index}</div>
-                            <b style="font-size:1rem;">${t.keyword}</b>
-                        </div>
+                        <b>${t.keyword}</b>
                         <a href="taskspage.html?id=${t.id}" class="do-btn">Start</a>
                     </div>
                 `).join('');
             }
-        }
-
-        function filterTasks() {
-            let input = document.getElementById('taskSearch').value.toLowerCase();
-            let items = document.getElementsByClassName('task-item');
-            for (let i of items) { i.style.display = i.innerText.toLowerCase().includes(input) ? "flex" : "none"; }
         }
 
         async function loadProfile() {
@@ -288,9 +241,12 @@
 
         async function saveProfile(e) {
             e.preventDefault();
-            const payload = { email: currentUserSession.email, upi_id: document.getElementById('upi_id').value, whatsapp: document.getElementById('whatsapp_no').value };
-            const { error } = await _supabase.from('profiles').upsert(payload, { onConflict: 'email' });
-            if (!error) { alert("Settings Saved! "); lockInputs(); }
+            const { error } = await _supabase.from('profiles').upsert({ 
+                email: currentUserSession.email, 
+                upi_id: document.getElementById('upi_id').value, 
+                whatsapp: document.getElementById('whatsapp_no').value 
+            });
+            if (!error) { alert("Details Saved! ✅"); lockInputs(); }
         }
 
         function lockInputs() {
@@ -305,53 +261,36 @@
             document.getElementById('edit-btn').style.display = 'none';
         }
 
-        async function fetchPayoutHistory() {
-            const list = document.getElementById('payout-history-list');
-            const { data } = await _supabase.from('payouts').select('*').eq('email', currentUserSession.email).order('created_at', { ascending: false });
-            if (data && data.length > 0) {
-                list.innerHTML = data.map(item => `
-                    <div style="display:flex; justify-content:space-between; padding:15px 5px; border-bottom:1px solid #f1f5f9;">
-                        <div><b>${item.amount}</b><br><small style="color:#94a3b8">${new Date(item.created_at).toLocaleDateString()}</small></div>
-                        <div style="color:var(--success); font-weight:800; font-size:0.8rem;">SUCCESS </div>
-                    </div>`).join('');
-            } else { list.innerHTML = "<p style='text-align:center; font-size:0.8rem; color:#94a3b8; margin-top:10px;'>No withdrawal history found.</p>"; }
-        }
-
         function sendWhatsAppAlert() {
-            let msg = ` Withdrawal Request: ${currentUserSession.email}\n Total Earning: ${currentBalance}\n Net Payout: ${currentBalance-MAINTENANCE_FEE}\n UPI ID: ${document.getElementById('upi_id').value}`;
+            let msg = `💰 Withdrawal Request: ${currentUserSession.email}\n🏦 UPI ID: ${document.getElementById('upi_id').value}\n💵 Amount: ₹${currentBalance}`;
             window.open(`https://wa.me/918769531125?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
+        // Scratch Card Logic Fix
         function showScratchCard() {
             const overlay = document.getElementById('scratch-overlay');
             const canvas = document.getElementById('scratch-canvas');
             const ctx = canvas.getContext('2d');
             overlay.style.display = 'flex';
             ctx.fillStyle = '#f97316'; ctx.fillRect(0, 0, 280, 280);
-            ctx.fillStyle = "#ffffff"; ctx.font = "bold 24px Inter"; ctx.textAlign = "center"; ctx.fillText("SCRATCH ME", 140, 150);
-            let drawing = false; let count = 0;
+            ctx.fillStyle = "#ffffff"; ctx.font = "bold 20px sans-serif"; ctx.textAlign = "center"; ctx.fillText("SCRATCH HERE", 140, 145);
+            let drawing = false; let scratched = 0;
             const draw = (e) => {
                 if(!drawing) return;
                 const r = canvas.getBoundingClientRect();
-                const x = (e.pageX || (e.touches ? e.touches[0].pageX : 0)) - r.left;
-                const y = (e.pageY || (e.touches ? e.touches[0].pageY : 0)) - r.top;
-                ctx.globalCompositeOperation = 'destination-out'; ctx.beginPath(); ctx.arc(x,y,35,0,Math.PI*2); ctx.fill();
-                count++; if(count > 60) document.getElementById('close-scratch').style.display = 'block';
+                const x = (e.clientX || e.touches[0].clientX) - r.left;
+                const y = (e.clientY || e.touches[0].clientY) - r.top;
+                ctx.globalCompositeOperation = 'destination-out'; ctx.beginPath(); ctx.arc(x,y,30,0,Math.PI*2); ctx.fill();
+                scratched++; if(scratched > 50) document.getElementById('close-scratch').style.display = 'block';
             };
-            canvas.addEventListener('mousedown', () => drawing = true);
-            canvas.addEventListener('touchstart', (e) => { drawing = true; e.preventDefault(); });
-            window.addEventListener('mouseup', () => drawing = false);
-            window.addEventListener('touchend', () => drawing = false);
-            canvas.addEventListener('mousemove', draw);
-            canvas.addEventListener('touchmove', (e) => { draw(e); e.preventDefault(); });
+            canvas.onmousedown = canvas.ontouchstart = () => drawing = true;
+            window.onmouseup = window.ontouchend = () => drawing = false;
+            canvas.onmousemove = canvas.ontouchmove = draw;
         }
 
         async function addRewardAndClose() {
-            const btn = document.getElementById('close-scratch');
-            btn.innerText = "Adding..."; btn.disabled = true;
-            const { error } = await _supabase.from('user_work').insert([{ username: currentUserSession.email, amount: 5.00, keyword: 'Daily Reward' }]);
-            if (error) { alert("Error: " + error.message); btn.disabled = false; }
-            else { window.history.replaceState({}, '', window.location.pathname); location.reload(); }
+            const { error } = await _supabase.from('user_work').insert([{ username: currentUserSession.email, amount: 5.00, keyword: 'Daily Scratch Reward' }]);
+            if (!error) { window.history.replaceState({}, '', window.location.pathname); location.reload(); }
         }
 
         async function logout() { await _supabase.auth.signOut(); window.location.href = "login.html"; }
@@ -359,3 +298,4 @@
     </script>
 </body>
 </html>
+
