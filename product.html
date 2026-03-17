@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arham Elite | Official Store</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root { --gold: #ffcc00; --bg: #020406; --card: #12151c; --gray: #888; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; margin: 0; padding: 0; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+
+        /* --- HEADER & NAV --- */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: #000; border-bottom: 1px solid #222; position: sticky; top: 0; z-index: 3000; }
+        .logo { font-size: 1.2rem; font-weight: 900; color: var(--gold); }
+        .menu-trigger { font-size: 1.6rem; cursor: pointer; color: var(--gold); }
+
+        .side-nav { position: fixed; top: 0; right: -280px; width: 260px; height: 100vh; background: var(--card); border-left: 1px solid #333; transition: 0.4s; z-index: 4000; padding: 60px 20px; box-sizing: border-box; }
+        .side-nav.active { right: 0; }
+        .close-btn { position: absolute; top: 20px; left: 20px; font-size: 1.2rem; cursor: pointer; color: var(--gray); }
+        .nav-link { padding: 18px 0; border-bottom: 1px solid #222; display: block; color: #ddd; text-decoration: none; cursor: pointer; }
+
+        /* --- BANNERS --- */
+        .banner-container { display: flex; overflow-x: auto; gap: 15px; padding: 20px; scrollbar-width: none; scroll-snap-type: x mandatory; scroll-behavior: smooth; }
+        .banner-container::-webkit-scrollbar { display: none; }
+        .banner-item { min-width: 85%; height: 190px; border-radius: 25px; scroll-snap-align: center; border: 1px solid rgba(255,204,0,0.2); background-size: cover; background-position: center; position: relative; overflow: hidden; flex-shrink: 0; }
+        .banner-text { position: absolute; left: 20px; bottom: 20px; z-index: 5; background: rgba(0,0,0,0.6); padding: 5px 12px; border-radius: 10px; }
+
+        .container { padding: 0 15px 120px; max-width: 650px; margin: auto; }
+
+        /* --- CATEGORY GRID --- */
+        .category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
+        .category-card { border-radius: 20px; height: 160px; position: relative; overflow: hidden; border: 1px solid #222; background-size: cover; background-position: center; cursor: pointer; transition: 0.3s; }
+        .category-label { position: absolute; bottom: 0; width: 100%; background: rgba(0,0,0,0.85); padding: 10px; font-size: 0.8rem; font-weight: bold; text-align: center; box-sizing: border-box; }
+
+        /* --- PRODUCT UI --- */
+        .product-card-ui { background: var(--card); border-radius: 25px; padding: 20px; margin-top: 20px; border: 1px solid #333; }
+        .p-image { width: 100%; height: 250px; border-radius: 20px; object-fit: cover; }
+        .p-title { font-size: 1.4rem; font-weight: bold; color: var(--gold); margin: 15px 0 5px; }
+        .sale-price { font-size: 1.2rem; font-weight: bold; color: #fff; }
+        .p-comm { color: #27ae60; background: rgba(39,174,96,0.1); padding: 5px 10px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; display: inline-block; }
+        .p-desc { color: #ccc; line-height: 1.5; font-size: 0.9rem; margin: 15px 0; }
+        .btn-video { display: block; background: #ff0000; color: #fff; text-decoration: none; text-align: center; padding: 12px; border-radius: 12px; font-weight: bold; margin-bottom: 10px; }
+
+        .page-view { display: none; }
+        .page-view.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .btn-action { background: var(--gold); color: #000; border: none; width: 100%; padding: 18px; border-radius: 18px; font-weight: 800; cursor: pointer; margin-top: 10px; }
+        .input-field { width: 100%; padding: 16px; background: #0b0d11; border: 1px solid #333; border-radius: 12px; color: #fff; margin-bottom: 12px; box-sizing: border-box; }
+
+        .bottom-bar { position: fixed; bottom: 0; width: 100%; background: #000; display: flex; border-top: 1px solid #222; padding: 12px 0; z-index: 2500; }
+        .tab-item { flex: 1; text-align: center; color: #555; font-size: 0.75rem; cursor: pointer; }
+        .tab-item.active { color: var(--gold); }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">ARHAM ELITE</div>
+        <div class="menu-trigger" onclick="toggleNav(true)"></div>
+    </header>
+
+    <nav class="side-nav" id="sideNav">
+        <span class="close-btn" onclick="toggleNav(false)"> Close Menu</span>
+        <div class="nav-link" onclick="switchPage('profile')"> My Profile</div>
+        <div class="nav-link" onclick="switchPage('history')"> Order History</div>
+        <div class="nav-link" onclick="switchPage('my-bills')"> My Dedicated Bills</div>
+        <div class="nav-link" onclick="window.open('https://wa.me/918769531125')"> Help & Support</div>
+    </nav>
+
+    <div class="banner-container" id="bannerScroller">
+        <div class="banner-item" style="background-image: url('biofit.png')"><div class="banner-text"><h2>Biofit</h2></div></div>
+        <div class="banner-item" style="background-image: url('naturamore.png')"><div class="banner-text"><h2>Naturamore</h2></div></div>
+        <div class="banner-item" style="background-image: url('herbs & more.png')"><div class="banner-text"><h2>Herbs & More</h2></div></div>
+        <div class="banner-item" style="background-image: url('clean & more.png')"><div class="banner-text"><h2>Clean & More</h2></div></div>
+        <div class="banner-item" style="background-image: url('health care.png')"><div class="banner-text"><h2>Health Care</h2></div></div>
+        <div class="banner-item" style="background-image: url('crop care.png')"><div class="banner-text"><h2>Crop Care</h2></div></div>
+        <div class="banner-item" style="background-image: url('home care.png')"><div class="banner-text"><h2>Home Care</h2></div></div>
+        <div class="banner-item" style="background-image: url('personal care & cosmetics.png')"><div class="banner-text"><h2>Cosmetics</h2></div></div>
+    </div>
+
+    <div class="container">
+        <div id="home-view" class="page-view active">
+            <div class="category-grid">
+                <div class="category-card" onclick="openProduct(4)" style="background-image: url('health care.png')"><div class="category-label">Health Care</div></div>
+                <div class="category-card" onclick="openProduct(8)" style="background-image: url('personal care & cosmetics.png')"><div class="category-label">Personal Care</div></div>
+                <div class="category-card" onclick="openProduct(3)" style="background-image: url('crop care.png')"><div class="category-label">Crop Care</div></div>
+                <div class="category-card" onclick="openProduct(6)" style="background-image: url('home care.png')"><div class="category-label">Home Care</div></div>
+                <div class="category-card" onclick="openProduct(7)" style="background-image: url('naturamore.png')"><div class="category-label">Naturamore</div></div>
+                <div class="category-card" onclick="openProduct(1)" style="background-image: url('biofit.png')"><div class="category-label">Biofit</div></div>
+                <div class="category-card" onclick="openProduct(2)" style="background-image: url('clean & more.png')"><div class="category-label">Clean & More</div></div>
+                <div class="category-card" onclick="openProduct(5)" style="background-image: url('herbs & more.png')"><div class="category-label">Herbs & More</div></div>
+            </div>
+        </div>
+
+        <div id="product-detail-view" class="page-view">
+            <div id="product-content" class="product-card-ui">
+                </div>
+            <button class="btn-action" onclick="addToCart()">Add to Bill & Order</button>
+            <button class="btn-action" style="background:#222; color:#fff;" onclick="switchPage('home')">Back to Store</button>
+        </div>
+
+        <div id="history-view" class="page-view">
+            <h3>Order Tracker</h3>
+            <input type="text" id="track-id" class="input-field" placeholder="Enter Order Number">
+            <button class="btn-action" onclick="trackOrder()">Track Now</button>
+            <div id="history-result" style="margin-top:20px;"></div>
+        </div>
+
+        <div id="cart-view" class="page-view">
+            <h3>Checkout Bill</h3>
+            <div id="invoice-data" class="product-card-ui">
+                <h4 style="margin:0; color:var(--gold);">ARHAM ELITE OFFICIAL</h4>
+                <p id="bill-item">Item: None</p>
+                <p id="order-no-display" style="font-size:0.8rem; color:var(--gray);"></p>
+                <hr style="border:0; border-top:1px solid #333;">
+                <h3>Total: <span id="bill-amt">0.00</span></h3>
+            </div>
+            <button class="btn-action" onclick="downloadBill()">Download Invoice PDF</button>
+            <button class="btn-action" style="background:#fff" onclick="switchPage('order')">Continue to Shipping</button>
+        </div>
+
+        <div id="order-view" class="page-view">
+            <h3>Delivery Details</h3>
+            <input type="text" id="sh-name" class="input-field" placeholder="Full Name">
+            <textarea id="sh-addr" class="input-field" placeholder="Shipping Address" rows="3"></textarea>
+            <button class="btn-action" onclick="doPaymentRedirect()">PAY & CONTINUE</button>
+        </div>
+    </div>
+
+    <nav class="bottom-bar">
+        <div class="tab-item active" id="tab-home" onclick="switchPage('home')">Store</div>
+        <div class="tab-item" id="tab-cart" onclick="switchPage('cart')">Bill</div>
+        <div class="tab-item" id="tab-order" onclick="switchPage('order')">Order</div>
+    </nav>
+
+    <script>
+        // Mapping category specific data (Temporary until admin upload)
+        const products = {
+            1: { title: 'Biofit Product', price: 0, comm: '0', desc: 'Biofit category items.' },
+            2: { title: 'Clean & More Product', price: 0, comm: '0', desc: 'Clean & More category items.' },
+            3: { title: 'Crop Care Product', price: 0, comm: '0', desc: 'Crop Care category items.' },
+            4: { title: 'Health Care Product', price: 0, comm: '0', desc: 'Health Care category items.' },
+            5: { title: 'Herbs & More Product', price: 0, comm: '0', desc: 'Herbs & More category items.' },
+            6: { title: 'Home Care Product', price: 0, comm: '0', desc: 'Home Care category items.' },
+            7: { title: 'Naturamore Product', price: 0, comm: '0', desc: 'Naturamore category items.' },
+            8: { title: 'Personal Care Product', price: 0, comm: '0', desc: 'Personal Care & Cosmetics category items.' }
+        };
+
+        let currentProduct = null;
+        let generatedOrderID = "";
+
+        function openProduct(id) {
+            currentProduct = products[id];
+            document.getElementById('product-content').innerHTML = `
+                <div class="p-title">${currentProduct.title}</div>
+                <button class="btn-video"> Watch Video</button>
+                <div class="sale-price">Price: ${currentProduct.price}</div>
+                <div class="p-comm">Commission: ${currentProduct.comm}</div>
+                <p class="p-desc">${currentProduct.desc}</p>`;
+            switchPage('product-detail');
+        }
+
+        function addToCart() {
+            if(!currentProduct) return;
+            generatedOrderID = "AE-" + Math.floor(100000 + Math.random() * 900000);
+            document.getElementById('bill-item').innerText = "Item: " + currentProduct.title;
+            document.getElementById('bill-amt').innerText = "" + currentProduct.price;
+            document.getElementById('order-no-display').innerText = "UniqueID: " + generatedOrderID;
+            sessionStorage.setItem('orderTotal', currentProduct.price);
+            alert("Order " + generatedOrderID + " added!");
+            switchPage('cart');
+        }
+
+        function trackOrder() {
+            const id = document.getElementById('track-id').value;
+            const res = document.getElementById('history-result');
+            if(id && id.startsWith('AE-')) {
+                res.innerHTML = `<div class="product-card-ui" style="border-color:#27ae60"><p><b>OrderID:</b> ${id}</p><p><b>Status:</b> Under Verification</p></div>`;
+            } else { alert("Invalid ID."); }
+        }
+
+        function doPaymentRedirect() { window.location.assign("payment.html"); }
+
+        function downloadBill() { html2pdf().from(document.getElementById('invoice-data')).save('Bill.pdf'); }
+
+        function switchPage(p) {
+            document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+            const target = document.getElementById(p + '-view');
+            if(target) target.classList.add('active');
+            const tab = document.getElementById('tab-'+ (p === 'product-detail' ? 'home' : p));
+            if(tab) tab.classList.add('active');
+            document.getElementById('bannerScroller').style.display = (p === 'home') ? 'flex' : 'none';
+            document.getElementById('sideNav').classList.remove('active');
+        }
+
+        function toggleNav(s) { document.getElementById('sideNav').classList.toggle('active', s); }
+
+        setInterval(() => {
+            const sc = document.getElementById('bannerScroller');
+            if (sc.scrollLeft + sc.clientWidth >= sc.scrollWidth - 10) sc.scrollTo({left:0, behavior:'smooth'});
+            else sc.scrollBy({left: sc.clientWidth, behavior:'smooth'});
+        }, 4000);
+    </script>
+</body>
+</html>

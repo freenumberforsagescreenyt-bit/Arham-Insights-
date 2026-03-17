@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Payment | Arham Elite</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { 
+            --gold: #ffcc00; 
+            --dark-bg: #05070a; 
+            --card-bg: #11141b; 
+            --green: #27ae60; 
+        }
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            text-align: center; padding: 20px; 
+            background: var(--dark-bg); color: white;
+            display: flex; align-items: center; justify-content: center; 
+            min-height: 100vh; margin: 0; 
+        }
+        .payment-box { 
+            background: var(--card-bg); padding: 30px; border-radius: 30px; 
+            max-width: 400px; width: 100%; border: 1px solid rgba(255, 204, 0, 0.2);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
+        }
+        .qr-wrapper {
+            background: white; padding: 15px; border-radius: 20px;
+            display: inline-block; margin: 20px 0;
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.1);
+        }
+        .qr-img { width: 100%; max-width: 230px; display: block; border-radius: 10px; }
+        .upi-id { 
+            background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; 
+            font-weight: bold; font-size: 14px; color: var(--gold);
+            border: 1px solid rgba(255,204,0,0.1); margin: 10px 0;
+        }
+        input { 
+            width: 100%; padding: 15px; margin: 15px 0; border: 1px solid #333; 
+            border-radius: 15px; background: #000; color: white;
+            box-sizing: border-box; font-size: 16px; text-align: center; 
+        }
+        .btn-verify { 
+            background: linear-gradient(90deg, #ffcc00, #ff9900); color: black; 
+            border: none; padding: 18px; width: 100%; border-radius: 18px; 
+            font-weight: 800; cursor: pointer; font-size: 16px; transition: 0.3s; 
+        }
+        .success-overlay { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: var(--dark-bg); z-index: 1000; flex-direction: column; 
+            align-items: center; justify-content: center; 
+        }
+    </style>
+</head>
+<body>
+
+    <div id="thank-you-note" class="success-overlay">
+        <i class="fas fa-check-circle" style="font-size: 80px; color: var(--green); margin-bottom: 20px;"></i>
+        <h1 style="color: white;">Order Placed!</h1>
+        <p style="color: #aaa; font-size: 18px; max-width: 80%;">Payment verification in progress...</p>
+        <p style="color: var(--gold); font-size: 14px;">Redirecting you shortly...</p>
+    </div>
+
+    <div class="payment-box" id="payment-form">
+        <h2 style="color: var(--gold); margin-bottom: 5px;">Verify Payment</h2>
+        <p style="font-size: 12px; color: #888; margin-bottom: 20px;">SECURE ELITE GATEWAY</p>
+        
+        <p style="font-size: 14px; color: #ccc;">Scan QR to pay <b>Naman Jain</b></p>
+        
+        <div class="qr-wrapper">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=upi://pay?pa=8248997125@slc%26pn=Naman%20Jain%26cu=INR" class="qr-img" alt="Slice UPI QR">
+        </div>
+        
+        <div class="upi-id">UPI ID: 8248997125@slc</div> 
+        <h3 id="display-amount" style="color: white; margin: 10px 0;">Amount: ₹0</h3>
+        
+        <p style="font-size: 13px; color: #aaa; margin-top: 20px;">Enter 12-digit UTR/Ref No. below:</p> 
+        <input type="number" id="utr_input" placeholder="e.g. 4123XXXXXXXX" oninput="if(this.value.length > 12) this.value = this.value.slice(0, 12);">
+        <button class="btn-verify" onclick="submitOrder()">Verify & Submit Order</button>
+    </div>
+
+    <script>
+        const SB_URL = "https://rzmftpafcyxburlkwqnm.supabase.co";
+        const SB_KEY = "sb_publishable_zt4Wt4wBgarEU15zF-RoKw_4achnceD";
+        const _supabase = supabase.createClient(SB_URL, SB_KEY);
+
+        let finalAmount = Number(sessionStorage.getItem('orderTotal')) || 0;
+        document.getElementById('display-amount').innerText = `Amount: ₹${finalAmount}`;
+
+        async function submitOrder() {
+            const utr = document.getElementById('utr_input').value;
+            if (utr.length !== 12) return alert("Enter valid 12-digit UTR");
+
+            const orderMsg = sessionStorage.getItem('pendingOrderMessage') || "Elite Order";
+            const user = JSON.parse(localStorage.getItem('nemi_user_details')) || {};
+
+            const { error } = await _supabase.from('orders').insert([{ 
+                user_name: user.name || 'Unknown',
+                amount: finalAmount,
+                utr_number: utr,
+                status: 'Pending',
+                order_details: orderMsg,
+                user_whatsapp: user.whatsapp || 'N/A'
+            }]);
+
+            if (error) return alert("Database Error: " + error.message);
+
+            const finalFormat = `*✅ NEW ELITE ORDER*%0A*UTR:* ${utr}%0A*Amount:* ₹${finalAmount}%0A*Customer:* ${user.name || 'N/A'}`;
+            const adminNumbers = ["918769531125", "918248997125"];
+
+            document.getElementById('thank-you-note').style.display = 'flex';
+            document.getElementById('payment-form').style.display = 'none';
+
+            adminNumbers.forEach((num, index) => {
+                setTimeout(() => window.open(`https://wa.me/${num}?text=${finalFormat}`, '_blank'), index * 1000); 
+            });
+
+            setTimeout(() => {
+                // If came from product.html, go back. Else index.html
+                if (document.referrer.includes('product.html')) {
+                    window.location.href = 'product.html';
+                } else {
+                    window.location.href = 'index.html';
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

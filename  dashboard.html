@@ -2,300 +2,251 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard - Arham Insights Elite</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Arham Studio | AI Ad Terminal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
         
         :root { 
-            --primary: #f97316; 
-            --tg-blue: #0088cc;
-            --dark: #0f172a; 
-            --bg-light: #f8fafc; 
-            --success: #10b981; 
-            --card-glass: rgba(255, 255, 255, 0.9);
+            --gold: #ffcc00; --bg: #05070a; --card: #11141d; 
+            --border: rgba(255, 255, 255, 0.08); --amber: #ff9933;
+            --neon-blue: #00f2ff;
+            --success-green: #10b981;
         }
-
-        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; outline: none; }
 
         body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background: var(--bg-light);
-            background-image: radial-gradient(at 0% 0%, #fef3c7 0px, transparent 50%), radial-gradient(at 100% 100%, #e0f2fe 0px, transparent 50%);
-            background-attachment: fixed;
-            color: #1e293b; margin: 0; padding-bottom: 80px; 
+            font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg);
+            color: #f1f5f9; margin: 0; padding: 0; 
+            overflow-x: hidden; width: 100vw;
         }
-        
+
+        /* --- STUDIO NAVBAR --- */
         .navbar { 
-            background: rgba(255, 255, 255, 0.85); 
-            backdrop-filter: blur(15px);
-            padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; 
-            position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            background: rgba(10, 12, 18, 0.98); backdrop-filter: blur(25px);
+            padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; 
+            position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--border);
         }
+        .menu-trigger { font-size: 1.4rem; color: var(--gold); cursor: pointer; }
 
-        .container { max-width: 600px; margin: 0 auto; padding: 15px; }
-
-        /* Welcome & Telegram Banner */
-        .welcome-card { 
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%); 
-            color: white; padding: 25px; border-radius: 24px; margin-bottom: 20px;
-            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.2);
+        /* --- ATTRACTIVE EARNING HUB --- */
+        .earning-hub {
+            background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
+            margin: 15px; border-radius: 24px; padding: 22px;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            position: relative; overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
+        .hub-title { color: var(--success-green); font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
+        .hub-desc { font-size: 0.8rem; opacity: 0.8; margin: 8px 0 15px 0; line-height: 1.4; }
         
-        .tg-banner {
-            background: linear-gradient(90deg, #0088cc, #00a2ed);
-            color: white; padding: 15px; border-radius: 20px; margin-bottom: 20px;
-            display: flex; align-items: center; justify-content: space-between;
-            text-decoration: none; box-shadow: 0 8px 20px rgba(0, 136, 204, 0.2);
+        .dual-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .hub-btn {
+            padding: 12px; border-radius: 14px; border: none; font-weight: 700; font-size: 0.75rem;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+            text-decoration: none; transition: 0.3s;
         }
+        .btn-store { background: var(--success-green); color: white; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
+        .btn-details { background: rgba(255,255,255,0.05); color: white; border: 1px solid var(--border); }
 
-        .stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
-        .stat-item { background: rgba(255,255,255,0.1); padding: 12px; border-radius: 18px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
-        .stat-item b { font-size: 1.3rem; display: block; }
-
-        /* Glass Panels */
-        .glass-panel { 
-            background: var(--card-glass); padding: 20px; border-radius: 24px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid #fff; 
-            margin-bottom: 20px; backdrop-filter: blur(10px);
+        /* --- INFO MODAL (HOW IT WORKS) --- */
+        #info-modal {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+            z-index: 5000; align-items: center; justify-content: center; padding: 20px;
+            backdrop-filter: blur(10px);
         }
-
-        .section-title { font-weight: 800; font-size: 1.1rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
-        .section-title i { color: var(--primary); }
-
-        /* Task Items */
-        .task-grid { display: grid; gap: 12px; }
-        .task-item { 
-            background: white; padding: 18px; border-radius: 20px; border: 1px solid #f1f5f9; 
-            display: flex; justify-content: space-between; align-items: center; transition: 0.3s;
+        .modal-content {
+            background: #0f172a; border: 1px solid var(--gold); padding: 30px;
+            border-radius: 30px; width: 100%; max-width: 400px; position: relative;
         }
-        
-        /* Grey Market Specific Styling */
-        .grey-item { border-left: 5px solid var(--tg-blue) !important; background: #f0f9ff; }
+        .step-box { display: flex; gap: 15px; margin-bottom: 20px; align-items: flex-start; }
+        .step-num { background: var(--gold); color: #000; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; flex-shrink: 0; }
 
-        .do-btn { 
-            background: var(--primary); color: white; padding: 8px 18px; border-radius: 12px; 
-            text-decoration: none; font-weight: 700; font-size: 0.85rem; box-shadow: 0 4px 10px rgba(249, 115, 22, 0.2);
+        /* --- PROMO BANNER --- */
+        .promo-banner {
+            background: linear-gradient(90deg, #1e293b, #0f172a);
+            border-radius: 20px; margin: 15px; padding: 20px; border: 1px solid var(--neon-blue);
+            position: relative; display: flex; align-items: center; justify-content: space-between;
+            animation: pulse-glow 3s infinite; text-decoration: none; color: white;
         }
+        @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 10px rgba(0, 242, 255, 0.1); } 50% { box-shadow: 0 0 25px rgba(0, 242, 255, 0.3); } }
 
-        .tg-btn { background: var(--tg-blue) !important; box-shadow: 0 4px 10px rgba(0, 136, 204, 0.2) !important; }
-
-        #withdraw-btn { display: none; background: #22c55e; color: white; border: none; width: 100%; padding: 16px; border-radius: 15px; font-weight: 800; margin-top: 15px; cursor: pointer; }
-
-        /* Scratch Card Pop-up */
-        #scratch-overlay { display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.95); z-index: 5000; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(15px); }
-        .scratch-container { position: relative; width: 280px; height: 280px; background: #fff; border-radius: 30px; overflow: hidden; border: 4px solid var(--primary); }
+        /* --- REST OF THE STYLES (INTACT) --- */
+        .side-menu { position: fixed; top: 0; left: -310px; width: 280px; height: 100vh; background: #080a0f; z-index: 2000; transition: 0.5s; border-right: 1px solid var(--border); padding: 30px 20px; overflow-y: auto; }
+        .side-menu.active { left: 0; }
+        .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; z-index: 1500; }
+        .menu-overlay.active { display: block; }
+        .plat-sec { margin-bottom: 25px; }
+        .plat-title { font-size: 0.65rem; font-weight: 800; color: var(--gold); letter-spacing: 2px; display: block; text-transform: uppercase; border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 12px; }
+        .plat-item { padding: 12px; font-size: 0.8rem; color: #94a3b8; cursor: pointer; display: flex; align-items: center; gap: 12px; border-radius: 12px; transition: 0.3s; margin-bottom: 4px; }
+        .container { max-width: 100%; width: 100%; margin: 0 auto; padding: 15px; box-sizing: border-box; overflow-x: hidden; }
+        .trail-scroll { display: flex; gap: 12px; overflow-x: auto; padding: 5px 0 20px; scrollbar-width: none; }
+        .trail-card { min-width: 120px; height: 120px; border-radius: 22px; background-size: cover; background-position: center; border: 2px solid var(--border); position: relative; overflow: hidden; flex-shrink: 0; }
+        .trail-wm { position: absolute; inset: 0; padding: 10px; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-end; background: linear-gradient(transparent, rgba(0,0,0,0.6)); }
+        .trail-wm img { width: 16px; margin-bottom: 2px; }
+        .trail-wm span { font-size: 0.4rem; color: #fff; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; }
+        .config-card { background: #0f121a; border: 1.5px solid var(--gold); border-radius: 28px; padding: 20px; margin-bottom: 25px; width: 100%; box-sizing: border-box; }
+        select { width: 100%; padding: 14px; margin-top: 10px; border-radius: 14px; background: rgba(0,0,0,0.6); border: 1px solid var(--border); color: white; outline: none; font-size: 0.85rem; }
+        .ad-canvas { position: relative; width: 100%; border-radius: 35px; overflow: hidden; background: #000; border: 1px solid var(--border); transition: 0.7s; box-shadow: 0 30px 60px rgba(0,0,0,0.8); margin: 0 auto 50px; }
+        .canvas-1-1 { aspect-ratio: 1/1; }
+        .canvas-9-16 { aspect-ratio: 9/16; max-height: 80vh; }
+        #p-img-main { position: absolute; width: 60%; top: 40%; left: 50%; transform: translate(-50%, -50%); z-index: 2; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.9)); transition: 0.5s; }
+        #p-bg-main { position: absolute; inset: 0; opacity: 0.7; z-index: 1; transition: 1s; }
+        .brand-watermark { position: absolute; top: 25px; right: 25px; z-index: 10; display: flex; flex-direction: column; align-items: flex-end; opacity: 0.6; pointer-events: none; }
+        .water-logo { width: 28px; height: auto; margin-bottom: 4px; display: block; }
+        .water-text { font-size: 0.6rem; letter-spacing: 2px; font-weight: 800; color: white; text-transform: uppercase; text-shadow: 1px 1px 5px #000; }
+        .ad-overlay { position: absolute; bottom: 0; width: 100%; padding: 35px 20px; background: linear-gradient(transparent, rgba(0,0,0,1) 85%); z-index: 3; box-sizing: border-box; }
+        .btn-main { background: var(--gold); color: #000; border: none; padding: 18px; border-radius: 18px; font-weight: 800; width: 100%; margin-top: 10px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem; }
     </style>
 </head>
 <body>
-    <div id="scratch-overlay">
-        <h2 style="color:var(--dark); margin-bottom: 20px;">Shabash! 🎁</h2>
-        <div class="scratch-container">
-            <div class="reward-content" style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1;">
-                <i class="fa-solid fa-gift" style="font-size: 3rem; color: var(--primary);"></i>
-                <h2 style="font-size: 2rem; margin: 10px 0;">₹5.00</h2>
-                <p>Wallet mein add ho raha hai...</p>
-            </div>
-            <canvas id="scratch-canvas" width="280" height="280" style="position:absolute; z-index:2; cursor:crosshair;"></canvas>
+
+    <div class="menu-overlay" id="overlay" onclick="toggleSideMenu()"></div>
+    <nav class="side-menu" id="side-menu">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+            <b style="color:var(--gold); letter-spacing:1px;">MASTER AD STUDIO</b>
+            <i class="fa fa-times" onclick="toggleSideMenu()" style="cursor:pointer;"></i>
         </div>
-        <button id="close-scratch" class="do-btn" style="margin-top:20px; padding:15px 40px; display:none;" onclick="addRewardAndClose()">Claim Now</button>
+        <div class="plat-sec">
+            <span class="plat-title"><i class="fab fa-whatsapp"></i> WhatsApp</span>
+            <div class="plat-item" onclick="quickTrail('WhatsApp', 'canvas-9-16')">Full Screen AI Status</div>
+            <div class="plat-item" onclick="quickTrail('WhatsApp', 'canvas-1-1')">Square Chat Promo</div>
+        </div>
+        <div class="plat-sec">
+            <span class="plat-title"><i class="fab fa-instagram"></i> Instagram</span>
+            <div class="plat-item" onclick="quickTrail('Instagram', 'canvas-9-16')">Vertical Reel/Story</div>
+            <div class="plat-item" onclick="quickTrail('Instagram', 'canvas-1-1')">Feed Marketing Post</div>
+        </div>
+        <div class="plat-sec">
+            <span class="plat-title"><i class="fa fa-shopping-bag"></i> Premium Store</span>
+            <a href="product.html" class="plat-item" style="text-decoration: none; color: inherit;"><i class="fa fa-bolt" style="color: var(--neon-blue);"></i> View Product Store</a>
+        </div>
+        <div class="plat-sec">
+            <span class="plat-title"><i class="fa fa-share-nodes"></i> Niche Socials</span>
+            <div class="plat-item" onclick="quickTrail('Reddit', 'canvas-1-1')"><i class="fab fa-reddit-alien"></i> Reddit Ad</div>
+            <div class="plat-item" onclick="quickTrail('LinkedIn', 'canvas-1-1')"><i class="fab fa-linkedin-in"></i> LinkedIn Network</div>
+        </div>
+    </nav>
+
+    <div class="earning-hub">
+        <div class="hub-title"><i class="fa-solid fa-coins"></i> Arham Earning Hub</div>
+        <p class="hub-desc">Ab ads share karke **Direct Commission** kamao! Har sale par aapko milega bada profit.</p>
+        <div class="dual-nav">
+            <a href="product.html" class="hub-btn btn-store"><i class="fa fa-rocket"></i> Start Earning</a>
+            <button class="hub-btn btn-details" onclick="openHowItWorks()"><i class="fa fa-info-circle"></i> How it works</button>
+        </div>
+    </div>
+
+    <div id="info-modal">
+        <div class="modal-content">
+            <h2 style="color:var(--gold); margin-top:0;">Kaise Kamayein? 💸</h2>
+            
+            <div class="step-box">
+                <div class="step-num">1</div>
+                <div><b>Ad Generate Karein</b><br><small>Studio se apna favourite product ad banayein.</small></div>
+            </div>
+
+            <div class="step-box">
+                <div class="step-num">2</div>
+                <div><b>Social Media par Share Karein</b><br><small>WhatsApp, Insta ya Facebook par ad post karein.</small></div>
+            </div>
+
+            <div class="step-box">
+                <div class="step-num">3</div>
+                <div><b>Commission Kamao!</b><br><small>Jab bhi koi aapke ad se product lega, aapko fixed commission milega.</small></div>
+            </div>
+
+            <button class="btn-main" onclick="closeHowItWorks()">Samajh Gaya!</button>
+        </div>
     </div>
 
     <nav class="navbar">
-        <div style="font-weight: 900; font-size: 1.2rem;">ARHAM <span style="color:var(--primary)">INSIGHTS</span></div>
-        <button onclick="logout()" style="background:none; border:none; font-weight:700; color:var(--secondary);"><i class="fa fa-power-off"></i></button>
+        <div class="menu-trigger" onclick="toggleSideMenu()"><i class="fa fa-bars-staggered"></i></div>
+        <div style="font-weight: 900; font-size: 1.2rem; letter-spacing: 1px;">ARHAM <span style="color:var(--gold)">STUDIO</span></div>
+        <i class="fa fa-user-shield" style="color:var(--gold);"></i>
     </nav>
 
+    <a href="product.html" class="promo-banner">
+        <div class="promo-text"><b>✨ ELITE PREMIUM STORE</b><span>Exclusive deals directly from the Arham Store!</span></div>
+        <div class="promo-icon"><i class="fa fa-shopping-cart"></i></div>
+    </a>
+
     <div class="container">
-        <a href="https://t.me/theemailmart" target="_blank" class="tg-banner">
-            <div style="display:flex; align-items:center; gap:12px;">
-                <i class="fab fa-telegram-plane" style="font-size:1.5rem;"></i>
-                <div>
-                    <b style="display:block; font-size:0.9rem;">Join Updates Channel</b>
-                    <small style="opacity:0.8;">@theemailmart</small>
-                </div>
-            </div>
-            <i class="fa fa-chevron-right"></i>
-        </a>
-
-        <div class="welcome-card">
-            <p id="user-email-header" style="margin:0; opacity:0.8; font-size:0.8rem;">Profile loading...</p>
-            <h2 style="margin:5px 0;">Namaste, Member! 👋</h2>
-            <div class="stats-row">
-                <div class="stat-item"><span>Tasks</span><b id="tasks-count">0</b></div>
-                <div class="stat-item"><span>Earnings</span><b id="total-earning">₹0.00</b></div>
-            </div>
-            <button id="withdraw-btn" onclick="sendWhatsAppAlert()"></button>
+        <span style="font-size: 0.65rem; color: var(--gold); font-weight: 800; letter-spacing: 1.5px; margin-left: 5px;">STYLE PREVIEW TRAILS</span>
+        <div class="trail-scroll">
+            <div class="trail-card" style="background-image: url('health care.png')"><div class="trail-wm"><img src="logo.png" onerror="this.style.display='none'"><span>Arham Insights ©</span></div></div>
+            <div class="trail-card" style="background-image: url('personal care & cosmetics.png')"><div class="trail-wm"><img src="logo.png" onerror="this.style.display='none'"><span>Arham Insights ©</span></div></div>
+            <div class="trail-card" style="background-image: url('biofit.png')"><div class="trail-wm"><img src="logo.png" onerror="this.style.display='none'"><span>Arham Insights ©</span></div></div>
+            <div class="trail-card" style="background-image: url('crop care.png')"><div class="trail-wm"><img src="logo.png" onerror="this.style.display='none'"><span>Arham Insights ©</span></div></div>
+            <div class="trail-card" style="background-image: url('naturamore.png')"><div class="trail-wm"><img src="logo.png" onerror="this.style.display='none'"><span>Arham Insights ©</span></div></div>
+            <div class="trail-card" style="background-image: url('herbs & more.png')"><div class="trail-wm"><img src="logo.png" onerror="this.style.display='none'"><span>Arham Insights ©</span></div></div>
         </div>
 
-        <div class="glass-panel" style="background:#f0f9ff; border: 1.5px solid #bae6fd;">
-            <div class="section-title" style="color:var(--tg-blue);"><i class="fa-solid fa-rocket"></i> Premium Recurring Work</div>
-            <div id="additional-work-container" class="task-grid">
-                <p style="text-align:center; font-size:0.8rem; color:#64748b;">Naye tasks load ho rahe hain...</p>
+        <div class="config-card">
+            <b style="color:var(--gold); font-size:1rem;"><i class="fa fa-sliders"></i> Master Studio Engine</b>
+            <select id="sel-target">
+                <option value="Health Care">Health Care Style</option>
+                <option value="Personal Care">Personal Care Style</option>
+                <option value="Agriculture">Biofit Style</option>
+                <option value="Wellness">Naturamore Style</option>
+            </select>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <select id="sel-plat"><option value="Luxury">Luxury Style</option><option value="Cyber">Neon Style</option><option value="Studio">Studio Style</option></select>
+                <select id="sel-fmt" onchange="syncCanvas()"><option value="canvas-1-1">Square (1:1)</option><option value="canvas-9-16">Story (9:16)</option></select>
             </div>
+            <button class="btn-main" style="background:#fff; color:#000;" onclick="manualGen()">GENERATE AI AD</button>
         </div>
 
-        <div class="glass-panel">
-            <div class="section-title"><i class="fa-solid fa-list-check"></i> Standard Tasks</div>
-            <div id="live-links-list" class="task-grid"></div>
-        </div>
-
-        <div class="glass-panel">
-            <div class="section-title"><i class="fa-solid fa-wallet"></i> Wallet Summary</div>
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-weight:700;">Net Balance:</span>
-                <b id="net-payable" style="color:var(--success); font-size:1.2rem;">₹0.00</b>
+        <div id="master-canvas" class="ad-canvas canvas-1-1">
+            <div class="brand-watermark"><img src="logo.png" class="water-logo" id="main-water-logo" onerror="this.style.display='none'"><span class="water-text">ARHAM INSIGHTS ©</span></div>
+            <div id="p-bg-main"></div>
+            <img id="p-img-main" src="" alt="">
+            <div class="ad-overlay">
+                <h2 id="p-name-main" style="margin:0; color:var(--gold); font-size:1.4rem; font-weight:800;">Generating Ad...</h2>
+                <div style="display:flex; align-items:baseline; gap:10px; margin-top:5px;"><b id="p-price-main" style="font-size:1.6rem; color:#fff;">Elite Preview</b></div>
+                <button class="btn-main" onclick="shareTrail()">📤 SHARE TO SOCIALS</button>
             </div>
-        </div>
-
-        <div class="glass-panel">
-            <div class="section-title"><i class="fa-solid fa-id-card"></i> Payout Details</div>
-            <form id="profile-form" onsubmit="saveProfile(event)">
-                <input type="tel" id="whatsapp_no" required placeholder="WhatsApp Number" style="width:100%; padding:12px; border-radius:10px; border:1px solid #ddd; margin-bottom:10px;">
-                <input type="text" id="upi_id" required placeholder="UPI ID (e.g. name@upi)" style="width:100%; padding:12px; border-radius:10px; border:1px solid #ddd;">
-                <button type="submit" id="save-btn" class="do-btn" style="width:100%; margin-top:15px; padding:12px;">Save Details</button>
-                <button type="button" id="edit-btn" onclick="enableEditing()" class="do-btn" style="display:none; width:100%; margin-top:15px; background:#64748b;">Edit Settings</button>
-            </form>
         </div>
     </div>
 
     <script>
-        const _supabase = supabase.createClient("https://mkzgmrxakattqgbjnwch.supabase.co", "sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL");
-        let currentUserSession = null;
-        let currentBalance = 0;
-        const MAINTENANCE_FEE = 0; // Set to 0 as per your previous discussion
+        const categoryTrails = { "Health Care": "health care.png", "Personal Care": "personal care & cosmetics.png", "Agriculture": "biofit.png", "Wellness": "naturamore.png" };
 
-        async function init() {
-            const { data: { session } } = await _supabase.auth.getSession();
-            if (session) {
-                currentUserSession = session.user;
-                document.getElementById('user-email-header').innerText = currentUserSession.email;
-                await fetchUserProgress();
-                await loadProfile();
-                await fetchTaskLinks();
-                await loadAdditionalWork(); // NEW: Grey Market tasks
-                if (new URLSearchParams(window.location.search).get('status') === 'success') showScratchCard();
-            } else { window.location.href = "login.html"; }
+        function toggleSideMenu() { document.getElementById('side-menu').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
+        function syncCanvas() { const fmt = document.getElementById('sel-fmt').value; document.getElementById('master-canvas').className = 'ad-canvas ' + fmt; }
+        function manualGen() { const cat = document.getElementById('sel-target').value; const theme = document.getElementById('sel-plat').value; renderStudio(cat, theme); }
+        function openHowItWorks() { document.getElementById('info-modal').style.display = 'flex'; }
+        function closeHowItWorks() { document.getElementById('info-modal').style.display = 'none'; }
+
+        function renderStudio(category, theme) {
+            const imgEl = document.getElementById('p-img-main');
+            const bgEl = document.getElementById('p-bg-main');
+            imgEl.style.opacity = "0"; bgEl.style.opacity = "0";
+            setTimeout(() => {
+                imgEl.src = categoryTrails[category] || "health care.png";
+                document.getElementById('p-name-main').innerText = category + " Elite Ad";
+                const seed = Math.floor(Math.random()*9999);
+                const prompt = `ultra_luxury_product_studio_background_for_${theme}_dark_aesthetic_cinematic_lighting_gold_dust`;
+                bgEl.style.background = `url('https://image.pollinations.ai/prompt/${prompt}?width=600&height=1000&nologo=true&seed=${seed}') center/cover`;
+                imgEl.style.opacity = "1"; bgEl.style.opacity = "0.7";
+            }, 300);
         }
 
-        // LOAD GREY MARKET TASKS FROM NEW TABLE
-        async function loadAdditionalWork() {
-            const { data: greyTasks, error } = await _supabase.from('grey_tasks').select('*').order('created_at', {ascending: false});
-            const container = document.getElementById('additional-work-container');
-            
-            if (greyTasks && greyTasks.length > 0) {
-                container.innerHTML = greyTasks.map(task => `
-                    <div class="task-item grey-item">
-                        <div style="max-width:70%;">
-                            <b style="font-size:0.9rem; display:block;">${task.title}</b>
-                            <small style="color:#64748b; font-size:0.7rem;">${task.instruction}</small>
-                            <div style="margin-top:5px; color:var(--success); font-weight:800; font-size:0.8rem;">Reward: ₹${task.reward_amount}</div>
-                        </div>
-                        <a href="https://t.me/Namonamah03" target="_blank" class="do-btn tg-btn">Submit</a>
-                    </div>
-                `).join('');
-            } else {
-                container.innerHTML = "<p style='text-align:center; font-size:0.8rem; color:#94a3b8;'>Naye tasks jald aa rahe hain...</p>";
-            }
+        function quickTrail(plat, fmt) {
+            document.getElementById('sel-fmt').value = fmt; syncCanvas();
+            const cats = Object.keys(categoryTrails);
+            renderStudio(cats[Math.floor(Math.random() * cats.length)], plat);
+            toggleSideMenu(); window.scrollTo({top: 150, behavior: 'smooth'});
         }
 
-        async function fetchUserProgress() {
-            const { data } = await _supabase.from('user_work').select('amount').eq('username', currentUserSession.email);
-            if(data) {
-                document.getElementById('tasks-count').innerText = data.length;
-                currentBalance = data.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
-                document.getElementById('total-earning').innerText = "₹" + currentBalance.toFixed(2);
-                document.getElementById('net-payable').innerText = "₹" + currentBalance.toFixed(2);
-                if(currentBalance >= 100) { // Withdraw button shows at ₹100
-                    const btn = document.getElementById('withdraw-btn');
-                    btn.style.display = 'block';
-                    btn.innerHTML = `<i class="fa-brands fa-whatsapp"></i> Withdraw Now (₹${currentBalance.toFixed(2)})`;
-                }
-            }
+        function shareTrail() {
+            const msg = `🚀 *ARHAM ELITE AD STUDIO* \nMarketing & Earnings Powered by AI. \n\n👉 Experience Studio: ${window.location.origin}`;
+            if(navigator.share) { navigator.share({ title: 'Arham Insights Studio', text: msg }); }
+            else { navigator.clipboard.writeText(msg); alert("Link Copied!"); }
         }
 
-        async function fetchTaskLinks() {
-            const { data } = await _supabase.from('admin_blogs').select('*').order('id', {ascending: false});
-            const list = document.getElementById('live-links-list');
-            if(data) {
-                list.innerHTML = data.map((t) => `
-                    <div class="task-item">
-                        <b>${t.keyword}</b>
-                        <a href="taskspage.html?id=${t.id}" class="do-btn">Start</a>
-                    </div>
-                `).join('');
-            }
-        }
-
-        async function loadProfile() {
-            const { data } = await _supabase.from('profiles').select('*').eq('email', currentUserSession.email).maybeSingle();
-            if(data) {
-                document.getElementById('upi_id').value = data.upi_id || '';
-                document.getElementById('whatsapp_no').value = data.whatsapp || '';
-                if(data.upi_id) lockInputs();
-            }
-        }
-
-        async function saveProfile(e) {
-            e.preventDefault();
-            const { error } = await _supabase.from('profiles').upsert({ 
-                email: currentUserSession.email, 
-                upi_id: document.getElementById('upi_id').value, 
-                whatsapp: document.getElementById('whatsapp_no').value 
-            });
-            if (!error) { alert("Details Saved! ✅"); lockInputs(); }
-        }
-
-        function lockInputs() {
-            document.querySelectorAll('#profile-form input').forEach(i => i.readOnly = true);
-            document.getElementById('save-btn').style.display = 'none';
-            document.getElementById('edit-btn').style.display = 'block';
-        }
-
-        function enableEditing() {
-            document.querySelectorAll('#profile-form input').forEach(i => i.readOnly = false);
-            document.getElementById('save-btn').style.display = 'block';
-            document.getElementById('edit-btn').style.display = 'none';
-        }
-
-        function sendWhatsAppAlert() {
-            let msg = `💰 Withdrawal Request: ${currentUserSession.email}\n🏦 UPI ID: ${document.getElementById('upi_id').value}\n💵 Amount: ₹${currentBalance}`;
-            window.open(`https://wa.me/918769531125?text=${encodeURIComponent(msg)}`, '_blank');
-        }
-
-        // Scratch Card Logic Fix
-        function showScratchCard() {
-            const overlay = document.getElementById('scratch-overlay');
-            const canvas = document.getElementById('scratch-canvas');
-            const ctx = canvas.getContext('2d');
-            overlay.style.display = 'flex';
-            ctx.fillStyle = '#f97316'; ctx.fillRect(0, 0, 280, 280);
-            ctx.fillStyle = "#ffffff"; ctx.font = "bold 20px sans-serif"; ctx.textAlign = "center"; ctx.fillText("SCRATCH HERE", 140, 145);
-            let drawing = false; let scratched = 0;
-            const draw = (e) => {
-                if(!drawing) return;
-                const r = canvas.getBoundingClientRect();
-                const x = (e.clientX || e.touches[0].clientX) - r.left;
-                const y = (e.clientY || e.touches[0].clientY) - r.top;
-                ctx.globalCompositeOperation = 'destination-out'; ctx.beginPath(); ctx.arc(x,y,30,0,Math.PI*2); ctx.fill();
-                scratched++; if(scratched > 50) document.getElementById('close-scratch').style.display = 'block';
-            };
-            canvas.onmousedown = canvas.ontouchstart = () => drawing = true;
-            window.onmouseup = window.ontouchend = () => drawing = false;
-            canvas.onmousemove = canvas.ontouchmove = draw;
-        }
-
-        async function addRewardAndClose() {
-            const { error } = await _supabase.from('user_work').insert([{ username: currentUserSession.email, amount: 5.00, keyword: 'Daily Scratch Reward' }]);
-            if (!error) { window.history.replaceState({}, '', window.location.pathname); location.reload(); }
-        }
-
-        async function logout() { await _supabase.auth.signOut(); window.location.href = "login.html"; }
-        window.onload = init;
+        window.onload = () => manualGen();
     </script>
 </body>
 </html>
-
