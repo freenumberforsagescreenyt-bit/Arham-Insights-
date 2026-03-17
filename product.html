@@ -1,111 +1,145 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Arham Elite | Official Store</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --gold: #ffcc00; --bg: #020406; --card: #12151c; --gray: #888; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; margin: 0; padding: 0; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+        
+        :root { 
+            --neon-cyan: #00f2ff; --bg-dark: #020406; --card: #12151c; 
+            --gold: #ffcc00; --gray: #888; --border-glow: rgba(0, 242, 255, 0.15);
+        }
 
-        /* --- HEADER & NAV --- */
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: #000; border-bottom: 1px solid #222; position: sticky; top: 0; z-index: 3000; }
-        .logo { font-size: 1.2rem; font-weight: 900; color: var(--gold); }
-        .menu-trigger { font-size: 1.6rem; cursor: pointer; color: var(--gold); }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-dark); 
+            color: #fff; margin: 0; padding: 0; overflow-x: hidden; 
+            -webkit-tap-highlight-color: transparent;
+        }
 
-        .side-nav { position: fixed; top: 0; right: -280px; width: 260px; height: 100vh; background: var(--card); border-left: 1px solid #333; transition: 0.4s; z-index: 4000; padding: 60px 20px; box-sizing: border-box; }
+        /* --- HEADER --- */
+        .header { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 15px 20px; background: #000; border-bottom: 1px solid var(--border-glow); 
+            position: sticky; top: 0; z-index: 3000; 
+        }
+        .logo { font-size: 1.2rem; font-weight: 900; color: var(--gold); letter-spacing: 1px; }
+        .menu-trigger { font-size: 1.6rem; cursor: pointer; color: var(--neon-cyan); }
+
+        /* --- SIDE NAV --- */
+        .side-nav { 
+            position: fixed; top: 0; right: -300px; width: 280px; height: 100vh; 
+            background: #01040a; border-left: 1px solid var(--border-glow); 
+            transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); z-index: 4000; 
+            padding: 70px 20px 20px; box-sizing: border-box; overflow-y: auto;
+        }
         .side-nav.active { right: 0; }
-        .close-btn { position: absolute; top: 20px; left: 20px; font-size: 1.2rem; cursor: pointer; color: var(--gray); }
-        .nav-link { padding: 18px 0; border-bottom: 1px solid #222; display: block; color: #ddd; text-decoration: none; cursor: pointer; }
+        .close-btn { position: absolute; top: 20px; left: 20px; font-size: 1.2rem; cursor: pointer; color: var(--neon-cyan); }
+        
+        .menu-sec-title { font-size: 0.65rem; color: var(--neon-cyan); text-transform: uppercase; letter-spacing: 2px; margin: 20px 0 10px; display: block; opacity: 0.7; }
+        .nav-link { padding: 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; color: #ddd; text-decoration: none; cursor: pointer; transition: 0.3s; background: rgba(255,255,255,0.02); margin-bottom: 8px; border: 1px solid transparent; }
+        .nav-link:hover { background: rgba(0, 242, 255, 0.05); border-color: var(--border-glow); color: var(--neon-cyan); }
 
-        /* --- BANNERS --- */
+        /* --- BANNER --- */
         .banner-container { display: flex; overflow-x: auto; gap: 15px; padding: 20px; scrollbar-width: none; scroll-snap-type: x mandatory; scroll-behavior: smooth; }
         .banner-container::-webkit-scrollbar { display: none; }
-        .banner-item { min-width: 85%; height: 190px; border-radius: 25px; scroll-snap-align: center; border: 1px solid rgba(255,204,0,0.2); background-size: cover; background-position: center; position: relative; overflow: hidden; flex-shrink: 0; }
-        .banner-text { position: absolute; left: 20px; bottom: 20px; z-index: 5; background: rgba(0,0,0,0.6); padding: 5px 12px; border-radius: 10px; }
+        .banner-item { min-width: 85%; height: 190px; border-radius: 25px; scroll-snap-align: center; border: 1px solid var(--border-glow); background-size: cover; background-position: center; position: relative; overflow: hidden; flex-shrink: 0; }
+        .banner-text { position: absolute; left: 20px; bottom: 20px; z-index: 5; background: rgba(0,0,0,0.7); padding: 8px 15px; border-radius: 12px; }
 
         .container { padding: 0 15px 120px; max-width: 650px; margin: auto; }
 
         /* --- CATEGORY GRID --- */
         .category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
         .category-card { border-radius: 20px; height: 160px; position: relative; overflow: hidden; border: 1px solid #222; background-size: cover; background-position: center; cursor: pointer; transition: 0.3s; }
-        .category-label { position: absolute; bottom: 0; width: 100%; background: rgba(0,0,0,0.85); padding: 10px; font-size: 0.8rem; font-weight: bold; text-align: center; box-sizing: border-box; }
+        .category-label { position: absolute; bottom: 0; width: 100%; background: rgba(0,0,0,0.85); padding: 10px; font-size: 0.8rem; font-weight: 800; text-align: center; box-sizing: border-box; color: var(--gold); }
 
-        /* --- PRODUCT UI --- */
-        .product-card-ui { background: var(--card); border-radius: 25px; padding: 20px; margin-top: 20px; border: 1px solid #333; }
-        .p-image { width: 100%; height: 250px; border-radius: 20px; object-fit: cover; }
+        .product-card-ui { background: var(--card); border-radius: 25px; padding: 20px; margin-top: 20px; border: 1px solid #333; position: relative; }
+        .p-image { width: 100%; height: 250px; border-radius: 20px; object-fit: cover; border: 1px solid #222; }
         .p-title { font-size: 1.4rem; font-weight: bold; color: var(--gold); margin: 15px 0 5px; }
         .sale-price { font-size: 1.2rem; font-weight: bold; color: #fff; }
-        .p-comm { color: #27ae60; background: rgba(39,174,96,0.1); padding: 5px 10px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; display: inline-block; }
-        .p-desc { color: #ccc; line-height: 1.5; font-size: 0.9rem; margin: 15px 0; }
-        .btn-video { display: block; background: #ff0000; color: #fff; text-decoration: none; text-align: center; padding: 12px; border-radius: 12px; font-weight: bold; margin-bottom: 10px; }
-
+        .p-comm { color: #10b981; background: rgba(16,185,129,0.1); padding: 5px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 800; display: inline-block; }
+        
         .page-view { display: none; }
-        .page-view.active { display: block; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .page-view.active { display: block; animation: slideUp 0.4s; }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        .btn-action { background: var(--gold); color: #000; border: none; width: 100%; padding: 18px; border-radius: 18px; font-weight: 800; cursor: pointer; margin-top: 10px; }
-        .input-field { width: 100%; padding: 16px; background: #0b0d11; border: 1px solid #333; border-radius: 12px; color: #fff; margin-bottom: 12px; box-sizing: border-box; }
+        .btn-action { background: var(--gold); color: #000; border: none; width: 100%; padding: 18px; border-radius: 18px; font-weight: 800; cursor: pointer; margin-top: 10px; text-transform: uppercase; }
+        .input-field { width: 100%; padding: 16px; background: #0b0d11; border: 1px solid #333; border-radius: 12px; color: #fff; margin-bottom: 12px; box-sizing: border-box; outline: none; }
 
-        .bottom-bar { position: fixed; bottom: 0; width: 100%; background: #000; display: flex; border-top: 1px solid #222; padding: 12px 0; z-index: 2500; }
-        .tab-item { flex: 1; text-align: center; color: #555; font-size: 0.75rem; cursor: pointer; }
-        .tab-item.active { color: var(--gold); }
+        .bottom-bar { position: fixed; bottom: 0; width: 100%; background: #000; display: flex; border-top: 1px solid #222; padding: 15px 0; z-index: 2500; }
+        .tab-item { flex: 1; text-align: center; color: #555; font-size: 1.2rem; cursor: pointer; transition: 0.3s; }
+        .tab-item.active { color: var(--gold); transform: scale(1.1); }
     </style>
 </head>
 <body>
 
     <header class="header">
         <div class="logo">ARHAM ELITE</div>
-        <div class="menu-trigger" onclick="toggleNav(true)"></div>
+        <div class="menu-trigger" onclick="toggleNav(true)"><i class="fa fa-bars-staggered"></i></div>
     </header>
 
     <nav class="side-nav" id="sideNav">
-        <span class="close-btn" onclick="toggleNav(false)"> Close Menu</span>
-        <div class="nav-link" onclick="switchPage('profile')"> My Profile</div>
-        <div class="nav-link" onclick="switchPage('history')"> Order History</div>
-        <div class="nav-link" onclick="switchPage('my-bills')"> My Dedicated Bills</div>
-        <div class="nav-link" onclick="window.open('https://wa.me/918769531125')"> Help & Support</div>
+        <span class="close-btn" onclick="toggleNav(false)"><i class="fa fa-times"></i> Close</span>
+        <span class="menu-sec-title">Profile Hub</span>
+        <div class="nav-link" onclick="switchPage('customer-info')"><i class="fa fa-id-card"></i> My Account Info</div>
+        <div class="nav-link" onclick="switchPage('history')"><i class="fa fa-truck"></i> Order History</div>
+        <div class="nav-link" onclick="switchPage('my-bills')"><i class="fa fa-file-invoice"></i> My Dedicated Bills</div>
+        <span class="menu-sec-title">Elite Support</span>
+        <div class="nav-link" onclick="window.open('https://wa.me/918769531125')"><i class="fab fa-whatsapp"></i> WhatsApp Support</div>
     </nav>
 
-    <div class="banner-container" id="bannerScroller">
-        <div class="banner-item" style="background-image: url('biofit.png')"><div class="banner-text"><h2>Biofit</h2></div></div>
-        <div class="banner-item" style="background-image: url('naturamore.png')"><div class="banner-text"><h2>Naturamore</h2></div></div>
-        <div class="banner-item" style="background-image: url('herbs & more.png')"><div class="banner-text"><h2>Herbs & More</h2></div></div>
-        <div class="banner-item" style="background-image: url('clean & more.png')"><div class="banner-text"><h2>Clean & More</h2></div></div>
+    <div class="banner-container" id="adBanner">
         <div class="banner-item" style="background-image: url('health care.png')"><div class="banner-text"><h2>Health Care</h2></div></div>
+        <div class="banner-item" style="background-image: url('personal care & cosmetics.png')"><div class="banner-text"><h2>Personal Care</h2></div></div>
         <div class="banner-item" style="background-image: url('crop care.png')"><div class="banner-text"><h2>Crop Care</h2></div></div>
         <div class="banner-item" style="background-image: url('home care.png')"><div class="banner-text"><h2>Home Care</h2></div></div>
-        <div class="banner-item" style="background-image: url('personal care & cosmetics.png')"><div class="banner-text"><h2>Cosmetics</h2></div></div>
+        <div class="banner-item" style="background-image: url('naturamore.png')"><div class="banner-text"><h2>Naturamore</h2></div></div>
+        <div class="banner-item" style="background-image: url('biofit.png')"><div class="banner-text"><h2>Biofit</h2></div></div>
+        <div class="banner-item" style="background-image: url('clean & more.png')"><div class="banner-text"><h2>Clean & More</h2></div></div>
+        <div class="banner-item" style="background-image: url('herbs & more.png')"><div class="banner-text"><h2>Herbs & More</h2></div></div>
     </div>
 
     <div class="container">
         <div id="home-view" class="page-view active">
             <div class="category-grid">
-                <div class="category-card" onclick="openProduct(4)" style="background-image: url('health care.png')"><div class="category-label">Health Care</div></div>
-                <div class="category-card" onclick="openProduct(8)" style="background-image: url('personal care & cosmetics.png')"><div class="category-label">Personal Care</div></div>
-                <div class="category-card" onclick="openProduct(3)" style="background-image: url('crop care.png')"><div class="category-label">Crop Care</div></div>
-                <div class="category-card" onclick="openProduct(6)" style="background-image: url('home care.png')"><div class="category-label">Home Care</div></div>
-                <div class="category-card" onclick="openProduct(7)" style="background-image: url('naturamore.png')"><div class="category-label">Naturamore</div></div>
-                <div class="category-card" onclick="openProduct(1)" style="background-image: url('biofit.png')"><div class="category-label">Biofit</div></div>
-                <div class="category-card" onclick="openProduct(2)" style="background-image: url('clean & more.png')"><div class="category-label">Clean & More</div></div>
-                <div class="category-card" onclick="openProduct(5)" style="background-image: url('herbs & more.png')"><div class="category-label">Herbs & More</div></div>
+                <div class="category-card" onclick="alert('Is category mein abhi koi product nahi hai.')" style="background-image: url('health care.png')"><div class="category-label">Health Care</div></div>
+                <div class="category-card" onclick="alert('Is category mein abhi koi product nahi hai.')" style="background-image: url('personal care & cosmetics.png')"><div class="category-label">Personal Care</div></div>
+                <div class="category-card" onclick="alert('Is category mein abhi koi product nahi hai.')" style="background-image: url('crop care.png')"><div class="category-label">Crop Care</div></div>
+                <div class="category-card" onclick="alert('Is category mein abhi koi product nahi hai.')" style="background-image: url('home care.png')"><div class="category-label">Home Care</div></div>
+                <div class="category-card" onclick="alert('Is category mein abhi koi product nahi hai.')" style="background-image: url('naturamore.png')"><div class="category-label">Naturamore</div></div>
+                <div class="category-card" onclick="alert('Is category mein abhi koi product nahi hai.')" style="background-image: url('biofit.png')"><div class="category-label">Biofit</div></div>
+                <div class="category-card" onclick="alert('Is category mein abhi koi product nahi hai.')" style="background-image: url('clean & more.png')"><div class="category-label">Clean & More</div></div>
+                <div class="category-card" onclick="alert('Is category mein abhi koi product nahi hai.')" style="background-image: url('herbs & more.png')"><div class="category-label">Herbs & More</div></div>
+            </div>
+            <div id="dynamic-product-area"></div>
+        </div>
+
+        <div id="customer-info-view" class="page-view">
+            <h3>Customer Data Protocol</h3>
+            <div class="product-card-ui">
+                <input type="text" id="user-name" class="input-field" placeholder="Full Name">
+                <input type="number" id="user-wa" class="input-field" placeholder="WhatsApp Number">
+                <input type="email" id="user-email" class="input-field" placeholder="Email ID">
+                <textarea id="user-addr" class="input-field" rows="3" placeholder="Full Delivery Address"></textarea>
+                <button class="btn-action" onclick="saveProfile()">Secure Details</button>
             </div>
         </div>
 
         <div id="product-detail-view" class="page-view">
-            <div id="product-content" class="product-card-ui">
-                </div>
-            <button class="btn-action" onclick="addToCart()">Add to Bill & Order</button>
+            <div id="product-content" class="product-card-ui"></div>
+            <button class="btn-action" id="buy-btn" onclick="handlePurchase()">Proceed to Order</button>
             <button class="btn-action" style="background:#222; color:#fff;" onclick="switchPage('home')">Back to Store</button>
         </div>
 
         <div id="history-view" class="page-view">
-            <h3>Order Tracker</h3>
+            <h3>Track My Order</h3>
             <input type="text" id="track-id" class="input-field" placeholder="Enter Order Number">
-            <button class="btn-action" onclick="trackOrder()">Track Now</button>
-            <div id="history-result" style="margin-top:20px;"></div>
+            <button class="btn-action" onclick="trackOrder()">Get Live Status</button>
+            <div id="history-result"></div>
         </div>
 
         <div id="cart-view" class="page-view">
@@ -115,94 +149,134 @@
                 <p id="bill-item">Item: None</p>
                 <p id="order-no-display" style="font-size:0.8rem; color:var(--gray);"></p>
                 <hr style="border:0; border-top:1px solid #333;">
-                <h3>Total: <span id="bill-amt">0.00</span></h3>
+                <h3>Total: <span id="bill-amt">₹0.00</span></h3>
             </div>
-            <button class="btn-action" onclick="downloadBill()">Download Invoice PDF</button>
-            <button class="btn-action" style="background:#fff" onclick="switchPage('order')">Continue to Shipping</button>
+            <button class="btn-action" onclick="switchPage('order')">Continue to Shipping</button>
         </div>
 
         <div id="order-view" class="page-view">
-            <h3>Delivery Details</h3>
-            <input type="text" id="sh-name" class="input-field" placeholder="Full Name">
-            <textarea id="sh-addr" class="input-field" placeholder="Shipping Address" rows="3"></textarea>
+            <h3>Shipping Confirmation</h3>
+            <div id="saved-info-note" style="font-size:0.8rem; margin-bottom:10px; color:var(--gray);">Profile details will be auto-processed.</div>
             <button class="btn-action" onclick="doPaymentRedirect()">PAY & CONTINUE</button>
         </div>
     </div>
 
     <nav class="bottom-bar">
-        <div class="tab-item active" id="tab-home" onclick="switchPage('home')">Store</div>
-        <div class="tab-item" id="tab-cart" onclick="switchPage('cart')">Bill</div>
-        <div class="tab-item" id="tab-order" onclick="switchPage('order')">Order</div>
+        <div class="tab-item active" id="tab-home" onclick="switchPage('home')"><i class="fa fa-shop"></i></div>
+        <div class="tab-item" id="tab-cart" onclick="switchPage('cart')"><i class="fa fa-receipt"></i></div>
+        <div class="tab-item" id="tab-order" onclick="switchPage('order')"><i class="fa fa-truck-fast"></i></div>
     </nav>
 
     <script>
-        // Mapping category specific data (Temporary until admin upload)
-        const products = {
-            1: { title: 'Biofit Product', price: 0, comm: '0', desc: 'Biofit category items.' },
-            2: { title: 'Clean & More Product', price: 0, comm: '0', desc: 'Clean & More category items.' },
-            3: { title: 'Crop Care Product', price: 0, comm: '0', desc: 'Crop Care category items.' },
-            4: { title: 'Health Care Product', price: 0, comm: '0', desc: 'Health Care category items.' },
-            5: { title: 'Herbs & More Product', price: 0, comm: '0', desc: 'Herbs & More category items.' },
-            6: { title: 'Home Care Product', price: 0, comm: '0', desc: 'Home Care category items.' },
-            7: { title: 'Naturamore Product', price: 0, comm: '0', desc: 'Naturamore category items.' },
-            8: { title: 'Personal Care Product', price: 0, comm: '0', desc: 'Personal Care & Cosmetics category items.' }
-        };
-
+        const _supa = supabase.createClient("https://mkzgmrxakattqgbjnwch.supabase.co", "sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL");
         let currentProduct = null;
-        let generatedOrderID = "";
 
-        function openProduct(id) {
-            currentProduct = products[id];
+        async function initEliteStore() {
+            try {
+                const { data, error } = await _supa.from('products').select('*').order('created_at', { ascending: false });
+                if(error) throw error;
+                if(data && data.length > 0) {
+                    const list = document.getElementById('dynamic-product-area');
+                    const banner = document.getElementById('adBanner');
+                    
+                    data.forEach(p => {
+                        const price = p.sale_price || 0;
+                        
+                        // IF EXTERNAL PRODUCT -> ADD SEPARATE BANNER
+                        if(p.stock_status === 'External') {
+                            const ad = document.createElement('div');
+                            ad.className = 'banner-item';
+                            ad.style.backgroundImage = `url('${p.image_filename}')`;
+                            ad.innerHTML = `<div class="banner-text"><h2 style="color:var(--neon-cyan)">${p.name}</h2><p>Global Brand Offer - ₹${price}</p></div>`;
+                            ad.onclick = () => showCustomDetail(p);
+                            banner.appendChild(ad);
+                        }
+                        
+                        // ADD ALL PRODUCTS TO GRID
+                        const card = document.createElement('div');
+                        card.className = 'product-card-ui';
+                        card.onclick = () => showCustomDetail(p);
+                        card.innerHTML = `
+                            <img src="${p.image_filename}" class="p-image" onerror="this.src='health care.png'">
+                            <div class="p-title">${p.name}</div>
+                            <div class="p-comm">Commission: ₹${p.commission || 0}</div>
+                            <div class="sale-price">₹${price}</div>
+                        `;
+                        list.appendChild(card);
+                    });
+                }
+            } catch (err) { console.log("Waiting for external product signals..."); }
+        }
+
+        function showCustomDetail(p) {
+            const price = p.sale_price || 0;
+            currentProduct = p;
             document.getElementById('product-content').innerHTML = `
-                <div class="p-title">${currentProduct.title}</div>
-                <button class="btn-video"> Watch Video</button>
-                <div class="sale-price">Price: ${currentProduct.price}</div>
-                <div class="p-comm">Commission: ${currentProduct.comm}</div>
-                <p class="p-desc">${currentProduct.desc}</p>`;
+                <img src="${p.image_filename}" class="p-image" onerror="this.src='health care.png'">
+                <div class="p-title">${p.name}</div>
+                <div class="sale-price">Price: ₹${price}</div>
+                <p class="p-desc">${p.description || 'Exclusive premium brand product.'}</p>`;
+            
+            // Buy Button logic
+            const btn = document.getElementById('buy-btn');
+            btn.innerText = (p.stock_status === 'External') ? 'Buy on Global Store' : 'Add to Order Protocol';
+            
             switchPage('product-detail');
         }
 
-        function addToCart() {
+        function handlePurchase() {
             if(!currentProduct) return;
-            generatedOrderID = "AE-" + Math.floor(100000 + Math.random() * 900000);
-            document.getElementById('bill-item').innerText = "Item: " + currentProduct.title;
-            document.getElementById('bill-amt').innerText = "" + currentProduct.price;
-            document.getElementById('order-no-display').innerText = "UniqueID: " + generatedOrderID;
-            sessionStorage.setItem('orderTotal', currentProduct.price);
-            alert("Order " + generatedOrderID + " added!");
+            if(currentProduct.stock_status === 'External') {
+                // External redirect (Product URL store hoti hai image_filename mein ya alag column ho toh)
+                // Yahan simple link open kar raha hoon
+                window.open(currentProduct.image_filename, '_blank');
+            } else {
+                addToCart();
+            }
+        }
+
+        function saveProfile() {
+            const user = { name: document.getElementById('user-name').value, wa: document.getElementById('user-wa').value, email: document.getElementById('user-email').value, addr: document.getElementById('user-addr').value };
+            if(!user.name || !user.wa) { alert("Complete details required!"); return; }
+            localStorage.setItem('arham_user', JSON.stringify(user));
+            alert("Identity Secured!");
+        }
+
+        function addToCart() {
+            const id = "AE-" + Math.floor(100000 + Math.random() * 900000);
+            document.getElementById('bill-item').innerText = "Item: " + currentProduct.name;
+            document.getElementById('bill-amt').innerText = "₹" + currentProduct.sale_price;
+            document.getElementById('order-no-display').innerText = "UniqueID: " + id;
+            alert("Order Synchronized!");
             switchPage('cart');
         }
-
-        function trackOrder() {
-            const id = document.getElementById('track-id').value;
-            const res = document.getElementById('history-result');
-            if(id && id.startsWith('AE-')) {
-                res.innerHTML = `<div class="product-card-ui" style="border-color:#27ae60"><p><b>OrderID:</b> ${id}</p><p><b>Status:</b> Under Verification</p></div>`;
-            } else { alert("Invalid ID."); }
-        }
-
-        function doPaymentRedirect() { window.location.assign("payment.html"); }
-
-        function downloadBill() { html2pdf().from(document.getElementById('invoice-data')).save('Bill.pdf'); }
 
         function switchPage(p) {
             document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
             const target = document.getElementById(p + '-view');
             if(target) target.classList.add('active');
-            const tab = document.getElementById('tab-'+ (p === 'product-detail' ? 'home' : p));
-            if(tab) tab.classList.add('active');
-            document.getElementById('bannerScroller').style.display = (p === 'home') ? 'flex' : 'none';
-            document.getElementById('sideNav').classList.remove('active');
+            const tabMap = {'home':'tab-home', 'cart':'tab-cart', 'order':'tab-order', 'product-detail':'tab-home', 'customer-info':'tab-home'};
+            const tid = tabMap[p];
+            if(tid) document.getElementById(tid).classList.add('active');
+            document.getElementById('adBanner').style.display = (p === 'home') ? 'flex' : 'none';
+            toggleNav(false);
+            window.scrollTo(0,0);
         }
 
         function toggleNav(s) { document.getElementById('sideNav').classList.toggle('active', s); }
+        function trackOrder() { const id = document.getElementById('track-id').value; if(id.startsWith('AE-')) document.getElementById('history-result').innerHTML = `<div class="product-card-ui" style="border-color:var(--neon-cyan)">OrderID: ${id}<br>Status: Processing Signal</div>`; }
+        function doPaymentRedirect() { window.location.assign("payment.html"); }
 
         setInterval(() => {
-            const sc = document.getElementById('bannerScroller');
-            if (sc.scrollLeft + sc.clientWidth >= sc.scrollWidth - 10) sc.scrollTo({left:0, behavior:'smooth'});
-            else sc.scrollBy({left: sc.clientWidth, behavior:'smooth'});
-        }, 4000);
+            const sc = document.getElementById('adBanner');
+            if(sc && sc.style.display !== 'none') {
+                if (sc.scrollLeft + sc.clientWidth >= sc.scrollWidth - 10) sc.scrollTo({left:0, behavior:'smooth'});
+                else sc.scrollBy({left: sc.clientWidth, behavior:'smooth'});
+            }
+        }, 5000);
+
+        window.onload = initEliteStore;
     </script>
 </body>
 </html>
