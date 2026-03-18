@@ -5,277 +5,174 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Arham Elite | Official Store</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
-        
-        :root { 
-            --neon-cyan: #00f2ff; --bg-dark: #020406; --card: #12151c; 
-            --gold: #ffcc00; --gray: #888; --border-glow: rgba(0, 242, 255, 0.15);
-        }
-
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-dark); 
-            color: #fff; margin: 0; padding: 0; overflow-x: hidden; 
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        /* --- HEADER --- */
-        .header { 
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 15px 20px; background: #000; border-bottom: 1px solid var(--border-glow); 
-            position: sticky; top: 0; z-index: 3000; 
-        }
+        :root { --neon-cyan: #00f2ff; --bg-dark: #020406; --card: #12151c; --gold: #ffcc00; --gray: #888; --border-glow: rgba(0, 242, 255, 0.15); --danger: #ff4d4d; --success: #10b981; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-dark); color: #fff; margin: 0; padding: 0; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: #000; border-bottom: 1px solid var(--border-glow); position: sticky; top: 0; z-index: 3000; }
         .logo { font-size: 1.2rem; font-weight: 900; color: var(--gold); letter-spacing: 1px; }
-        .menu-trigger { font-size: 1.6rem; cursor: pointer; color: var(--neon-cyan); }
-
-        /* --- SIDE NAV --- */
-        .side-nav { 
-            position: fixed; top: 0; right: -300px; width: 280px; height: 100vh; 
-            background: #01040a; border-left: 1px solid var(--border-glow); 
-            transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); z-index: 4000; 
-            padding: 70px 20px 20px; box-sizing: border-box; overflow-y: auto;
-        }
+        .side-nav { position: fixed; top: 0; right: -300px; width: 280px; height: 100vh; background: #01040a; border-left: 1px solid var(--border-glow); transition: 0.5s; z-index: 4000; padding: 70px 20px 20px; box-sizing: border-box; }
         .side-nav.active { right: 0; }
-        .close-btn { position: absolute; top: 20px; left: 20px; font-size: 1.2rem; cursor: pointer; color: var(--neon-cyan); }
-        
-        .menu-sec-title { font-size: 0.65rem; color: var(--neon-cyan); text-transform: uppercase; letter-spacing: 2px; margin: 20px 0 10px; display: block; opacity: 0.7; }
-        .nav-link { padding: 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; color: #ddd; text-decoration: none; cursor: pointer; transition: 0.3s; background: rgba(255,255,255,0.02); margin-bottom: 8px; border: 1px solid transparent; }
-        .nav-link:hover { background: rgba(0, 242, 255, 0.05); border-color: var(--border-glow); color: var(--neon-cyan); }
-
-        /* --- BANNER --- */
+        .nav-link { padding: 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; color: #ddd; text-decoration: none; cursor: pointer; margin-bottom: 8px; background: rgba(255,255,255,0.02); }
         .banner-container { display: flex; overflow-x: auto; gap: 15px; padding: 20px; scrollbar-width: none; scroll-snap-type: x mandatory; scroll-behavior: smooth; }
-        .banner-container::-webkit-scrollbar { display: none; }
-        .banner-item { min-width: 85%; height: 190px; border-radius: 25px; scroll-snap-align: center; border: 1px solid var(--border-glow); background-size: cover; background-position: center; position: relative; overflow: hidden; flex-shrink: 0; }
-        .banner-text { position: absolute; left: 20px; bottom: 20px; z-index: 5; background: rgba(0,0,0,0.7); padding: 8px 15px; border-radius: 12px; }
-
+        .banner-item { min-width: 85%; height: 210px; border-radius: 25px; scroll-snap-align: center; border: 1px solid var(--border-glow); background-size: cover; background-position: center; position: relative; overflow: hidden; flex-shrink: 0; }
+        .banner-text { position: absolute; left: 20px; bottom: 20px; background: rgba(0,0,0,0.8); padding: 10px 18px; border-radius: 15px; border-left: 4px solid var(--neon-cyan); }
         .container { padding: 0 15px 120px; max-width: 650px; margin: auto; }
-
-        /* --- CATEGORY GRID --- */
         .category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
-        .category-card { border-radius: 20px; height: 160px; position: relative; overflow: hidden; border: 1px solid #222; background-size: cover; background-position: center; cursor: pointer; transition: 0.3s; }
-        .category-label { position: absolute; bottom: 0; width: 100%; background: rgba(0,0,0,0.85); padding: 10px; font-size: 0.8rem; font-weight: 800; text-align: center; box-sizing: border-box; color: var(--gold); }
-
-        .product-card-ui { background: var(--card); border-radius: 25px; padding: 20px; margin-top: 20px; border: 1px solid #333; position: relative; }
-        .p-image { width: 100%; height: 250px; border-radius: 20px; object-fit: cover; border: 1px solid #222; }
-        .p-title { font-size: 1.4rem; font-weight: bold; color: var(--gold); margin: 15px 0 5px; }
-        .sale-price { font-size: 1.2rem; font-weight: bold; color: #fff; }
-        .p-comm { color: #10b981; background: rgba(16,185,129,0.1); padding: 5px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 800; display: inline-block; }
-        
+        .category-card { border-radius: 22px; height: 160px; position: relative; overflow: hidden; border: 1px solid #222; background-size: cover; background-position: center; cursor: pointer; }
+        .category-label { position: absolute; bottom: 0; width: 100%; background: rgba(0,0,0,0.85); padding: 12px; font-size: 0.85rem; font-weight: 800; text-align: center; color: var(--gold); }
+        .product-card-ui { background: var(--card); border-radius: 25px; padding: 20px; margin-top: 20px; border: 1px solid #333; }
+        .p-image { width: 100%; height: 260px; border-radius: 20px; object-fit: cover; }
+        .btn-action { background: var(--gold); color: #000; border: none; width: 100%; padding: 20px; border-radius: 20px; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
         .page-view { display: none; }
-        .page-view.active { display: block; animation: slideUp 0.4s; }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-        .btn-action { background: var(--gold); color: #000; border: none; width: 100%; padding: 18px; border-radius: 18px; font-weight: 800; cursor: pointer; margin-top: 10px; text-transform: uppercase; }
+        .page-view.active { display: block; }
         .input-field { width: 100%; padding: 16px; background: #0b0d11; border: 1px solid #333; border-radius: 12px; color: #fff; margin-bottom: 12px; box-sizing: border-box; outline: none; }
-
+        .support-box { background: rgba(255,204,0,0.05); border: 1px solid var(--gold); padding: 15px; border-radius: 15px; text-align: center; margin-top: 30px; }
         .bottom-bar { position: fixed; bottom: 0; width: 100%; background: #000; display: flex; border-top: 1px solid #222; padding: 15px 0; z-index: 2500; }
-        .tab-item { flex: 1; text-align: center; color: #555; font-size: 1.2rem; cursor: pointer; transition: 0.3s; }
-        .tab-item.active { color: var(--gold); transform: scale(1.1); }
+        .tab-item { flex: 1; text-align: center; color: #555; font-size: 1.25rem; }
+        .tab-item.active { color: var(--gold); }
     </style>
 </head>
 <body>
-
     <header class="header">
         <div class="logo">ARHAM ELITE</div>
-        <div class="menu-trigger" onclick="toggleNav(true)"><i class="fa fa-bars-staggered"></i></div>
+        <div onclick="toggleNav(true)" style="font-size:1.6rem; cursor:pointer; color:var(--neon-cyan);"><i class="fa fa-bars-staggered"></i></div>
     </header>
-
     <nav class="side-nav" id="sideNav">
-        <span class="close-btn" onclick="toggleNav(false)"><i class="fa fa-times"></i> Close</span>
-        <span class="menu-sec-title">Profile Hub</span>
-        <div class="nav-link" onclick="switchPage('customer-info')"><i class="fa fa-id-card"></i> My Account Info</div>
+        <span onclick="toggleNav(false)" style="color:var(--neon-cyan); cursor:pointer;">× Close Hub</span>
+        <div class="nav-link" onclick="switchPage('customer-info')"><i class="fa fa-id-card"></i> Profile Hub</div>
         <div class="nav-link" onclick="switchPage('history')"><i class="fa fa-truck"></i> Order History</div>
-        <div class="nav-link" onclick="switchPage('my-bills')"><i class="fa fa-file-invoice"></i> My Dedicated Bills</div>
-        <span class="menu-sec-title">Elite Support</span>
-        <div class="nav-link" onclick="window.open('https://wa.me/918769531125')"><i class="fab fa-whatsapp"></i> WhatsApp Support</div>
+        <div class="nav-link" onclick="window.location.href='mailto:arhaminsightshelp@gmail.com'"><i class="fa fa-envelope"></i> Contact Support</div>
     </nav>
-
     <div class="banner-container" id="adBanner">
-        <div class="banner-item" style="background-image: url('health care.png')"><div class="banner-text"><h2>Health Care</h2></div></div>
-        <div class="banner-item" style="background-image: url('personal care & cosmetics.png')"><div class="banner-text"><h2>Personal Care</h2></div></div>
-        <div class="banner-item" style="background-image: url('crop care.png')"><div class="banner-text"><h2>Crop Care</h2></div></div>
+        <div class="banner-item" style="background-image: url('health care.png')"><div class="banner-text"><h2>Health</h2></div></div>
+        <div class="banner-item" style="background-image: url('personal care & cosmetics.png')"><div class="banner-text"><h2>Beauty</h2></div></div>
+        <div class="banner-item" style="background-image: url('crop care.png')"><div class="banner-text"><h2>Agriculture</h2></div></div>
         <div class="banner-item" style="background-image: url('home care.png')"><div class="banner-text"><h2>Home Care</h2></div></div>
-        <div class="banner-item" style="background-image: url('naturamore.png')"><div class="banner-text"><h2>Naturamore</h2></div></div>
+        <div class="banner-item" style="background-image: url('naturamore.png')"><div class="banner-text"><h2>Nutrition</h2></div></div>
         <div class="banner-item" style="background-image: url('biofit.png')"><div class="banner-text"><h2>Biofit</h2></div></div>
-        <div class="banner-item" style="background-image: url('clean & more.png')"><div class="banner-text"><h2>Clean & More</h2></div></div>
-        <div class="banner-item" style="background-image: url('herbs & more.png')"><div class="banner-text"><h2>Herbs & More</h2></div></div>
+        <div class="banner-item" style="background-image: url('clean & more.png')"><div class="banner-text"><h2>Hygiene</h2></div></div>
+        <div class="banner-item" style="background-image: url('herbs & more.png')"><div class="banner-text"><h2>Ayurveda</h2></div></div>
     </div>
-
     <div class="container">
         <div id="home-view" class="page-view active">
             <div class="category-grid">
-                <div class="category-card" onclick="alert('Is category mein abhi koi product nahi hai.')" style="background-image: url('health care.png')"><div class="category-label">Health Care</div></div>
-                <div class="category-card" onclick="alert('Is category mein abhi koi product nahi hai.')" style="background-image: url('personal care & cosmetics.png')"><div class="category-label">Personal Care</div></div>
-                <div class="category-card" onclick="alert('Is category mein abhi koi product nahi hai.')" style="background-image: url('crop care.png')"><div class="category-label">Crop Care</div></div>
-                <div class="category-card" onclick="alert('Is category mein abhi koi product nahi hai.')" style="background-image: url('home care.png')"><div class="category-label">Home Care</div></div>
-                <div class="category-card" onclick="alert('Is category mein abhi koi product nahi hai.')" style="background-image: url('naturamore.png')"><div class="category-label">Naturamore</div></div>
-                <div class="category-card" onclick="alert('Is category mein abhi koi product nahi hai.')" style="background-image: url('biofit.png')"><div class="category-label">Biofit</div></div>
-                <div class="category-card" onclick="alert('Is category mein abhi koi product nahi hai.')" style="background-image: url('clean & more.png')"><div class="category-label">Clean & More</div></div>
-                <div class="category-card" onclick="alert('Is category mein abhi koi product nahi hai.')" style="background-image: url('herbs & more.png')"><div class="category-label">Herbs & More</div></div>
+                <div class="category-card" style="background-image: url('health care.png')"><div class="category-label">Health Care</div></div>
+                <div class="category-card" style="background-image: url('personal care & cosmetics.png')"><div class="category-label">Personal Care</div></div>
+                <div class="category-card" style="background-image: url('crop care.png')"><div class="category-label">Crop Care</div></div>
+                <div class="category-card" style="background-image: url('home care.png')"><div class="category-label">Home Care</div></div>
+                <div class="category-card" style="background-image: url('naturamore.png')"><div class="category-label">Naturamore</div></div>
+                <div class="category-card" style="background-image: url('biofit.png')"><div class="category-label">Biofit</div></div>
+                <div class="category-card" style="background-image: url('clean & more.png')"><div class="category-label">Clean & More</div></div>
+                <div class="category-card" style="background-image: url('herbs & more.png')"><div class="category-label">Herbs & More</div></div>
             </div>
             <div id="dynamic-product-area"></div>
+            <div class="support-box">FOR SUPPORT: <b>arhaminsightshelp@gmail.com</b></div>
         </div>
-
-        <div id="customer-info-view" class="page-view">
-            <h3>Customer Data Protocol</h3>
-            <div class="product-card-ui">
-                <input type="text" id="user-name" class="input-field" placeholder="Full Name">
-                <input type="number" id="user-wa" class="input-field" placeholder="WhatsApp Number">
-                <input type="email" id="user-email" class="input-field" placeholder="Email ID">
-                <textarea id="user-addr" class="input-field" rows="3" placeholder="Full Delivery Address"></textarea>
-                <button class="btn-action" onclick="saveProfile()">Secure Details</button>
-            </div>
-        </div>
-
-        <div id="product-detail-view" class="page-view">
-            <div id="product-content" class="product-card-ui"></div>
-            <button class="btn-action" id="buy-btn" onclick="handlePurchase()">Proceed to Order</button>
-            <button class="btn-action" style="background:#222; color:#fff;" onclick="switchPage('home')">Back to Store</button>
-        </div>
-
-        <div id="history-view" class="page-view">
-            <h3>Track My Order</h3>
-            <input type="text" id="track-id" class="input-field" placeholder="Enter Order Number">
-            <button class="btn-action" onclick="trackOrder()">Get Live Status</button>
-            <div id="history-result"></div>
+                <div id="product-page-view" class="page-view">
+            <div id="dedicated-product-content"></div>
         </div>
 
         <div id="cart-view" class="page-view">
-            <h3>Checkout Bill</h3>
-            <div id="invoice-data" class="product-card-ui">
-                <h4 style="margin:0; color:var(--gold);">ARHAM ELITE OFFICIAL</h4>
-                <p id="bill-item">Item: None</p>
-                <p id="order-no-display" style="font-size:0.8rem; color:var(--gray);"></p>
-                <hr style="border:0; border-top:1px solid #333;">
-                <h3>Total: <span id="bill-amt">₹0.00</span></h3>
+            <h3>Elite Bill Summary</h3>
+            <div class="product-card-ui">
+                <p id="bill-item">None</p>
+                <h3 id="bill-amt">₹0.00</h3>
             </div>
-            <button class="btn-action" onclick="switchPage('order')">Continue to Shipping</button>
+            <div class="product-card-ui">
+                <h4 style="color:var(--gold);">DELIVERY PROTOCOL (Compulsory)</h4>
+                <input type="text" id="chk-name" class="input-field" placeholder="Full Name">
+                <input type="number" id="chk-wa" class="input-field" placeholder="WhatsApp Number">
+                <input type="email" id="chk-email" class="input-field" placeholder="Email ID">
+                <textarea id="chk-addr" class="input-field" rows="3" placeholder="Complete Address"></textarea>
+            </div>
+            <button class="btn-action" onclick="validateAndPay()">CONFIRM & PAY</button>
         </div>
 
-        <div id="order-view" class="page-view">
-            <h3>Shipping Confirmation</h3>
-            <div id="saved-info-note" style="font-size:0.8rem; margin-bottom:10px; color:var(--gray);">Profile details will be auto-processed.</div>
-            <button class="btn-action" onclick="doPaymentRedirect()">PAY & CONTINUE</button>
+        <div id="history-view" class="page-view"><h3>Order History</h3><div id="history-list"></div></div>
+        <div id="customer-info-view" class="page-view">
+            <h3>Identity Update</h3>
+            <div class="product-card-ui">
+                <input type="text" id="user-name" class="input-field" placeholder="Full Name">
+                <input type="number" id="user-wa" class="input-field" placeholder="WhatsApp">
+                <button class="btn-action" onclick="saveProfile()">Update Hub</button>
+            </div>
         </div>
     </div>
 
     <nav class="bottom-bar">
         <div class="tab-item active" id="tab-home" onclick="switchPage('home')"><i class="fa fa-shop"></i></div>
         <div class="tab-item" id="tab-cart" onclick="switchPage('cart')"><i class="fa fa-receipt"></i></div>
-        <div class="tab-item" id="tab-order" onclick="switchPage('order')"><i class="fa fa-truck-fast"></i></div>
+        <div class="tab-item" id="tab-order" onclick="switchPage('history')"><i class="fa fa-truck-fast"></i></div>
     </nav>
 
     <script>
         const _supa = supabase.createClient("https://mkzgmrxakattqgbjnwch.supabase.co", "sb_publishable_Div0TjlgvUbXNlwVqNGuag_-dPli5uL");
+        let allProducts = [];
         let currentProduct = null;
 
         async function initEliteStore() {
-            try {
-                const { data, error } = await _supa.from('products').select('*').order('created_at', { ascending: false });
-                if(error) throw error;
-                if(data && data.length > 0) {
-                    const list = document.getElementById('dynamic-product-area');
-                    const banner = document.getElementById('adBanner');
-                    
-                    data.forEach(p => {
-                        const price = p.sale_price || 0;
-                        
-                        // IF EXTERNAL PRODUCT -> ADD SEPARATE BANNER
-                        if(p.stock_status === 'External') {
-                            const ad = document.createElement('div');
-                            ad.className = 'banner-item';
-                            ad.style.backgroundImage = `url('${p.image_filename}')`;
-                            ad.innerHTML = `<div class="banner-text"><h2 style="color:var(--neon-cyan)">${p.name}</h2><p>Global Brand Offer - ₹${price}</p></div>`;
-                            ad.onclick = () => showCustomDetail(p);
-                            banner.appendChild(ad);
-                        }
-                        
-                        // ADD ALL PRODUCTS TO GRID
-                        const card = document.createElement('div');
-                        card.className = 'product-card-ui';
-                        card.onclick = () => showCustomDetail(p);
-                        card.innerHTML = `
-                            <img src="${p.image_filename}" class="p-image" onerror="this.src='health care.png'">
-                            <div class="p-title">${p.name}</div>
-                            <div class="p-comm">Commission: ₹${p.commission || 0}</div>
-                            <div class="sale-price">₹${price}</div>
-                        `;
-                        list.appendChild(card);
-                    });
-                }
-            } catch (err) { console.log("Waiting for external product signals..."); }
+            const { data } = await _supa.from('products').select('*').order('created_at', { ascending: false });
+            if(data && data.length > 0) {
+                allProducts = data;
+                renderStoreUI(data);
+                checkURL();
+            }
+            loadStoredProfile();
+            renderHistory();
         }
 
-        function showCustomDetail(p) {
-            const price = p.sale_price || 0;
+        function renderStoreUI(data) {
+            const list = document.getElementById('dynamic-product-area');
+            list.innerHTML = '<h3 style="margin-top:40px; color:var(--neon-cyan)">NEWLY LISTED</h3>';
+            data.forEach(p => {
+                list.innerHTML += `<div class="product-card-ui" onclick="openProductPage('${p.id}')">
+                    <img src="${p.image_filename}" class="p-image" onerror="this.src='health care.png'">
+                    <div style="font-size:1.2rem; font-weight:800; margin-top:15px;">${p.name}</div>
+                    <div style="color:var(--gold); font-weight:700;">₹${p.sale_price}</div>
+                </div>`;
+            });
+        }
+
+        function openProductPage(id) {
+            const p = allProducts.find(x => x.id == id);
+            if(!p) return;
             currentProduct = p;
-            document.getElementById('product-content').innerHTML = `
-                <img src="${p.image_filename}" class="p-image" onerror="this.src='health care.png'">
-                <div class="p-title">${p.name}</div>
-                <div class="sale-price">Price: ₹${price}</div>
-                <p class="p-desc">${p.description || 'Exclusive premium brand product.'}</p>`;
-            
-            // Buy Button logic
-            const btn = document.getElementById('buy-btn');
-            btn.innerText = (p.stock_status === 'External') ? 'Buy on Global Store' : 'Add to Order Protocol';
-            
-            switchPage('product-detail');
+            window.history.pushState({}, '', '?id=' + id);
+            document.getElementById('dedicated-product-content').innerHTML = `
+                <div class="p-page-card">
+                    <img src="${p.image_filename}" class="p-page-img" onerror="this.src='health care.png'">
+                    <div class="p-page-body">
+                        <span class="p-tag">Official Elite</span>
+                        <h1>${p.name}</h1>
+                        <h2 style="color:var(--gold)">₹${p.sale_price}</h2>
+                        <div class="comm-box">Commission: ₹${p.commission || '0'}</div>
+                        <a href="${p.video_link || '#'}" target="_blank" style="background:red; color:white; padding:15px; display:block; text-align:center; border-radius:12px; text-decoration:none; font-weight:800; margin-bottom:20px;">WATCH PRODUCT VIDEO</a>
+                        <p style="color:#aaa;">${p.description}</p>
+                        <button class="btn-action" onclick="addToCartDirect()">BUY NOW</button>
+                    </div>
+                </div>`;
+            switchPage('product-page');
         }
 
-        function handlePurchase() {
-            if(!currentProduct) return;
-            if(currentProduct.stock_status === 'External') {
-                // External redirect (Product URL store hoti hai image_filename mein ya alag column ho toh)
-                // Yahan simple link open kar raha hoon
-                window.open(currentProduct.image_filename, '_blank');
-            } else {
-                addToCart();
-            }
+        function validateAndPay() {
+            const n = document.getElementById('chk-name').value, w = document.getElementById('chk-wa').value, e = document.getElementById('chk-email').value, a = document.getElementById('chk-addr').value;
+            if(!n || !w || !e || !a) { alert("Compulsory: Bharo saari details!"); return; }
+            let h = JSON.parse(localStorage.getItem('arham_history') || '[]');
+            h.unshift({name: currentProduct.name, price: currentProduct.sale_price, date: new Date().toLocaleDateString(), img: currentProduct.image_filename});
+            localStorage.setItem('arham_history', JSON.stringify(h));
+            window.location.assign("payment.html");
         }
 
-        function saveProfile() {
-            const user = { name: document.getElementById('user-name').value, wa: document.getElementById('user-wa').value, email: document.getElementById('user-email').value, addr: document.getElementById('user-addr').value };
-            if(!user.name || !user.wa) { alert("Complete details required!"); return; }
-            localStorage.setItem('arham_user', JSON.stringify(user));
-            alert("Identity Secured!");
-        }
-
-        function addToCart() {
-            const id = "AE-" + Math.floor(100000 + Math.random() * 900000);
-            document.getElementById('bill-item').innerText = "Item: " + currentProduct.name;
-            document.getElementById('bill-amt').innerText = "₹" + currentProduct.sale_price;
-            document.getElementById('order-no-display').innerText = "UniqueID: " + id;
-            alert("Order Synchronized!");
-            switchPage('cart');
-        }
-
-        function switchPage(p) {
-            document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
-            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-            const target = document.getElementById(p + '-view');
-            if(target) target.classList.add('active');
-            const tabMap = {'home':'tab-home', 'cart':'tab-cart', 'order':'tab-order', 'product-detail':'tab-home', 'customer-info':'tab-home'};
-            const tid = tabMap[p];
-            if(tid) document.getElementById(tid).classList.add('active');
-            document.getElementById('adBanner').style.display = (p === 'home') ? 'flex' : 'none';
-            toggleNav(false);
-            window.scrollTo(0,0);
-        }
-
+        function addToCartDirect() { document.getElementById('bill-item').innerText = currentProduct.name; document.getElementById('bill-amt').innerText = "₹" + currentProduct.sale_price; switchPage('cart'); }
+        function saveProfile() { localStorage.setItem('arham_user', JSON.stringify({name: document.getElementById('user-name').value, wa: document.getElementById('user-wa').value})); alert("Hub Updated!"); }
+        function loadStoredProfile() { const u = JSON.parse(localStorage.getItem('arham_user') || '{}'); if(u.name){ document.getElementById('user-name').value = u.name; document.getElementById('chk-name').value = u.name; document.getElementById('user-wa').value = u.wa; document.getElementById('chk-wa').value = u.wa; }}
+        function renderHistory() { const list = document.getElementById('history-list'); const h = JSON.parse(localStorage.getItem('arham_history') || '[]'); list.innerHTML = h.length ? h.map(o => `<div class="product-card-ui" style="display:flex; gap:15px; align-items:center;"><img src="${o.img}" style="width:50px; height:50px; border-radius:8px;"><div><b>${o.name}</b><br><small>${o.date} - ₹${o.price}</small></div></div>`).join('') : "<p>No orders.</p>"; }
+        function switchPage(p) { document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active')); document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active')); document.getElementById(p + '-view').classList.add('active'); if(document.getElementById('tab-'+p)) document.getElementById('tab-'+p).classList.add('active'); document.getElementById('adBanner').style.display = (p === 'home') ? 'flex' : 'none'; toggleNav(false); window.scrollTo(0,0); }
         function toggleNav(s) { document.getElementById('sideNav').classList.toggle('active', s); }
-        function trackOrder() { const id = document.getElementById('track-id').value; if(id.startsWith('AE-')) document.getElementById('history-result').innerHTML = `<div class="product-card-ui" style="border-color:var(--neon-cyan)">OrderID: ${id}<br>Status: Processing Signal</div>`; }
-        function doPaymentRedirect() { window.location.assign("payment.html"); }
-
-        setInterval(() => {
-            const sc = document.getElementById('adBanner');
-            if(sc && sc.style.display !== 'none') {
-                if (sc.scrollLeft + sc.clientWidth >= sc.scrollWidth - 10) sc.scrollTo({left:0, behavior:'smooth'});
-                else sc.scrollBy({left: sc.clientWidth, behavior:'smooth'});
-            }
-        }, 5000);
-
+        function checkURL() { const id = new URLSearchParams(window.location.search).get('id'); if(id) openProductPage(id); }
+        setInterval(() => { const sc = document.getElementById('adBanner'); if(sc && sc.style.display !== 'none') { if (sc.scrollLeft + sc.clientWidth >= sc.scrollWidth - 10) sc.scrollTo({left:0}); else sc.scrollBy({left: sc.clientWidth, behavior:'smooth'}); }}, 4500);
         window.onload = initEliteStore;
     </script>
 </body>
