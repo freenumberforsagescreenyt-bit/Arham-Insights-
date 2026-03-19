@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Arham Studio | AI Master V39</title>
+    <title>Arham Studio | AI Master V40</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -25,22 +25,20 @@
         .plat-item { padding: 12px; font-size: 0.85rem; color: #94a3b8; cursor: pointer; display: flex; align-items: center; gap: 12px; border-radius: 12px; transition: 0.3s; margin-bottom: 4px; background: rgba(255,255,255,0.02); }
         .plat-item:hover { background: rgba(0, 242, 255, 0.05); color: var(--neon); }
 
-        /* --- UI ELEMENTS --- */
         .container { padding: 15px; max-width: 500px; margin: auto; padding-bottom: 100px; }
-        
-        /* --- HOME CUSTOM ENGINE --- */
+        .hero-hub { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .hub-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 15px; text-align: center; cursor: pointer; }
+
         .config-card { background: #0f121a; border-radius: 25px; padding: 20px; border: 1px solid var(--border); border-top: 3px solid var(--gold); margin-bottom: 25px; display: none; }
         .config-card.active { display: block; }
-        .control-group { margin-bottom: 15px; }
-        .control-group label { font-size: 0.6rem; color: var(--gold); font-weight: 800; text-transform: uppercase; margin-bottom: 5px; display: block; }
         select, input { width: 100%; padding: 12px; border-radius: 12px; background: rgba(0,0,0,0.5); border: 1px solid var(--border); color: #fff; outline: none; font-size: 0.8rem; box-sizing: border-box; }
         
-        /* --- PREMIUM POSTER LOOK --- */
+        /* --- PREMIUM POSTER --- */
         #capture-area { background: #000; border-radius: 35px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 30px 60px rgba(0,0,0,0.9); }
         .ad-canvas { position: relative; width: 100%; overflow: hidden; background: #000; }
         .canvas-1-1 { aspect-ratio: 1/1; } .canvas-9-16 { aspect-ratio: 9/16; max-height: 65vh; } .canvas-16-9 { aspect-ratio: 16/9; }
 
-        #p-img-main { position: absolute; width: 80%; top: 45%; left: 50%; transform: translate(-50%, -50%); z-index: 2; filter: drop-shadow(0 25px 50px rgba(0,0,0,0.95)); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        #p-img-main { position: absolute; width: 80%; top: 45%; left: 50%; transform: translate(-50%, -50%); z-index: 2; filter: drop-shadow(0 25px 50px rgba(0,0,0,0.95)); transition: 0.5s; }
         #p-bg-main { position: absolute; inset: 0; opacity: 0.65; z-index: 1; background-size: cover !important; }
         
         .brand-watermark { position: absolute; top: 25px; right: 25px; z-index: 10; text-align: right; opacity: 0.5; }
@@ -52,20 +50,19 @@
         .mrp-cut { color: var(--gray); text-decoration: line-through; font-size: 0.85rem; display: block; }
         .price-tag { color: var(--gold); font-weight: 900; font-size: 2rem; text-shadow: 0 0 15px rgba(255,204,0,0.3); }
         
-        .benefit-pills { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
-        .pill { font-size: 0.65rem; background: rgba(0,242,255,0.08); color: var(--neon); padding: 5px 12px; border-radius: 25px; border: 0.5px solid var(--neon); font-weight: 600; }
+        .pill { font-size: 0.65rem; background: rgba(0,242,255,0.08); color: var(--neon); padding: 5px 12px; border-radius: 25px; border: 0.5px solid var(--neon); font-weight: 600; margin-right: 5px; }
 
-        .psych-box { background: rgba(16,185,129,0.08); border-radius: 15px; padding: 12px; border-left: 4px solid var(--success); margin: 15px 0; font-size: 0.8rem; color: #e2e8f0; line-height: 1.4; font-weight: 600; }
+        .psych-box { background: rgba(16,185,129,0.08); border-radius: 15px; padding: 12px; border-left: 4px solid var(--success); margin: 15px 0; font-size: 0.8rem; color: #e2e8f0; font-weight: 600; }
 
-        .insta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
-        .insta-btn { background: rgba(255,255,255,0.03); color: #fff; padding: 12px; border-radius: 12px; text-decoration: none; font-size: 0.75rem; font-weight: 800; text-align: center; border: 1px solid #222; transition: 0.3s; }
-        .insta-btn i { color: #ff0050; margin-right: 6px; }
+        /* ONLY ANJALI BUTTON */
+        .insta-btn { background: rgba(255,255,255,0.03); color: #fff; padding: 15px; border-radius: 15px; text-decoration: none; font-size: 0.85rem; font-weight: 800; text-align: center; border: 1px solid #222; display: block; margin-top: 15px; transition: 0.3s; }
+        .insta-btn i { color: #ff0050; margin-right: 8px; }
 
         .btn-main { background: var(--gold); color: #000; border: none; padding: 20px; border-radius: 18px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; margin-top: 10px; font-size: 1rem; }
         #loader { display: none; text-align: center; color: var(--neon); font-size: 0.8rem; font-weight: 800; padding: 10px; }
         
         .bottom-bar { position: fixed; bottom: 0; width: 100%; background: #000; display: flex; border-top: 1px solid #222; padding: 15px 0; z-index: 2500; }
-        .tab-item { flex: 1; text-align: center; color: #444; font-size: 1.5rem; cursor: pointer; transition: 0.3s; } 
+        .tab-item { flex: 1; text-align: center; color: #444; font-size: 1.5rem; cursor: pointer; } 
         .tab-item.active { color: var(--gold); transform: scale(1.1); }
     </style>
 </head>
@@ -73,8 +70,7 @@
 
     <div class="menu-overlay" id="overlay" onclick="toggleMenu(false)"></div>
     <nav class="side-menu" id="side-menu">
-        <b style="color:var(--gold); font-size:1.2rem;">AD FACTORY BOT</b>
-        
+        <b style="color:var(--gold); font-size:1.2rem;">ELITE HUB (V40)</b>
         <span class="plat-title">Indian Social Hubs</span>
         <div class="plat-item" onclick="autoPilot('canvas-1-1', 'instagram')"><i class="fab fa-instagram"></i> Insta Feed (Auto)</div>
         <div class="plat-item" onclick="autoPilot('canvas-9-16', 'instagram')"><i class="fab fa-instagram"></i> Insta Story (Auto)</div>
@@ -92,9 +88,13 @@
     </nav>
 
     <div class="container">
-        
+        <div class="hero-hub">
+            <div class="hub-card" onclick="window.location.href='product.html'"><i class="fa fa-store"></i><h4>Live Store</h4></div>
+            <div class="hub-card" onclick="alert('Join @Namonamah03 for guide!')"><i class="fa fa-graduation-cap"></i><h4>Earn Hub</h4></div>
+        </div>
+
         <div class="config-card" id="home-engine">
-            <label style="color:var(--neon); font-size:0.7rem; font-weight:800;">MANUAL CUSTOMIZER (HOME ONLY)</label>
+            <label style="color:var(--neon); font-size:0.7rem; font-weight:800;">MANUAL CUSTOMIZER</label>
             <input type="text" id="custom-name" placeholder="Custom Product Name..." style="margin-top:10px;" oninput="updateUI()">
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px;">
                 <select id="sel-target" onchange="manualGen()"><option value="Health Care">Health Care</option><option value="Personal Care">Personal Care</option><option value="Crop Care">Crop Care</option><option value="Naturamore">Naturamore</option><option value="Biofit">Biofit</option><option value="Clean & More">Clean & More</option><option value="Herbs & More">Herbs & More</option></select>
@@ -118,25 +118,17 @@
                 <div class="foot-top">
                     <div>
                         <h2 id="foot-title" style="margin:0; font-size:1.5rem; font-weight:800;">Elite Product</h2>
-                        <div class="benefit-pills" id="benefit-pills">
-                            <span class="pill">Organic</span><span class="pill">Proven Result</span>
-                        </div>
+                        <div id="benefit-pills"></div>
                     </div>
                     <div style="text-align:right;">
                         <span class="mrp-cut" id="mrp-price">₹000</span>
                         <span class="price-tag" id="foot-price">₹000</span>
                     </div>
                 </div>
-
-                <div class="psych-box" id="psych-trigger">
-                    95% of Elite Members switched to this for better results. Why are you still waiting?
-                </div>
-
-                <div style="font-size:0.65rem; color:var(--gold); font-weight:800; text-align:center; letter-spacing:1px;">TAP TO ORDER DIRECT:</div>
-                <div class="insta-grid">
-                    <a href="https://instagram.com/kohli_0310" class="insta-btn"><i class="fab fa-instagram"></i> Akash</a>
-                    <a href="https://instagram.com/anjalisinghsuman82" class="insta-btn"><i class="fab fa-instagram"></i> Anjali</a>
-                </div>
+                <div class="psych-box" id="psych-trigger">95% of Elite Members switched to this for better results. Why are you still waiting?</div>
+                
+                <div style="font-size:0.65rem; color:var(--gold); font-weight:800; text-align:center; letter-spacing:1px; margin-top:15px;">TAP TO ORDER DIRECT:</div>
+                <a href="https://instagram.com/anjalisinghsuman82" class="insta-btn"><i class="fab fa-instagram"></i> Contact Anjali</a>
             </div>
         </div>
 
@@ -153,13 +145,13 @@
 
     <script>
         const productData = { 
-            "Health Care": { img: "health care.png", price: 550, b: ["Immunity", "Eco-Safe", "Tested"], p: "Your body is your only home. Protect it with Elite Health Care today!" },
-            "Personal Care": { img: "personal care & cosmetics.png", price: 290, b: ["Glow", "Chemical-Free", "Pure"], p: "Don't settle for basic. Your skin deserves the Elite touch!" }, 
-            "Crop Care": { img: "crop care.png", price: 850, b: ["Yield x2", "Bio-Organic", "Fast"], p: "Turn your farm into a goldmine. Higher yield, zero toxins!" },
-            "Naturamore": { img: "naturamore.png", price: 1550, b: ["Nutrition", "Protein", "Best"], p: "Elite health isn't a luxury, it's a necessity. Start your fuel now!" },
-            "Biofit": { img: "biofit.png", price: 1200, b: ["Soil Growth", "Nature", "Pure"], p: "The secret to massive harvests is in the soil. Elite Biofit is the key!" },
-            "Clean & More": { img: "clean & more.png", price: 350, b: ["Hygiene", "Strong", "Safe"], p: "A clean home is a happy home. Elite protection for your family." },
-            "Herbs & More": { img: "herbs & more.png", price: 380, b: ["Ayurvedic", "Roots", "Safe"], p: "Ancient wisdom, modern results. Healing power of pure herbs." }
+            "Health Care": { img: "health care.png", price: 550, b: ["Immunity", "Eco-Safe"], p: "Your body is your only home. Protect it with Elite Health Care today!" },
+            "Personal Care": { img: "personal care & cosmetics.png", price: 290, b: ["Glow", "Pure"], p: "Don't settle for basic. Your skin deserves the Elite touch!" }, 
+            "Crop Care": { img: "crop care.png", price: 850, b: ["Yield x2", "Fast"], p: "Turn your farm into a goldmine. Higher yield, zero toxins!" },
+            "Naturamore": { img: "naturamore.png", price: 1550, b: ["Protein", "Best"], p: "Elite health isn't a luxury, it's a necessity. Start your fuel now!" },
+            "Biofit": { img: "biofit.png", price: 1200, b: ["Soil Growth", "Nature"], p: "The secret to massive harvests is in the soil. Elite Biofit is the key!" },
+            "Clean & More": { img: "clean & more.png", price: 350, b: ["Hygiene", "Safe"], p: "A clean home is a happy home. Elite protection for your family." },
+            "Herbs & More": { img: "herbs & more.png", price: 380, b: ["Ayurvedic", "Roots"], p: "Ancient wisdom, modern results. Healing power of pure herbs." }
         };
         let currentApp = 'instagram';
 
@@ -187,13 +179,11 @@
             const cat = document.getElementById('sel-target').value;
             const theme = document.getElementById('sel-theme').value;
             const data = productData[cat];
-            
             if(!document.getElementById('custom-name').value) document.getElementById('foot-title').innerText = cat;
             document.getElementById('foot-price').innerText = "₹" + data.price;
             document.getElementById('mrp-price').innerText = "₹" + Math.round(data.price * 1.35);
             document.getElementById('benefit-pills').innerHTML = data.b.map(x => `<span class="pill">${x}</span>`).join('');
             document.getElementById('psych-trigger').innerText = data.p;
-            
             renderStudio(cat, theme);
         }
 
@@ -203,8 +193,7 @@
             const loader = document.getElementById('loader');
             loader.style.display = "block";
             const seed = Math.floor(Math.random()*1000000);
-            const ai_url = `https://image.pollinations.ai/prompt/premium_3d_product_podium_${theme}_stage_soft_lighting_8k?width=1080&height=1080&nologo=true&seed=${seed}`;
-            
+            const ai_url = `https://image.pollinations.ai/prompt/premium_3d_product_podium_${theme}_stage_8k?width=1080&height=1080&nologo=true&seed=${seed}`;
             imgEl.src = productData[category].img;
             const bgImg = new Image(); bgImg.crossOrigin = "anonymous"; bgImg.src = ai_url;
             bgImg.onload = () => { bgEl.style.backgroundImage = `url('${ai_url}')`; loader.style.display = "none"; };
@@ -219,7 +208,7 @@
                 const link = document.createElement('a');
                 link.download = `ArhamElite_${Date.now()}.jpg`; link.href = canvas.toDataURL('image/jpeg', 0.9); link.click();
                 setTimeout(() => { 
-                    const urls = { instagram: "https://www.instagram.com/", whatsapp: "whatsapp://", youtube: "https://www.youtube.com/", telegram: "https://t.me/", linkedin: "https://linkedin.com/", facebook: "https://fb.com/" };
+                    const urls = { instagram: "https://www.instagram.com/", whatsapp: "whatsapp://", youtube: "https://www.youtube.com/", telegram: "https://t.me/", facebook: "https://fb.com/" };
                     window.open(urls[currentApp] || "https://www.instagram.com/", "_blank");
                 }, 1000);
             } catch (err) { alert("Try Again!"); }
@@ -229,3 +218,4 @@
     </script>
 </body>
 </html>
+
