@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Arham Studio | AI Ad Terminal V30</title>
+    <title>Arham Studio | AI Ad Terminal V32</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -41,8 +41,9 @@
         .ad-canvas { position: relative; width: 100%; overflow: hidden; background: #000; transition: 0.5s; }
         .canvas-1-1 { aspect-ratio: 1/1; }
         .canvas-9-16 { aspect-ratio: 9/16; max-height: 70vh; }
+        .canvas-16-9 { aspect-ratio: 16/9; }
 
-        #p-img-main { position: absolute; width: 70%; top: 45%; left: 50%; transform: translate(-50%, -50%); z-index: 2; filter: drop-shadow(0 15px 35px rgba(0,0,0,0.8)); transition: 0.5s; }
+        #p-img-main { position: absolute; width: 70%; top: 45%; left: 50%; transform: translate(-50%, -50%); z-index: 2; filter: drop-shadow(0 15px 35px rgba(0,0,0,0.8)); transition: 0.5s; pointer-events: none; }
         #p-bg-main { position: absolute; inset: 0; opacity: 0.8; z-index: 1; transition: 1s; background-size: cover !important; background-position: center !important; }
         
         .brand-watermark { position: absolute; top: 25px; right: 25px; z-index: 10; display: flex; flex-direction: column; align-items: flex-end; opacity: 0.8; }
@@ -57,16 +58,17 @@
         .benefit-list li { margin-bottom: 5px; display: flex; align-items: center; gap: 8px; font-weight: 500; }
         .benefit-list i { color: var(--success-green); font-size: 0.8rem; }
         
-        .price-tag { background: var(--gold); color: #000; padding: 10px 18px; border-radius: 12px; font-weight: 900; font-size: 1.5rem; box-shadow: 0 4px 15px rgba(255,204,0,0.3); text-align: center; }
+        .price-tag { background: var(--gold); color: #000; padding: 10px 18px; border-radius: 12px; font-weight: 900; font-size: 1.5rem; box-shadow: 0 4px 15px rgba(255,204,0,0.2); text-align: center; }
         .price-label { font-size: 0.5rem; display: block; text-transform: uppercase; margin-bottom: -4px; opacity: 0.7; }
 
         .psych-trigger { margin-top: 15px; background: rgba(16, 185, 129, 0.1); padding: 10px; border-radius: 10px; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 0.75rem; color: var(--success-green); font-weight: 700; text-align: center; }
 
-        .contact-strip { margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 18px; display: flex; flex-direction: column; gap: 10px; }
-        .contact-label { font-size: 0.75rem; color: var(--gold); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-        .id-row { display: flex; justify-content: space-between; align-items: center; gap: 15px; }
+        .contact-strip { margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 18px; display: flex; flex-direction: column; gap: 8px; }
+        .contact-label { font-size: 0.7rem; color: var(--gold); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .id-row { display: flex; justify-content: space-between; align-items: center; }
         .contact-id { font-size: 0.85rem; color: #fff; font-weight: 700; letter-spacing: 0.5px; text-decoration: none; display: flex; align-items: center; background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 10px; flex: 1; justify-content: center; }
         .contact-id i { color: var(--neon-blue); margin-right: 8px; font-size: 1.1rem; }
+        .contact-id:active { opacity: 0.7; }
 
         /* --- CONFIG CONTROLS --- */
         .config-card { background: #0f121a; border-radius: 25px; padding: 20px; margin: 20px 0; border: 1px solid var(--border); border-top: 3px solid var(--gold); }
@@ -138,7 +140,7 @@
 
             <div class="control-group">
                 <label>3. Custom Tagline</label>
-                <input type="text" id="cust-tag" placeholder="Dosto ke liye special offer..." oninput="updateText()">
+                <input type="text" id="cust-tag" placeholder="Invest time, get rewards..." oninput="updateText()">
             </div>
 
             <button class="btn-main" onclick="manualGen()">Generate Unique Ad</button>
@@ -149,10 +151,10 @@
         <div id="capture-area">
             <div id="master-canvas" class="ad-canvas canvas-1-1">
                 <div id="p-bg-main"></div>
-                <img id="p-img-main" src="" alt="Product">
+                <img id="p-img-main" src="" alt="Product" crossorigin="anonymous">
                 
                 <div class="brand-watermark">
-                    <img src="https://i.ibb.co/N26BWZdY/Screenshot-20260130-221623.jpg" class="water-logo" alt="L">
+                    <img src="https://i.ibb.co/N26BWZdY/Screenshot-20260130-221623.jpg" class="water-logo" alt="L" crossorigin="anonymous">
                     <span class="water-text">ARHAM ELITE</span>
                     <span style="font-size:0.3rem; letter-spacing:1.5px; color:var(--gold); font-weight:800;">OFFICIAL AI STUDIO ©</span>
                 </div>
@@ -236,42 +238,75 @@
             const bgEl = document.getElementById('p-bg-main');
             const loader = document.getElementById('loader');
             loader.style.display = "block";
+            
+            // Clean up to avoid ghosting
             imgEl.style.opacity = "0";
+            bgEl.style.backgroundImage = "none";
+
             setTimeout(() => {
+                // FIXED: Use Local image for Product to avoid CORS if possible
                 imgEl.src = productData[category].img;
+                
                 const seed = Math.floor(Math.random()*1000000);
                 const prompt = `minimalist_3d_product_stage_luxury_background_${theme}_soft_cinematic_lighting_8k`;
-                bgEl.style.background = `url('https://image.pollinations.ai/prompt/${prompt}?width=1080&height=1080&nologo=true&seed=${seed}')`;
-                imgEl.onload = () => { imgEl.style.opacity = "1"; loader.style.display = "none"; };
+                const ai_url = `https://image.pollinations.ai/prompt/${prompt}?width=1080&height=1080&nologo=true&seed=${seed}`;
+                
+                // FIXED: Preload AI Image with CORS
+                const bgImg = new Image();
+                bgImg.crossOrigin = "anonymous";
+                bgImg.src = ai_url;
+                bgImg.onload = () => {
+                    bgEl.style.backgroundImage = `url('${ai_url}')`;
+                    imgEl.style.opacity = "1";
+                    loader.style.display = "none";
+                };
+                bgImg.onerror = () => {
+                    // Fallback to simple color if AI fails
+                    bgEl.style.background = "#111";
+                    imgEl.style.opacity = "1";
+                    loader.style.display = "none";
+                }
             }, 300);
         }
 
         async function captureAndShare() {
             const btn = document.getElementById('share-btn');
             const area = document.getElementById('capture-area');
-            btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> GENERATING POSTER...';
+            btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> LOCKING SIGNAL...';
             btn.disabled = true;
 
             try {
-                const canvas = await html2canvas(area, { useCORS: true, scale: 3, backgroundColor: '#000' });
+                // FIXED: Wait extra 500ms to ensure all images are drawn
+                await new Promise(r => setTimeout(r, 500));
+
+                const canvas = await html2canvas(area, { 
+                    useCORS: true, 
+                    allowTaint: false, 
+                    scale: 3, 
+                    backgroundColor: '#000',
+                    imageTimeout: 15000,
+                    logging: false 
+                });
+
                 const blob = await new Promise(res => canvas.toBlob(res, 'image/jpeg', 0.95));
-                const file = new File([blob], "Arham_Elite_AD.jpg", { type: "image/jpeg" });
+                const file = new File([blob], "Arham_Elite_Ad.jpg", { type: "image/jpeg" });
 
                 if (navigator.canShare && navigator.canShare({ files: [file] })) {
                     await navigator.share({
                         files: [file],
-                        title: 'Arham Elite Ad',
-                        text: `Check out Arham Elite's premium product! \n\nDirect Order Akash: https://instagram.com/kohli_0310 \nDirect Order Anjali: https://instagram.com/anjalisinghsuman82 \nWebsite: ${window.location.origin}`
+                        title: 'Arham Elite AI Ad',
+                        text: `Check out Arham Elite's premium product! \n\nAkash: https://instagram.com/kohli_0310 \nAnjali: https://instagram.com/anjalisinghsuman82 \nWebsite: ${window.location.origin}`
                     });
                 } else {
                     const link = document.createElement('a');
                     link.download = 'Arham_Ad.jpg';
                     link.href = canvas.toDataURL('image/jpeg');
                     link.click();
-                    alert("Poster Downloaded! Ab share kar do.");
+                    alert("Poster Saved! Gallery check kar.");
                 }
             } catch (err) {
-                alert("Error generating image.");
+                console.error(err);
+                alert("Generation Error: Try clicking Generate Ad again.");
             } finally {
                 btn.innerHTML = '<i class="fa fa-share-nodes"></i> GENERATE & SHARE IMAGE';
                 btn.disabled = false;
