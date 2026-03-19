@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Arham Studio | AI Ad Terminal V32</title>
+    <title>Arham Studio | AI Ad Terminal V33</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -35,22 +35,19 @@
 
         .container { padding: 15px; box-sizing: border-box; max-width: 500px; margin: auto; }
         
-        /* --- THE CAPTURE BOX --- */
         #capture-area { background: #000; border-radius: 30px; overflow: hidden; border: 1.5px solid var(--border); }
-
-        .ad-canvas { position: relative; width: 100%; overflow: hidden; background: #000; transition: 0.5s; }
+        .ad-canvas { position: relative; width: 100%; overflow: hidden; background: #000; transition: 0.3s; }
         .canvas-1-1 { aspect-ratio: 1/1; }
         .canvas-9-16 { aspect-ratio: 9/16; max-height: 70vh; }
         .canvas-16-9 { aspect-ratio: 16/9; }
 
-        #p-img-main { position: absolute; width: 70%; top: 45%; left: 50%; transform: translate(-50%, -50%); z-index: 2; filter: drop-shadow(0 15px 35px rgba(0,0,0,0.8)); transition: 0.5s; pointer-events: none; }
-        #p-bg-main { position: absolute; inset: 0; opacity: 0.8; z-index: 1; transition: 1s; background-size: cover !important; background-position: center !important; }
+        #p-img-main { position: absolute; width: 70%; top: 45%; left: 50%; transform: translate(-50%, -50%); z-index: 2; filter: drop-shadow(0 15px 35px rgba(0,0,0,0.8)); transition: 0.3s; pointer-events: none; }
+        #p-bg-main { position: absolute; inset: 0; opacity: 0.8; z-index: 1; transition: 0.5s; background-size: cover !important; background-position: center !important; }
         
         .brand-watermark { position: absolute; top: 25px; right: 25px; z-index: 10; display: flex; flex-direction: column; align-items: flex-end; opacity: 0.8; }
         .water-logo { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--gold); margin-bottom: 5px; box-shadow: 0 0 15px rgba(255,204,0,0.3); }
         .water-text { font-size: 0.65rem; letter-spacing: 3px; font-weight: 900; color: #fff; text-transform: uppercase; text-shadow: 2px 2px 5px #000; }
 
-        /* --- ATTACHED FOOTER --- */
         .ad-footer-attached { background: #000; padding: 25px; border-top: 1px solid rgba(255,255,255,0.1); text-align: left; }
         .footer-grid { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: start; }
         .benefit-tag { font-size: 0.8rem; color: var(--gold); font-weight: 800; text-transform: uppercase; margin-bottom: 8px; display: block; letter-spacing: 1px; }
@@ -68,16 +65,13 @@
         .id-row { display: flex; justify-content: space-between; align-items: center; }
         .contact-id { font-size: 0.85rem; color: #fff; font-weight: 700; letter-spacing: 0.5px; text-decoration: none; display: flex; align-items: center; background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 10px; flex: 1; justify-content: center; }
         .contact-id i { color: var(--neon-blue); margin-right: 8px; font-size: 1.1rem; }
-        .contact-id:active { opacity: 0.7; }
 
-        /* --- CONFIG CONTROLS --- */
         .config-card { background: #0f121a; border-radius: 25px; padding: 20px; margin: 20px 0; border: 1px solid var(--border); border-top: 3px solid var(--gold); }
         .control-group { margin-bottom: 15px; text-align: left; }
         .control-group label { font-size: 0.65rem; color: var(--gold); font-weight: 800; text-transform: uppercase; margin-bottom: 5px; display: block; }
         select, input { width: 100%; padding: 12px; border-radius: 12px; background: rgba(0,0,0,0.5); border: 1px solid var(--border); color: #fff; outline: none; font-size: 0.85rem; box-sizing: border-box; }
         
         .btn-main { background: var(--gold); color: #000; border: none; padding: 18px; border-radius: 15px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; margin-top: 10px; }
-
         #loader { display: none; margin: 15px 0; color: var(--neon-blue); font-size: 0.8rem; font-weight: 800; text-align: center; }
     </style>
 </head>
@@ -87,33 +81,31 @@
     
     <nav class="side-menu" id="side-menu">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
-            <b style="color:var(--gold);">PLATFORM OPTIMIZER</b>
+            <b style="color:var(--gold);">FAST POSTER</b>
             <i class="fa fa-times" onclick="toggleSideMenu()"></i>
         </div>
         
         <div class="plat-sec">
             <span class="plat-title">Instagram / Facebook</span>
-            <div class="plat-item" onclick="autoPilot('canvas-1-1')"><i class="fab fa-instagram"></i> Feed Post (1:1)</div>
-            <div class="plat-item" onclick="autoPilot('canvas-9-16')"><i class="fab fa-instagram"></i> Reel / Story (9:16)</div>
+            <div class="plat-item" onclick="autoPilot('canvas-1-1', 'instagram')"><i class="fab fa-instagram"></i> Feed Post (1:1)</div>
+            <div class="plat-item" onclick="autoPilot('canvas-9-16', 'instagram')"><i class="fab fa-instagram"></i> Reel / Story (9:16)</div>
         </div>
 
         <div class="plat-sec">
             <span class="plat-title">WhatsApp</span>
-            <div class="plat-item" onclick="autoPilot('canvas-9-16')"><i class="fab fa-whatsapp"></i> Status Update</div>
-            <div class="plat-item" onclick="autoPilot('canvas-1-1')"><i class="fab fa-whatsapp"></i> Chat Marketing</div>
+            <div class="plat-item" onclick="autoPilot('canvas-9-16', 'whatsapp')"><i class="fab fa-whatsapp"></i> Status Update</div>
         </div>
 
         <div class="plat-sec">
             <span class="plat-title">YouTube</span>
-            <div class="plat-item" onclick="autoPilot('canvas-16-9')"><i class="fab fa-youtube"></i> Thumbnail (16:9)</div>
-            <div class="plat-item" onclick="autoPilot('canvas-9-16')"><i class="fab fa-youtube"></i> Shorts Ad</div>
+            <div class="plat-item" onclick="autoPilot('canvas-16-9', 'youtube')"><i class="fab fa-youtube"></i> Thumbnail (16:9)</div>
         </div>
     </nav>
 
     <nav class="navbar">
         <div class="menu-trigger" onclick="toggleSideMenu()"><i class="fa fa-bars-staggered"></i></div>
-        <div style="font-weight: 900;">ARHAM <span style="color:var(--gold)">STUDIO Master</span></div>
-        <i class="fa fa-wand-magic-sparkles" style="color:var(--gold);"></i>
+        <div style="font-weight: 900;">ARHAM <span style="color:var(--gold)">STUDIO Turbo</span></div>
+        <i class="fa fa-bolt" style="color:var(--gold);"></i>
     </nav>
 
     <div class="container">
@@ -138,25 +130,19 @@
                 </select>
             </div>
 
-            <div class="control-group">
-                <label>3. Custom Tagline</label>
-                <input type="text" id="cust-tag" placeholder="Invest time, get rewards..." oninput="updateText()">
-            </div>
-
-            <button class="btn-main" onclick="manualGen()">Generate Unique Ad</button>
+            <button class="btn-main" onclick="manualGen()">Fast Build Ad</button>
         </div>
 
-        <div id="loader"><i class="fa fa-spinner fa-spin"></i> SYNCHRONIZING AI VISUALS...</div>
+        <div id="loader"><i class="fa fa-spinner fa-spin"></i> TURBO LOADING...</div>
 
         <div id="capture-area">
             <div id="master-canvas" class="ad-canvas canvas-1-1">
                 <div id="p-bg-main"></div>
                 <img id="p-img-main" src="" alt="Product" crossorigin="anonymous">
-                
                 <div class="brand-watermark">
                     <img src="https://i.ibb.co/N26BWZdY/Screenshot-20260130-221623.jpg" class="water-logo" alt="L" crossorigin="anonymous">
                     <span class="water-text">ARHAM ELITE</span>
-                    <span style="font-size:0.3rem; letter-spacing:1.5px; color:var(--gold); font-weight:800;">OFFICIAL AI STUDIO ©</span>
+                    <span style="font-size:0.3rem; letter-spacing:1.5px; color:var(--gold); font-weight:800;">AI STUDIO ©</span>
                 </div>
             </div>
 
@@ -165,23 +151,17 @@
                     <div>
                         <span class="benefit-tag" id="foot-title">Product Name</span>
                         <ul class="benefit-list" id="benefit-list">
-                            <li><i class="fa fa-circle-check"></i> 100% Results Oriented</li>
-                            <li><i class="fa fa-circle-check"></i> Certified Genuine Quality</li>
-                            <li><i class="fa fa-circle-check"></i> Premium Elite Standard</li>
+                            <li><i class="fa fa-circle-check"></i> High Quality</li>
+                            <li><i class="fa fa-circle-check"></i> Certified</li>
                         </ul>
                     </div>
                     <div class="price-tag">
-                        <span class="price-label">Elite Price</span>
+                        <span class="price-label">Price</span>
                         <span id="foot-price">₹000</span>
                     </div>
                 </div>
-
-                <div class="psych-trigger">
-                    ⚡ 10,000+ Elite Members Trust Arham Quality. Order Now!
-                </div>
-
+                <div class="psych-trigger">⚡ Special Offer. Buy Now!</div>
                 <div class="contact-strip">
-                    <span class="contact-label">FOR INSTANT ORDER CONTACT:</span>
                     <div class="id-row">
                         <a href="https://instagram.com/kohli_0310" target="_blank" class="contact-id"><i class="fab fa-instagram"></i> Akash</a>
                         <a href="https://instagram.com/anjalisinghsuman82" target="_blank" class="contact-id"><i class="fab fa-instagram"></i> Anjali</a>
@@ -191,22 +171,24 @@
         </div>
 
         <button class="btn-main" style="background:#fff;" onclick="captureAndShare()" id="share-btn">
-            <i class="fa fa-share-nodes"></i> GENERATE & SHARE IMAGE
+            <i class="fa fa-download"></i> SAVE & OPEN SOCIAL APP
         </button>
     </div>
 
     <script>
         const productData = { 
-            "Health Care": { img: "health care.png", price: "₹550", b: ["Immunity Booster", "100% Side-effect free", "Deep Cellular Repair"] }, 
-            "Personal Care": { img: "personal care & cosmetics.png", price: "₹290", b: ["Natural Glow System", "Chemical Free Formula", "Dermatologist Tested"] }, 
-            "Agriculture": { img: "biofit.png", price: "₹1200", b: ["Double Crop Yield", "Organic Soil Restore", "Farmer's First Choice"] }, 
-            "Wellness": { img: "naturamore.png", price: "₹1550", b: ["Complete Daily Nutrition", "Active Muscle Support", "High Protein Content"] } 
+            "Health Care": { img: "health care.png", price: "₹550", b: ["Immunity Booster", "100% Organic"] }, 
+            "Personal Care": { img: "personal care & cosmetics.png", price: "₹290", b: ["Natural Glow", "Chemical Free"] }, 
+            "Agriculture": { img: "biofit.png", price: "₹1200", b: ["High Yield", "Organic Soil"] }, 
+            "Wellness": { img: "naturamore.png", price: "₹1550", b: ["Daily Nutrition", "Best Seller"] } 
         };
         const themes = ["Luxury_Gold", "Cyber_Neon", "Professional_Studio"];
+        let lastSelectedApp = 'instagram';
 
         function toggleSideMenu() { document.getElementById('side-menu').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
         
-        function autoPilot(fmt) {
+        function autoPilot(fmt, app) {
+            lastSelectedApp = app;
             document.getElementById('master-canvas').className = 'ad-canvas ' + fmt;
             const products = Object.keys(productData);
             document.getElementById('sel-target').value = products[Math.floor(Math.random() * products.length)];
@@ -215,102 +197,62 @@
             toggleSideMenu();
         }
 
-        function setFormat(fmt) { document.getElementById('master-canvas').className = 'ad-canvas ' + fmt; toggleSideMenu(); }
-
-        function updateText() {
-            const val = document.getElementById('cust-tag').value;
-            if(val) document.getElementById('foot-title').innerText = val;
-        }
-
         function manualGen() {
             const cat = document.getElementById('sel-target').value;
             const theme = document.getElementById('sel-theme').value;
             const data = productData[cat];
-            const customTag = document.getElementById('cust-tag').value;
-            document.getElementById('foot-title').innerText = customTag || (cat + " Elite Selection");
+            document.getElementById('foot-title').innerText = cat;
             document.getElementById('foot-price').innerText = data.price;
             document.getElementById('benefit-list').innerHTML = data.b.map(item => `<li><i class="fa fa-circle-check"></i> ${item}</li>`).join('');
             renderStudio(cat, theme);
         }
 
         function renderStudio(category, theme) {
-            const imgEl = document.getElementById('p-img-main');
             const bgEl = document.getElementById('p-bg-main');
+            const imgEl = document.getElementById('p-img-main');
             const loader = document.getElementById('loader');
             loader.style.display = "block";
             
-            // Clean up to avoid ghosting
-            imgEl.style.opacity = "0";
-            bgEl.style.backgroundImage = "none";
-
-            setTimeout(() => {
-                // FIXED: Use Local image for Product to avoid CORS if possible
-                imgEl.src = productData[category].img;
-                
-                const seed = Math.floor(Math.random()*1000000);
-                const prompt = `minimalist_3d_product_stage_luxury_background_${theme}_soft_cinematic_lighting_8k`;
-                const ai_url = `https://image.pollinations.ai/prompt/${prompt}?width=1080&height=1080&nologo=true&seed=${seed}`;
-                
-                // FIXED: Preload AI Image with CORS
-                const bgImg = new Image();
-                bgImg.crossOrigin = "anonymous";
-                bgImg.src = ai_url;
-                bgImg.onload = () => {
-                    bgEl.style.backgroundImage = `url('${ai_url}')`;
-                    imgEl.style.opacity = "1";
-                    loader.style.display = "none";
-                };
-                bgImg.onerror = () => {
-                    // Fallback to simple color if AI fails
-                    bgEl.style.background = "#111";
-                    imgEl.style.opacity = "1";
-                    loader.style.display = "none";
-                }
-            }, 300);
+            const seed = Math.floor(Math.random()*1000000);
+            const ai_url = `https://image.pollinations.ai/prompt/luxury_product_podium_${theme}_8k?width=1080&height=1080&nologo=true&seed=${seed}`;
+            
+            imgEl.src = productData[category].img;
+            const bgImg = new Image();
+            bgImg.crossOrigin = "anonymous";
+            bgImg.src = ai_url;
+            bgImg.onload = () => {
+                bgEl.style.backgroundImage = `url('${ai_url}')`;
+                loader.style.display = "none";
+            };
         }
 
         async function captureAndShare() {
             const btn = document.getElementById('share-btn');
             const area = document.getElementById('capture-area');
-            btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> LOCKING SIGNAL...';
-            btn.disabled = true;
+            btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> SAVING...';
 
             try {
-                // FIXED: Wait extra 500ms to ensure all images are drawn
-                await new Promise(r => setTimeout(r, 500));
+                const canvas = await html2canvas(area, { useCORS: true, scale: 2, backgroundColor: '#000' });
+                const imgData = canvas.toDataURL('image/jpeg', 0.9);
+                
+                // --- DIRECT GALLERY DOWNLOAD ---
+                const link = document.createElement('a');
+                link.download = `Arham_Ad_${Date.now()}.jpg`;
+                link.href = imgData;
+                link.click();
 
-                const canvas = await html2canvas(area, { 
-                    useCORS: true, 
-                    allowTaint: false, 
-                    scale: 3, 
-                    backgroundColor: '#000',
-                    imageTimeout: 15000,
-                    logging: false 
-                });
+                // --- OPEN SOCIAL APP ---
+                setTimeout(() => {
+                    const urls = {
+                        instagram: "https://www.instagram.com/",
+                        whatsapp: "whatsapp://",
+                        youtube: "https://www.youtube.com/"
+                    };
+                    window.open(urls[lastSelectedApp] || "https://www.instagram.com/", "_blank");
+                }, 1000);
 
-                const blob = await new Promise(res => canvas.toBlob(res, 'image/jpeg', 0.95));
-                const file = new File([blob], "Arham_Elite_Ad.jpg", { type: "image/jpeg" });
-
-                if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                    await navigator.share({
-                        files: [file],
-                        title: 'Arham Elite AI Ad',
-                        text: `Check out Arham Elite's premium product! \n\nAkash: https://instagram.com/kohli_0310 \nAnjali: https://instagram.com/anjalisinghsuman82 \nWebsite: ${window.location.origin}`
-                    });
-                } else {
-                    const link = document.createElement('a');
-                    link.download = 'Arham_Ad.jpg';
-                    link.href = canvas.toDataURL('image/jpeg');
-                    link.click();
-                    alert("Poster Saved! Gallery check kar.");
-                }
-            } catch (err) {
-                console.error(err);
-                alert("Generation Error: Try clicking Generate Ad again.");
-            } finally {
-                btn.innerHTML = '<i class="fa fa-share-nodes"></i> GENERATE & SHARE IMAGE';
-                btn.disabled = false;
-            }
+            } catch (err) { alert("Try Again"); }
+            finally { btn.innerHTML = '<i class="fa fa-download"></i> SAVE & OPEN SOCIAL APP'; }
         }
 
         window.onload = () => manualGen();
