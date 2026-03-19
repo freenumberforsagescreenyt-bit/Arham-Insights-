@@ -3,207 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Arham Studio | AI Ad Terminal V33</title>
+    <title>Arham Studio | AI Master V39</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
-        
-        :root { 
-            --gold: #ffcc00; --bg: #05070a; --card: #11141d; 
-            --border: rgba(255, 255, 255, 0.08); --amber: #ff9933;
-            --neon-blue: #00f2ff; --success-green: #10b981;
-        }
-
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #f1f5f9; margin: 0; padding: 0; overflow-x: hidden; width: 100vw; -webkit-tap-highlight-color: transparent; }
+        :root { --gold: #ffcc00; --bg: #05070a; --card: #11141d; --border: rgba(255, 255, 255, 0.08); --neon: #00f2ff; --success: #10b981; --danger: #ff4d4d; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #f1f5f9; margin: 0; padding: 0; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
 
         .navbar { background: rgba(10, 12, 18, 0.98); backdrop-filter: blur(25px); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--border); }
-        .menu-trigger { font-size: 1.4rem; color: var(--gold); cursor: pointer; }
+        .logo-text { font-weight: 900; letter-spacing: 1px; } .logo-text span { color: var(--gold); }
 
         /* --- SIDE MENU --- */
-        .side-menu { position: fixed; top: 0; left: -310px; width: 280px; height: 100vh; background: #080a0f; z-index: 2000; transition: 0.5s; border-right: 1px solid var(--border); padding: 30px 20px; overflow-y: auto; }
+        .side-menu { position: fixed; top: 0; left: -310px; width: 280px; height: 100vh; background: #080a0f; z-index: 4000; transition: 0.5s; border-right: 1px solid var(--border); padding: 30px 20px; overflow-y: auto; }
         .side-menu.active { left: 0; }
-        .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; z-index: 1500; }
+        .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; z-index: 3500; }
         .menu-overlay.active { display: block; }
+        .plat-title { font-size: 0.7rem; font-weight: 800; color: var(--neon); letter-spacing: 2px; display: block; text-transform: uppercase; border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 12px; margin-top: 20px; }
+        .plat-item { padding: 12px; font-size: 0.85rem; color: #94a3b8; cursor: pointer; display: flex; align-items: center; gap: 12px; border-radius: 12px; transition: 0.3s; margin-bottom: 4px; background: rgba(255,255,255,0.02); }
+        .plat-item:hover { background: rgba(0, 242, 255, 0.05); color: var(--neon); }
+
+        /* --- UI ELEMENTS --- */
+        .container { padding: 15px; max-width: 500px; margin: auto; padding-bottom: 100px; }
         
-        .plat-sec { margin-bottom: 25px; }
-        .plat-title { font-size: 0.7rem; font-weight: 800; color: var(--gold); letter-spacing: 2px; display: block; text-transform: uppercase; border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 12px; }
-        .plat-item { padding: 12px; font-size: 0.85rem; color: #94a3b8; cursor: pointer; display: flex; align-items: center; gap: 12px; border-radius: 12px; transition: 0.3s; margin-bottom: 4px; }
-        .plat-item:hover { background: rgba(255,255,255,0.05); color: var(--neon-blue); }
-
-        .container { padding: 15px; box-sizing: border-box; max-width: 500px; margin: auto; }
+        /* --- HOME CUSTOM ENGINE --- */
+        .config-card { background: #0f121a; border-radius: 25px; padding: 20px; border: 1px solid var(--border); border-top: 3px solid var(--gold); margin-bottom: 25px; display: none; }
+        .config-card.active { display: block; }
+        .control-group { margin-bottom: 15px; }
+        .control-group label { font-size: 0.6rem; color: var(--gold); font-weight: 800; text-transform: uppercase; margin-bottom: 5px; display: block; }
+        select, input { width: 100%; padding: 12px; border-radius: 12px; background: rgba(0,0,0,0.5); border: 1px solid var(--border); color: #fff; outline: none; font-size: 0.8rem; box-sizing: border-box; }
         
-        #capture-area { background: #000; border-radius: 30px; overflow: hidden; border: 1.5px solid var(--border); }
-        .ad-canvas { position: relative; width: 100%; overflow: hidden; background: #000; transition: 0.3s; }
-        .canvas-1-1 { aspect-ratio: 1/1; }
-        .canvas-9-16 { aspect-ratio: 9/16; max-height: 70vh; }
-        .canvas-16-9 { aspect-ratio: 16/9; }
+        /* --- PREMIUM POSTER LOOK --- */
+        #capture-area { background: #000; border-radius: 35px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 30px 60px rgba(0,0,0,0.9); }
+        .ad-canvas { position: relative; width: 100%; overflow: hidden; background: #000; }
+        .canvas-1-1 { aspect-ratio: 1/1; } .canvas-9-16 { aspect-ratio: 9/16; max-height: 65vh; } .canvas-16-9 { aspect-ratio: 16/9; }
 
-        #p-img-main { position: absolute; width: 70%; top: 45%; left: 50%; transform: translate(-50%, -50%); z-index: 2; filter: drop-shadow(0 15px 35px rgba(0,0,0,0.8)); transition: 0.3s; pointer-events: none; }
-        #p-bg-main { position: absolute; inset: 0; opacity: 0.8; z-index: 1; transition: 0.5s; background-size: cover !important; background-position: center !important; }
+        #p-img-main { position: absolute; width: 80%; top: 45%; left: 50%; transform: translate(-50%, -50%); z-index: 2; filter: drop-shadow(0 25px 50px rgba(0,0,0,0.95)); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        #p-bg-main { position: absolute; inset: 0; opacity: 0.65; z-index: 1; background-size: cover !important; }
         
-        .brand-watermark { position: absolute; top: 25px; right: 25px; z-index: 10; display: flex; flex-direction: column; align-items: flex-end; opacity: 0.8; }
-        .water-logo { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--gold); margin-bottom: 5px; box-shadow: 0 0 15px rgba(255,204,0,0.3); }
-        .water-text { font-size: 0.65rem; letter-spacing: 3px; font-weight: 900; color: #fff; text-transform: uppercase; text-shadow: 2px 2px 5px #000; }
+        .brand-watermark { position: absolute; top: 25px; right: 25px; z-index: 10; text-align: right; opacity: 0.5; }
+        .water-logo { width: 38px; border-radius: 50%; border: 1.5px solid var(--gold); margin-bottom: 4px; }
+        .water-text { font-size: 0.55rem; font-weight: 900; color: #fff; letter-spacing: 2px; }
 
-        .ad-footer-attached { background: #000; padding: 25px; border-top: 1px solid rgba(255,255,255,0.1); text-align: left; }
-        .footer-grid { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: start; }
-        .benefit-tag { font-size: 0.8rem; color: var(--gold); font-weight: 800; text-transform: uppercase; margin-bottom: 8px; display: block; letter-spacing: 1px; }
-        .benefit-list { margin: 0; padding: 0; list-style: none; font-size: 0.85rem; color: #e2e8f0; }
-        .benefit-list li { margin-bottom: 5px; display: flex; align-items: center; gap: 8px; font-weight: 500; }
-        .benefit-list i { color: var(--success-green); font-size: 0.8rem; }
+        .ad-footer-attached { background: linear-gradient(to bottom, #000, #080a0f); padding: 25px; border-top: 1px solid rgba(255,255,255,0.1); }
+        .foot-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .mrp-cut { color: var(--gray); text-decoration: line-through; font-size: 0.85rem; display: block; }
+        .price-tag { color: var(--gold); font-weight: 900; font-size: 2rem; text-shadow: 0 0 15px rgba(255,204,0,0.3); }
         
-        .price-tag { background: var(--gold); color: #000; padding: 10px 18px; border-radius: 12px; font-weight: 900; font-size: 1.5rem; box-shadow: 0 4px 15px rgba(255,204,0,0.2); text-align: center; }
-        .price-label { font-size: 0.5rem; display: block; text-transform: uppercase; margin-bottom: -4px; opacity: 0.7; }
+        .benefit-pills { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
+        .pill { font-size: 0.65rem; background: rgba(0,242,255,0.08); color: var(--neon); padding: 5px 12px; border-radius: 25px; border: 0.5px solid var(--neon); font-weight: 600; }
 
-        .psych-trigger { margin-top: 15px; background: rgba(16, 185, 129, 0.1); padding: 10px; border-radius: 10px; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 0.75rem; color: var(--success-green); font-weight: 700; text-align: center; }
+        .psych-box { background: rgba(16,185,129,0.08); border-radius: 15px; padding: 12px; border-left: 4px solid var(--success); margin: 15px 0; font-size: 0.8rem; color: #e2e8f0; line-height: 1.4; font-weight: 600; }
 
-        .contact-strip { margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 18px; display: flex; flex-direction: column; gap: 8px; }
-        .contact-label { font-size: 0.7rem; color: var(--gold); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-        .id-row { display: flex; justify-content: space-between; align-items: center; }
-        .contact-id { font-size: 0.85rem; color: #fff; font-weight: 700; letter-spacing: 0.5px; text-decoration: none; display: flex; align-items: center; background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 10px; flex: 1; justify-content: center; }
-        .contact-id i { color: var(--neon-blue); margin-right: 8px; font-size: 1.1rem; }
+        .insta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+        .insta-btn { background: rgba(255,255,255,0.03); color: #fff; padding: 12px; border-radius: 12px; text-decoration: none; font-size: 0.75rem; font-weight: 800; text-align: center; border: 1px solid #222; transition: 0.3s; }
+        .insta-btn i { color: #ff0050; margin-right: 6px; }
 
-        .config-card { background: #0f121a; border-radius: 25px; padding: 20px; margin: 20px 0; border: 1px solid var(--border); border-top: 3px solid var(--gold); }
-        .control-group { margin-bottom: 15px; text-align: left; }
-        .control-group label { font-size: 0.65rem; color: var(--gold); font-weight: 800; text-transform: uppercase; margin-bottom: 5px; display: block; }
-        select, input { width: 100%; padding: 12px; border-radius: 12px; background: rgba(0,0,0,0.5); border: 1px solid var(--border); color: #fff; outline: none; font-size: 0.85rem; box-sizing: border-box; }
+        .btn-main { background: var(--gold); color: #000; border: none; padding: 20px; border-radius: 18px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; margin-top: 10px; font-size: 1rem; }
+        #loader { display: none; text-align: center; color: var(--neon); font-size: 0.8rem; font-weight: 800; padding: 10px; }
         
-        .btn-main { background: var(--gold); color: #000; border: none; padding: 18px; border-radius: 15px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; margin-top: 10px; }
-        #loader { display: none; margin: 15px 0; color: var(--neon-blue); font-size: 0.8rem; font-weight: 800; text-align: center; }
+        .bottom-bar { position: fixed; bottom: 0; width: 100%; background: #000; display: flex; border-top: 1px solid #222; padding: 15px 0; z-index: 2500; }
+        .tab-item { flex: 1; text-align: center; color: #444; font-size: 1.5rem; cursor: pointer; transition: 0.3s; } 
+        .tab-item.active { color: var(--gold); transform: scale(1.1); }
     </style>
 </head>
 <body>
 
-    <div class="menu-overlay" id="overlay" onclick="toggleSideMenu()"></div>
-    
+    <div class="menu-overlay" id="overlay" onclick="toggleMenu(false)"></div>
     <nav class="side-menu" id="side-menu">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
-            <b style="color:var(--gold);">FAST POSTER</b>
-            <i class="fa fa-times" onclick="toggleSideMenu()"></i>
-        </div>
+        <b style="color:var(--gold); font-size:1.2rem;">AD FACTORY BOT</b>
         
-        <div class="plat-sec">
-            <span class="plat-title">Instagram / Facebook</span>
-            <div class="plat-item" onclick="autoPilot('canvas-1-1', 'instagram')"><i class="fab fa-instagram"></i> Feed Post (1:1)</div>
-            <div class="plat-item" onclick="autoPilot('canvas-9-16', 'instagram')"><i class="fab fa-instagram"></i> Reel / Story (9:16)</div>
-        </div>
-
-        <div class="plat-sec">
-            <span class="plat-title">WhatsApp</span>
-            <div class="plat-item" onclick="autoPilot('canvas-9-16', 'whatsapp')"><i class="fab fa-whatsapp"></i> Status Update</div>
-        </div>
-
-        <div class="plat-sec">
-            <span class="plat-title">YouTube</span>
-            <div class="plat-item" onclick="autoPilot('canvas-16-9', 'youtube')"><i class="fab fa-youtube"></i> Thumbnail (16:9)</div>
-        </div>
+        <span class="plat-title">Indian Social Hubs</span>
+        <div class="plat-item" onclick="autoPilot('canvas-1-1', 'instagram')"><i class="fab fa-instagram"></i> Insta Feed (Auto)</div>
+        <div class="plat-item" onclick="autoPilot('canvas-9-16', 'instagram')"><i class="fab fa-instagram"></i> Insta Story (Auto)</div>
+        <div class="plat-item" onclick="autoPilot('canvas-9-16', 'whatsapp')"><i class="fab fa-whatsapp"></i> WhatsApp Status (Auto)</div>
+        <div class="plat-item" onclick="autoPilot('canvas-16-9', 'youtube')"><i class="fab fa-youtube"></i> YouTube Thumbnail</div>
+        <div class="plat-item" onclick="autoPilot('canvas-1-1', 'facebook')"><i class="fab fa-facebook"></i> Facebook Post</div>
+        <div class="plat-item" onclick="autoPilot('canvas-1-1', 'telegram')"><i class="fab fa-telegram"></i> Telegram Ad</div>
+        <div class="plat-item" onclick="autoPilot('canvas-1-1', 'linkedin')"><i class="fab fa-linkedin"></i> LinkedIn Pro Ad</div>
     </nav>
 
     <nav class="navbar">
-        <div class="menu-trigger" onclick="toggleSideMenu()"><i class="fa fa-bars-staggered"></i></div>
-        <div style="font-weight: 900;">ARHAM <span style="color:var(--gold)">STUDIO Turbo</span></div>
+        <div onclick="toggleMenu(true)" style="cursor:pointer; font-size:1.4rem; color:var(--gold);"><i class="fa fa-bars-staggered"></i></div>
+        <div class="logo-text">ARHAM <span>STUDIO Master</span></div>
         <i class="fa fa-bolt" style="color:var(--gold);"></i>
     </nav>
 
     <div class="container">
         
-        <div class="config-card">
-            <div class="control-group">
-                <label>1. Select Product</label>
-                <select id="sel-target" onchange="manualGen()">
-                    <option value="Health Care">Health Care</option>
-                    <option value="Personal Care">Luxury Care</option>
-                    <option value="Agriculture">Biofit Stimrich</option>
-                    <option value="Wellness">Naturamore</option>
-                </select>
+        <div class="config-card" id="home-engine">
+            <label style="color:var(--neon); font-size:0.7rem; font-weight:800;">MANUAL CUSTOMIZER (HOME ONLY)</label>
+            <input type="text" id="custom-name" placeholder="Custom Product Name..." style="margin-top:10px;" oninput="updateUI()">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px;">
+                <select id="sel-target" onchange="manualGen()"><option value="Health Care">Health Care</option><option value="Personal Care">Personal Care</option><option value="Crop Care">Crop Care</option><option value="Naturamore">Naturamore</option><option value="Biofit">Biofit</option><option value="Clean & More">Clean & More</option><option value="Herbs & More">Herbs & More</option></select>
+                <select id="sel-theme" onchange="manualGen()"><option value="Luxury_Gold">Royal Gold</option><option value="Cyber_Neon">Neon Cyber</option><option value="Professional_Studio">Pro Studio</option></select>
             </div>
-            
-            <div class="control-group">
-                <label>2. Creative Theme</label>
-                <select id="sel-theme" onchange="manualGen()">
-                    <option value="Luxury_Gold">Royal Gold</option>
-                    <option value="Cyber_Neon">Neon Cyber</option>
-                    <option value="Professional_Studio">Clean Studio</option>
-                </select>
-            </div>
-
-            <button class="btn-main" onclick="manualGen()">Fast Build Ad</button>
+            <button class="btn-main" onclick="manualGen()">Generate Manual Ad</button>
         </div>
 
-        <div id="loader"><i class="fa fa-spinner fa-spin"></i> TURBO LOADING...</div>
+        <div id="loader"><i class="fa fa-spinner fa-spin"></i> LOCKING SIGNAL...</div>
 
         <div id="capture-area">
             <div id="master-canvas" class="ad-canvas canvas-1-1">
                 <div id="p-bg-main"></div>
-                <img id="p-img-main" src="" alt="Product" crossorigin="anonymous">
+                <img id="p-img-main" src="" alt="P" crossorigin="anonymous">
                 <div class="brand-watermark">
                     <img src="https://i.ibb.co/N26BWZdY/Screenshot-20260130-221623.jpg" class="water-logo" alt="L" crossorigin="anonymous">
-                    <span class="water-text">ARHAM ELITE</span>
-                    <span style="font-size:0.3rem; letter-spacing:1.5px; color:var(--gold); font-weight:800;">AI STUDIO ©</span>
+                    <div class="water-text">ARHAM ELITE ©</div>
                 </div>
             </div>
-
             <div class="ad-footer-attached">
-                <div class="footer-grid">
+                <div class="foot-top">
                     <div>
-                        <span class="benefit-tag" id="foot-title">Product Name</span>
-                        <ul class="benefit-list" id="benefit-list">
-                            <li><i class="fa fa-circle-check"></i> High Quality</li>
-                            <li><i class="fa fa-circle-check"></i> Certified</li>
-                        </ul>
+                        <h2 id="foot-title" style="margin:0; font-size:1.5rem; font-weight:800;">Elite Product</h2>
+                        <div class="benefit-pills" id="benefit-pills">
+                            <span class="pill">Organic</span><span class="pill">Proven Result</span>
+                        </div>
                     </div>
-                    <div class="price-tag">
-                        <span class="price-label">Price</span>
-                        <span id="foot-price">₹000</span>
+                    <div style="text-align:right;">
+                        <span class="mrp-cut" id="mrp-price">₹000</span>
+                        <span class="price-tag" id="foot-price">₹000</span>
                     </div>
                 </div>
-                <div class="psych-trigger">⚡ Special Offer. Buy Now!</div>
-                <div class="contact-strip">
-                    <div class="id-row">
-                        <a href="https://instagram.com/kohli_0310" target="_blank" class="contact-id"><i class="fab fa-instagram"></i> Akash</a>
-                        <a href="https://instagram.com/anjalisinghsuman82" target="_blank" class="contact-id"><i class="fab fa-instagram"></i> Anjali</a>
-                    </div>
+
+                <div class="psych-box" id="psych-trigger">
+                    95% of Elite Members switched to this for better results. Why are you still waiting?
+                </div>
+
+                <div style="font-size:0.65rem; color:var(--gold); font-weight:800; text-align:center; letter-spacing:1px;">TAP TO ORDER DIRECT:</div>
+                <div class="insta-grid">
+                    <a href="https://instagram.com/kohli_0310" class="insta-btn"><i class="fab fa-instagram"></i> Akash</a>
+                    <a href="https://instagram.com/anjalisinghsuman82" class="insta-btn"><i class="fab fa-instagram"></i> Anjali</a>
                 </div>
             </div>
         </div>
 
         <button class="btn-main" style="background:#fff;" onclick="captureAndShare()" id="share-btn">
-            <i class="fa fa-download"></i> SAVE & OPEN SOCIAL APP
+            <i class="fa fa-download"></i> DOWNLOAD & SHARE AD
         </button>
     </div>
 
+    <nav class="bottom-bar">
+        <div class="tab-item active" id="tab-home" onclick="setMode('home')"><i class="fa fa-home"></i></div>
+        <div class="tab-item" id="tab-auto" onclick="toggleMenu(true)"><i class="fa fa-robot"></i></div>
+        <div class="tab-item" onclick="window.location.href='product.html'"><i class="fa fa-shop"></i></div>
+    </nav>
+
     <script>
         const productData = { 
-            "Health Care": { img: "health care.png", price: "₹550", b: ["Immunity Booster", "100% Organic"] }, 
-            "Personal Care": { img: "personal care & cosmetics.png", price: "₹290", b: ["Natural Glow", "Chemical Free"] }, 
-            "Agriculture": { img: "biofit.png", price: "₹1200", b: ["High Yield", "Organic Soil"] }, 
-            "Wellness": { img: "naturamore.png", price: "₹1550", b: ["Daily Nutrition", "Best Seller"] } 
+            "Health Care": { img: "health care.png", price: 550, b: ["Immunity", "Eco-Safe", "Tested"], p: "Your body is your only home. Protect it with Elite Health Care today!" },
+            "Personal Care": { img: "personal care & cosmetics.png", price: 290, b: ["Glow", "Chemical-Free", "Pure"], p: "Don't settle for basic. Your skin deserves the Elite touch!" }, 
+            "Crop Care": { img: "crop care.png", price: 850, b: ["Yield x2", "Bio-Organic", "Fast"], p: "Turn your farm into a goldmine. Higher yield, zero toxins!" },
+            "Naturamore": { img: "naturamore.png", price: 1550, b: ["Nutrition", "Protein", "Best"], p: "Elite health isn't a luxury, it's a necessity. Start your fuel now!" },
+            "Biofit": { img: "biofit.png", price: 1200, b: ["Soil Growth", "Nature", "Pure"], p: "The secret to massive harvests is in the soil. Elite Biofit is the key!" },
+            "Clean & More": { img: "clean & more.png", price: 350, b: ["Hygiene", "Strong", "Safe"], p: "A clean home is a happy home. Elite protection for your family." },
+            "Herbs & More": { img: "herbs & more.png", price: 380, b: ["Ayurvedic", "Roots", "Safe"], p: "Ancient wisdom, modern results. Healing power of pure herbs." }
         };
-        const themes = ["Luxury_Gold", "Cyber_Neon", "Professional_Studio"];
-        let lastSelectedApp = 'instagram';
+        let currentApp = 'instagram';
 
-        function toggleSideMenu() { document.getElementById('side-menu').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
-        
+        function toggleMenu(s) { document.getElementById('side-menu').classList.toggle('active', s); document.getElementById('overlay').classList.toggle('active', s); }
+        function setMode(m) { 
+            document.getElementById('home-engine').classList.toggle('active', m === 'home');
+            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+            document.getElementById('tab-' + m).classList.add('active');
+            if(m==='home') manualGen();
+        }
+
+        function updateUI() { const n = document.getElementById('custom-name').value; if(n) document.getElementById('foot-title').innerText = n; }
+
         function autoPilot(fmt, app) {
-            lastSelectedApp = app;
+            currentApp = app;
             document.getElementById('master-canvas').className = 'ad-canvas ' + fmt;
-            const products = Object.keys(productData);
-            document.getElementById('sel-target').value = products[Math.floor(Math.random() * products.length)];
-            document.getElementById('sel-theme').value = themes[Math.floor(Math.random() * themes.length)];
+            const cats = Object.keys(productData);
+            document.getElementById('sel-target').value = cats[Math.floor(Math.random()*cats.length)];
             manualGen();
-            toggleSideMenu();
+            toggleMenu(false);
+            setMode('auto');
         }
 
         function manualGen() {
             const cat = document.getElementById('sel-target').value;
             const theme = document.getElementById('sel-theme').value;
             const data = productData[cat];
-            document.getElementById('foot-title').innerText = cat;
-            document.getElementById('foot-price').innerText = data.price;
-            document.getElementById('benefit-list').innerHTML = data.b.map(item => `<li><i class="fa fa-circle-check"></i> ${item}</li>`).join('');
+            
+            if(!document.getElementById('custom-name').value) document.getElementById('foot-title').innerText = cat;
+            document.getElementById('foot-price').innerText = "₹" + data.price;
+            document.getElementById('mrp-price').innerText = "₹" + Math.round(data.price * 1.35);
+            document.getElementById('benefit-pills').innerHTML = data.b.map(x => `<span class="pill">${x}</span>`).join('');
+            document.getElementById('psych-trigger').innerText = data.p;
+            
             renderStudio(cat, theme);
         }
 
@@ -212,50 +202,30 @@
             const imgEl = document.getElementById('p-img-main');
             const loader = document.getElementById('loader');
             loader.style.display = "block";
-            
             const seed = Math.floor(Math.random()*1000000);
-            const ai_url = `https://image.pollinations.ai/prompt/luxury_product_podium_${theme}_8k?width=1080&height=1080&nologo=true&seed=${seed}`;
+            const ai_url = `https://image.pollinations.ai/prompt/premium_3d_product_podium_${theme}_stage_soft_lighting_8k?width=1080&height=1080&nologo=true&seed=${seed}`;
             
             imgEl.src = productData[category].img;
-            const bgImg = new Image();
-            bgImg.crossOrigin = "anonymous";
-            bgImg.src = ai_url;
-            bgImg.onload = () => {
-                bgEl.style.backgroundImage = `url('${ai_url}')`;
-                loader.style.display = "none";
-            };
+            const bgImg = new Image(); bgImg.crossOrigin = "anonymous"; bgImg.src = ai_url;
+            bgImg.onload = () => { bgEl.style.backgroundImage = `url('${ai_url}')`; loader.style.display = "none"; };
         }
 
         async function captureAndShare() {
             const btn = document.getElementById('share-btn');
             const area = document.getElementById('capture-area');
-            btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> SAVING...';
-
+            btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> SYNCING...';
             try {
-                const canvas = await html2canvas(area, { useCORS: true, scale: 2, backgroundColor: '#000' });
-                const imgData = canvas.toDataURL('image/jpeg', 0.9);
-                
-                // --- DIRECT GALLERY DOWNLOAD ---
+                const canvas = await html2canvas(area, { useCORS: true, scale: 2.5, backgroundColor: '#000' });
                 const link = document.createElement('a');
-                link.download = `Arham_Ad_${Date.now()}.jpg`;
-                link.href = imgData;
-                link.click();
-
-                // --- OPEN SOCIAL APP ---
-                setTimeout(() => {
-                    const urls = {
-                        instagram: "https://www.instagram.com/",
-                        whatsapp: "whatsapp://",
-                        youtube: "https://www.youtube.com/"
-                    };
-                    window.open(urls[lastSelectedApp] || "https://www.instagram.com/", "_blank");
+                link.download = `ArhamElite_${Date.now()}.jpg`; link.href = canvas.toDataURL('image/jpeg', 0.9); link.click();
+                setTimeout(() => { 
+                    const urls = { instagram: "https://www.instagram.com/", whatsapp: "whatsapp://", youtube: "https://www.youtube.com/", telegram: "https://t.me/", linkedin: "https://linkedin.com/", facebook: "https://fb.com/" };
+                    window.open(urls[currentApp] || "https://www.instagram.com/", "_blank");
                 }, 1000);
-
-            } catch (err) { alert("Try Again"); }
-            finally { btn.innerHTML = '<i class="fa fa-download"></i> SAVE & OPEN SOCIAL APP'; }
+            } catch (err) { alert("Try Again!"); }
+            finally { btn.innerHTML = '<i class="fa fa-download"></i> DOWNLOAD & SHARE AD'; }
         }
-
-        window.onload = () => manualGen();
+        window.onload = () => setMode('home');
     </script>
 </body>
 </html>
